@@ -44,10 +44,12 @@ backend/privacy_review/
   orchestration/    LangGraph workflow, state, routing
   evaluation/       metrics and reports
   llm/              Claude client - optional, never sees raw identifiers
+  ingestion/        .txt / .pdf / annotated .json -> Document, with typed errors
+  api/              FastAPI: /review, /upload, /batches/{id}, /health; serves frontend at /ui
   config/           settings from environment / .env
 backend/scripts/    prepare_data.py and other runnable entry points
 backend/tests/      pytest; tests/fixtures/kb_expected_decisions.json is hand-written
-frontend/           HTML + Tailwind
+frontend/           HTML + Tailwind + Plotly, no build step
 data/               git-ignored. Downloaded samples land here - never commit them.
 docs/               Review 1 deck and report, architecture diagram, HANDOFF.md
 ```
@@ -64,6 +66,10 @@ python -m spacy download en_core_web_lg
 cd backend
 pytest                                  # run the tests
 python scripts/prepare_data.py          # download + prepare dataset samples into ../data
+
+cd ..                                   # run the API + frontend from the repo root
+uvicorn --factory privacy_review.api:create_app --app-dir backend
+# open http://127.0.0.1:8000/ui/
 ```
 
 A Claude API key is optional. Without one, every agent runs its deterministic path. To

@@ -1,0 +1,5955 @@
+{
+  "version": "1.0",
+  "seed": 247,
+  "threat_model": "The attacker sees a release in which direct identifiers are replaced but PERSON pseudonyms are batch-consistent (policies.json: PERSON pseudonym_scope = batch), so documents about the same person can be linked. The attacker knows the registry (the outside world) and matches the quasi-identifiers visible across a person's linked documents against it. anonymity_set_size (k) is computed over the attributes as written in the source documents; anonymity_set_size_after_first_pass over only those still readable after the expected first-pass strategies (kept values, plus age bands, since generalising an age to a 10-year band preserves the band). expected_strategies are Agent 2's first-pass decisions under policies.json, before any Agent 4/5 remediation. A planted risk that is reidentifiable and survives_first_pass must be flagged by Agent 5; a control (k >= 3) must not be.",
+  "registry": [
+    {
+      "person_id": "T01",
+      "name": "Ananya Rao",
+      "is_target": true,
+      "occupation": "consultant radiologist",
+      "organization": "Marlow Bay Hospital",
+      "department": "Radiology",
+      "city": "Mumbai",
+      "age_band": "40-49",
+      "gender": "female",
+      "events": [
+        "Western India Radiology Forum 2025"
+      ]
+    },
+    {
+      "person_id": "T02",
+      "name": "Vikram Rao",
+      "is_target": true,
+      "occupation": "customer support engineer",
+      "organization": "Quillon Analytics",
+      "department": "Customer Support",
+      "city": "Pune",
+      "age_band": "20-29",
+      "gender": "male",
+      "events": [
+        "Quillon Founders' Day 2025"
+      ]
+    },
+    {
+      "person_id": "T03",
+      "name": "Meghna Iyer",
+      "is_target": true,
+      "occupation": "assistant warden",
+      "organization": "Kestrelmoor University",
+      "department": "Girls' Hostel",
+      "city": "Bengaluru",
+      "age_band": "30-39",
+      "gender": "female",
+      "events": []
+    },
+    {
+      "person_id": "T04",
+      "name": "Rohan Mehta",
+      "is_target": true,
+      "occupation": "data science manager",
+      "organization": "Quillon Analytics",
+      "department": "Data Science",
+      "city": "Pune",
+      "age_band": "40-49",
+      "gender": "male",
+      "events": [
+        "Quillon Founders' Day 2025"
+      ]
+    },
+    {
+      "person_id": "T05",
+      "name": "Lukas Brenner",
+      "is_target": true,
+      "occupation": "solutions architect",
+      "organization": "Quillon Analytics",
+      "department": "Platform Engineering",
+      "city": "Pune",
+      "age_band": "30-39",
+      "gender": "male",
+      "events": [
+        "Quillon Founders' Day 2025",
+        "Deccan AI Conference 2025"
+      ]
+    },
+    {
+      "person_id": "T06",
+      "name": "Kavya Menon",
+      "is_target": true,
+      "occupation": "events coordinator",
+      "organization": "Velloran Finance Ltd",
+      "department": "Corporate Communications",
+      "city": "Chennai",
+      "age_band": "30-39",
+      "gender": "female",
+      "events": [
+        "Coastal Finance Forum 2024"
+      ]
+    },
+    {
+      "person_id": "T07",
+      "name": "Priya Nair",
+      "is_target": true,
+      "occupation": "staff nurse",
+      "organization": "Marlow Bay Hospital",
+      "department": "Nursing",
+      "city": "Mumbai",
+      "age_band": "30-39",
+      "gender": "female",
+      "events": [
+        "Western India Nursing Summit 2025"
+      ]
+    },
+    {
+      "person_id": "T08",
+      "name": "Sandeep Kulkarni",
+      "is_target": true,
+      "occupation": "assistant professor",
+      "organization": "Kestrelmoor University",
+      "department": "Computer Science",
+      "city": "Bengaluru",
+      "age_band": "30-39",
+      "gender": "male",
+      "events": [
+        "Deccan AI Conference 2025"
+      ]
+    },
+    {
+      "person_id": "T09",
+      "name": "Neha Joshi",
+      "is_target": true,
+      "occupation": "research scientist",
+      "organization": "Fernhollow Biolabs",
+      "department": "Genomics",
+      "city": "Hyderabad",
+      "age_band": "20-29",
+      "gender": "female",
+      "events": [
+        "Indus Bioinformatics Symposium 2025"
+      ]
+    },
+    {
+      "person_id": "C01",
+      "name": "Naveen Kapoor",
+      "is_target": false,
+      "occupation": "consultant radiologist",
+      "organization": "Marlow Bay Hospital",
+      "department": "Radiology",
+      "city": "Mumbai",
+      "age_band": "30-39",
+      "gender": "male",
+      "events": []
+    },
+    {
+      "person_id": "C02",
+      "name": "Aditi Khanna",
+      "is_target": false,
+      "occupation": "consultant radiologist",
+      "organization": "Marlow Bay Hospital",
+      "department": "Radiology",
+      "city": "Mumbai",
+      "age_band": "50-59",
+      "gender": "female",
+      "events": [
+        "Western India Radiology Forum 2025"
+      ]
+    },
+    {
+      "person_id": "C03",
+      "name": "Ritika Zaveri",
+      "is_target": false,
+      "occupation": "staff nurse",
+      "organization": "Marlow Bay Hospital",
+      "department": "Nursing",
+      "city": "Mumbai",
+      "age_band": "30-39",
+      "gender": "female",
+      "events": [
+        "Western India Nursing Summit 2025"
+      ]
+    },
+    {
+      "person_id": "C04",
+      "name": "Bhavana Sethi",
+      "is_target": false,
+      "occupation": "staff nurse",
+      "organization": "Marlow Bay Hospital",
+      "department": "Nursing",
+      "city": "Mumbai",
+      "age_band": "30-39",
+      "gender": "female",
+      "events": [
+        "Western India Nursing Summit 2025"
+      ]
+    },
+    {
+      "person_id": "C05",
+      "name": "Madhuri Dutta",
+      "is_target": false,
+      "occupation": "staff nurse",
+      "organization": "Marlow Bay Hospital",
+      "department": "Nursing",
+      "city": "Mumbai",
+      "age_band": "30-39",
+      "gender": "female",
+      "events": [
+        "Western India Nursing Summit 2025"
+      ]
+    },
+    {
+      "person_id": "C06",
+      "name": "Pallavi Banerjee",
+      "is_target": false,
+      "occupation": "staff nurse",
+      "organization": "Marlow Bay Hospital",
+      "department": "Nursing",
+      "city": "Mumbai",
+      "age_band": "30-39",
+      "gender": "female",
+      "events": [
+        "Western India Nursing Summit 2025"
+      ]
+    },
+    {
+      "person_id": "C07",
+      "name": "Dev Gupta",
+      "is_target": false,
+      "occupation": "staff nurse",
+      "organization": "Marlow Bay Hospital",
+      "department": "Nursing",
+      "city": "Mumbai",
+      "age_band": "30-39",
+      "gender": "male",
+      "events": [
+        "Western India Nursing Summit 2025"
+      ]
+    },
+    {
+      "person_id": "C08",
+      "name": "Kriti Shah",
+      "is_target": false,
+      "occupation": "staff nurse",
+      "organization": "Marlow Bay Hospital",
+      "department": "Nursing",
+      "city": "Mumbai",
+      "age_band": "20-29",
+      "gender": "female",
+      "events": []
+    },
+    {
+      "person_id": "C09",
+      "name": "Harini Sethi",
+      "is_target": false,
+      "occupation": "receptionist",
+      "organization": "Marlow Bay Hospital",
+      "department": "Front Office",
+      "city": "Mumbai",
+      "age_band": "20-29",
+      "gender": "female",
+      "events": []
+    },
+    {
+      "person_id": "C10",
+      "name": "Varun Mishra",
+      "is_target": false,
+      "occupation": "customer support engineer",
+      "organization": "Quillon Analytics",
+      "department": "Customer Support",
+      "city": "Pune",
+      "age_band": "20-29",
+      "gender": "male",
+      "events": [
+        "Quillon Founders' Day 2025"
+      ]
+    },
+    {
+      "person_id": "C11",
+      "name": "Pranav Reddy",
+      "is_target": false,
+      "occupation": "customer support engineer",
+      "organization": "Quillon Analytics",
+      "department": "Customer Support",
+      "city": "Pune",
+      "age_band": "20-29",
+      "gender": "male",
+      "events": [
+        "Quillon Founders' Day 2025"
+      ]
+    },
+    {
+      "person_id": "C12",
+      "name": "Chirag Kamath",
+      "is_target": false,
+      "occupation": "customer support engineer",
+      "organization": "Quillon Analytics",
+      "department": "Customer Support",
+      "city": "Pune",
+      "age_band": "20-29",
+      "gender": "male",
+      "events": [
+        "Quillon Founders' Day 2025"
+      ]
+    },
+    {
+      "person_id": "C13",
+      "name": "Harini Chawla",
+      "is_target": false,
+      "occupation": "customer support engineer",
+      "organization": "Quillon Analytics",
+      "department": "Customer Support",
+      "city": "Pune",
+      "age_band": "20-29",
+      "gender": "female",
+      "events": []
+    },
+    {
+      "person_id": "C14",
+      "name": "Sneha Shah",
+      "is_target": false,
+      "occupation": "solutions architect",
+      "organization": "Quillon Analytics",
+      "department": "Platform Engineering",
+      "city": "Pune",
+      "age_band": "40-49",
+      "gender": "female",
+      "events": [
+        "Quillon Founders' Day 2025",
+        "Deccan AI Conference 2025"
+      ]
+    },
+    {
+      "person_id": "C15",
+      "name": "Deepa Jain",
+      "is_target": false,
+      "occupation": "data science manager",
+      "organization": "Quillon Analytics",
+      "department": "Data Science",
+      "city": "Hyderabad",
+      "age_band": "30-39",
+      "gender": "female",
+      "events": []
+    },
+    {
+      "person_id": "C16",
+      "name": "Bhavana Naidu",
+      "is_target": false,
+      "occupation": "data analyst",
+      "organization": "Quillon Analytics",
+      "department": "Data Science",
+      "city": "Pune",
+      "age_band": "20-29",
+      "gender": "female",
+      "events": [
+        "Quillon Founders' Day 2025"
+      ]
+    },
+    {
+      "person_id": "C17",
+      "name": "Esha Desai",
+      "is_target": false,
+      "occupation": "HR manager",
+      "organization": "Quillon Analytics",
+      "department": "People Operations",
+      "city": "Pune",
+      "age_band": "30-39",
+      "gender": "female",
+      "events": [
+        "Quillon Founders' Day 2025"
+      ]
+    },
+    {
+      "person_id": "C18",
+      "name": "Karan Naidu",
+      "is_target": false,
+      "occupation": "assistant warden",
+      "organization": "Kestrelmoor University",
+      "department": "Boys' Hostel",
+      "city": "Bengaluru",
+      "age_band": "30-39",
+      "gender": "male",
+      "events": []
+    },
+    {
+      "person_id": "C19",
+      "name": "Yamini Malhotra",
+      "is_target": false,
+      "occupation": "warden",
+      "organization": "Kestrelmoor University",
+      "department": "Girls' Hostel",
+      "city": "Bengaluru",
+      "age_band": "50-59",
+      "gender": "female",
+      "events": []
+    },
+    {
+      "person_id": "C20",
+      "name": "Abhay Tiwari",
+      "is_target": false,
+      "occupation": "assistant professor",
+      "organization": "Kestrelmoor University",
+      "department": "Computer Science",
+      "city": "Bengaluru",
+      "age_band": "30-39",
+      "gender": "male",
+      "events": [
+        "Deccan AI Conference 2025"
+      ]
+    },
+    {
+      "person_id": "C21",
+      "name": "Abhay Khanna",
+      "is_target": false,
+      "occupation": "assistant professor",
+      "organization": "Kestrelmoor University",
+      "department": "Computer Science",
+      "city": "Bengaluru",
+      "age_band": "30-39",
+      "gender": "male",
+      "events": [
+        "Deccan AI Conference 2025"
+      ]
+    },
+    {
+      "person_id": "C22",
+      "name": "Siddharth Jain",
+      "is_target": false,
+      "occupation": "assistant professor",
+      "organization": "Kestrelmoor University",
+      "department": "Computer Science",
+      "city": "Bengaluru",
+      "age_band": "30-39",
+      "gender": "male",
+      "events": [
+        "Deccan AI Conference 2025"
+      ]
+    },
+    {
+      "person_id": "C23",
+      "name": "Bhavana Kamath",
+      "is_target": false,
+      "occupation": "assistant professor",
+      "organization": "Kestrelmoor University",
+      "department": "Computer Science",
+      "city": "Bengaluru",
+      "age_band": "30-39",
+      "gender": "female",
+      "events": [
+        "Deccan AI Conference 2025"
+      ]
+    },
+    {
+      "person_id": "C24",
+      "name": "Yamini Kapoor",
+      "is_target": false,
+      "occupation": "librarian",
+      "organization": "Kestrelmoor University",
+      "department": "Central Library",
+      "city": "Bengaluru",
+      "age_band": "40-49",
+      "gender": "female",
+      "events": []
+    },
+    {
+      "person_id": "C25",
+      "name": "Pallavi Tiwari",
+      "is_target": false,
+      "occupation": "research scientist",
+      "organization": "Fernhollow Biolabs",
+      "department": "Genomics",
+      "city": "Hyderabad",
+      "age_band": "20-29",
+      "gender": "female",
+      "events": [
+        "Indus Bioinformatics Symposium 2025"
+      ]
+    },
+    {
+      "person_id": "C26",
+      "name": "Aditi Patil",
+      "is_target": false,
+      "occupation": "research scientist",
+      "organization": "Fernhollow Biolabs",
+      "department": "Genomics",
+      "city": "Hyderabad",
+      "age_band": "20-29",
+      "gender": "female",
+      "events": [
+        "Indus Bioinformatics Symposium 2025"
+      ]
+    },
+    {
+      "person_id": "C27",
+      "name": "Tanvi Shah",
+      "is_target": false,
+      "occupation": "research scientist",
+      "organization": "Fernhollow Biolabs",
+      "department": "Genomics",
+      "city": "Hyderabad",
+      "age_band": "20-29",
+      "gender": "female",
+      "events": [
+        "Indus Bioinformatics Symposium 2025"
+      ]
+    },
+    {
+      "person_id": "C28",
+      "name": "Aarav Kapoor",
+      "is_target": false,
+      "occupation": "lab technician",
+      "organization": "Fernhollow Biolabs",
+      "department": "Genomics",
+      "city": "Hyderabad",
+      "age_band": "20-29",
+      "gender": "male",
+      "events": []
+    },
+    {
+      "person_id": "C29",
+      "name": "Deepa Shetty",
+      "is_target": false,
+      "occupation": "events coordinator",
+      "organization": "Velloran Finance Ltd",
+      "department": "Corporate Communications",
+      "city": "Kochi",
+      "age_band": "20-29",
+      "gender": "female",
+      "events": [
+        "Coastal Finance Forum 2024"
+      ]
+    },
+    {
+      "person_id": "C30",
+      "name": "Farhan Kamath",
+      "is_target": false,
+      "occupation": "accountant",
+      "organization": "Velloran Finance Ltd",
+      "department": "Finance",
+      "city": "Chennai",
+      "age_band": "30-39",
+      "gender": "male",
+      "events": []
+    },
+    {
+      "person_id": "C31",
+      "name": "Uma Desai",
+      "is_target": false,
+      "occupation": "accountant",
+      "organization": "Velloran Finance Ltd",
+      "department": "Finance",
+      "city": "Chennai",
+      "age_band": "40-49",
+      "gender": "female",
+      "events": [
+        "Coastal Finance Forum 2024"
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "doc_id": "hr-001",
+      "doc_type": "hr_record",
+      "text": "Staff record update. Dr. Ananya Rao has joined the imaging team. She works as a consultant radiologist at Marlow Bay Hospital. Contact: ananya.rao@example.org, +1-202-555-0111. Employee ID: EMP-40112."
+    },
+    {
+      "doc_id": "bio-001",
+      "doc_type": "speaker_bio",
+      "text": "Speaker profile: A. Rao. The speaker is in her forties and lives in Mumbai. Her talk covers low-dose CT screening."
+    },
+    {
+      "doc_id": "news-001",
+      "doc_type": "news_item",
+      "text": "Imaging award announced. Dr. Rao received this year's Silver Lens award for her screening research."
+    },
+    {
+      "doc_id": "alumni-001",
+      "doc_type": "alumni_newsletter",
+      "text": "Kestrelmoor University alumni notes. Ananya Rao (MBBS, class of 2008) sent greetings to her classmates. Vikram Rao (BTech, class of 2021) has joined a software company. Sandeep Kulkarni, now in his thirties, has returned to campus as faculty."
+    },
+    {
+      "doc_id": "tkt-001",
+      "doc_type": "support_ticket",
+      "text": "Ticket QA-5521. Raised by rohan.mehta@example.com: VPN access fails from the Pune office. Assigned to Vikram Rao, customer support engineer."
+    },
+    {
+      "doc_id": "memo-001",
+      "doc_type": "internal_memo",
+      "text": "Support rota for next week.\nChirag Kamath - customer support engineer, Customer Support, Quillon Analytics, Pune\nVarun Mishra - customer support engineer, Customer Support, Quillon Analytics, Pune\nVikram Rao - customer support engineer, Customer Support, Quillon Analytics, Pune\nPranav Reddy - customer support engineer, Customer Support, Quillon Analytics, Pune\nHarini Chawla - customer support engineer, Customer Support, Quillon Analytics, Pune"
+    },
+    {
+      "doc_id": "att-001",
+      "doc_type": "attendee_list",
+      "text": "Attendance record.\nEsha Desai, 37, attended Quillon Founders' Day 2025.\nVikram Rao, 24, attended Quillon Founders' Day 2025.\nChirag Kamath, 27, attended Quillon Founders' Day 2025.\nBhavana Naidu, 21, attended Quillon Founders' Day 2025.\nPranav Reddy, 24, attended Quillon Founders' Day 2025.\nSneha Shah, 41, attended Quillon Founders' Day 2025.\nVarun Mishra, 22, attended Quillon Founders' Day 2025."
+    },
+    {
+      "doc_id": "hr-002",
+      "doc_type": "hr_record",
+      "text": "Staff record. Meghna Iyer is an assistant warden in the Girls' Hostel at Kestrelmoor University. Age: 36. Phone: +1-202-555-0123."
+    },
+    {
+      "doc_id": "leave-001",
+      "doc_type": "leave_note",
+      "text": "Leave note. Meghna Iyer is on approved leave from 10 to 14 June 2025. Cover will be arranged by the housing office."
+    },
+    {
+      "doc_id": "memo-002",
+      "doc_type": "internal_memo",
+      "text": "Housing office memo. The only assistant warden of the girls' hostel at Kestrelmoor University, who joined in March 2024, has asked to move to day shifts. Please send replies to the housing office."
+    },
+    {
+      "doc_id": "hr-003",
+      "doc_type": "hr_record",
+      "text": "New appointment. Rohan Mehta has been appointed to lead the analytics group. The post is data science manager at Quillon Analytics. Email: rohan.mehta@example.com. Employee ID: EMP-30418."
+    },
+    {
+      "doc_id": "leave-002",
+      "doc_type": "leave_note",
+      "text": "Benefits enrolment form.\nEmployee ID: EMP-30418\nDate of birth: 14 August 1981\nPostcode: 411045\nGender: male\nSSN: 912-55-0148"
+    },
+    {
+      "doc_id": "news-005",
+      "doc_type": "news_item",
+      "text": "Town hall summary. Rohan Mehta spoke to staff about the data roadmap. The speaker, who is in his forties, is based in Pune."
+    },
+    {
+      "doc_id": "news-002",
+      "doc_type": "news_item",
+      "text": "Welcome note. Lukas Brenner, a German national, has joined the Pune office."
+    },
+    {
+      "doc_id": "bio-002",
+      "doc_type": "speaker_bio",
+      "text": "Conference keynote speaker: Lukas Brenner. The speaker is a solutions architect at Quillon Analytics. The talk is about streaming data platforms."
+    },
+    {
+      "doc_id": "news-003",
+      "doc_type": "news_item",
+      "text": "Innovation award. This year's innovation award went to L. Brenner. The winner, aged 34, led the data platform redesign."
+    },
+    {
+      "doc_id": "att-003",
+      "doc_type": "attendee_list",
+      "text": "Conference attendance.\nBhavana Kamath, Kestrelmoor University, attended the Deccan AI Conference 2025.\nLukas Brenner, Quillon Analytics, attended the Deccan AI Conference 2025.\nAbhay Tiwari, Kestrelmoor University, attended the Deccan AI Conference 2025.\nAbhay Khanna, Kestrelmoor University, attended the Deccan AI Conference 2025.\nSiddharth Jain, Kestrelmoor University, attended the Deccan AI Conference 2025.\nSandeep Kulkarni, Kestrelmoor University, attended the Deccan AI Conference 2025.\nSneha Shah, Quillon Analytics, attended the Deccan AI Conference 2025."
+    },
+    {
+      "doc_id": "hr-004",
+      "doc_type": "hr_record",
+      "text": "Personnel note. Kavya Menon has moved to the events team. The role is events coordinator at Velloran Finance Ltd. Contact: kavya.menon@example.net."
+    },
+    {
+      "doc_id": "leave-004",
+      "doc_type": "leave_note",
+      "text": "Leave request. Kavya Menon has applied for a week of annual leave. She is 31 and works from the Chennai office."
+    },
+    {
+      "doc_id": "news-004",
+      "doc_type": "news_item",
+      "text": "Forum recap. The Coastal Finance Forum 2024 was organised by Kavya Menon, who is based in Kochi."
+    },
+    {
+      "doc_id": "leave-003",
+      "doc_type": "leave_note",
+      "text": "Medical leave note. Priya Nair, staff nurse, is on medical leave until 28 February 2025. She has been diagnosed with a herniated disc. Record: MRN-0012345."
+    },
+    {
+      "doc_id": "memo-003",
+      "doc_type": "internal_memo",
+      "text": "Night roster for the coming week.\nRitika Zaveri - staff nurse, Marlow Bay Hospital, Mumbai\nMadhuri Dutta - staff nurse, Marlow Bay Hospital, Mumbai\nDev Gupta - staff nurse, Marlow Bay Hospital, Mumbai\nPriya Nair - staff nurse, Marlow Bay Hospital, Mumbai\nPallavi Banerjee - staff nurse, Marlow Bay Hospital, Mumbai\nBhavana Sethi - staff nurse, Marlow Bay Hospital, Mumbai"
+    },
+    {
+      "doc_id": "att-002",
+      "doc_type": "attendee_list",
+      "text": "Delegate confirmations.\nDev Gupta (Marlow Bay Hospital, 30s) will attend the Western India Nursing Summit 2025.\nPriya Nair (Marlow Bay Hospital, 30s) will attend the Western India Nursing Summit 2025.\nPallavi Banerjee (Marlow Bay Hospital, 30s) will attend the Western India Nursing Summit 2025.\nMadhuri Dutta (Marlow Bay Hospital, 30s) will attend the Western India Nursing Summit 2025.\nBhavana Sethi (Marlow Bay Hospital, 30s) will attend the Western India Nursing Summit 2025.\nRitika Zaveri (Marlow Bay Hospital, 30s) will attend the Western India Nursing Summit 2025."
+    },
+    {
+      "doc_id": "bio-003",
+      "doc_type": "speaker_bio",
+      "text": "Conference speaker: Sandeep Kulkarni. Sandeep Kulkarni is an assistant professor of Computer Science at Kestrelmoor University in Bengaluru. He will speak at the Deccan AI Conference 2025."
+    },
+    {
+      "doc_id": "hr-005",
+      "doc_type": "hr_record",
+      "text": "Staff record. Neha Joshi is a research scientist in the Genomics group at Fernhollow Biolabs, Hyderabad. Age: 27."
+    },
+    {
+      "doc_id": "memo-004",
+      "doc_type": "internal_memo",
+      "text": "Report date: 3 February 2025. Group update. Neha Joshi, aged 27, will present a poster at the Indus Bioinformatics Symposium 2025."
+    },
+    {
+      "doc_id": "tkt-002",
+      "doc_type": "support_ticket",
+      "text": "Ticket IT-0193. Neha Joshi reports that her lab laptop will not boot. Contact: neha.joshi@example.net, +1-202-555-0164."
+    },
+    {
+      "doc_id": "news-006",
+      "doc_type": "news_item",
+      "text": "Marlow Bay Hospital opens a cardiac wing. Release date: 12 January 2025. Location: Mumbai. The new wing adds forty beds."
+    }
+  ],
+  "mentions": [
+    {
+      "doc_id": "hr-001",
+      "start": 21,
+      "end": 35,
+      "entity_type": "PERSON",
+      "person_id": "T01",
+      "value_kind": "titled_full_name",
+      "sentence_index": 1,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "hr-001",
+      "start": 80,
+      "end": 102,
+      "entity_type": "OCCUPATION",
+      "person_id": "T01",
+      "value_kind": "job_title",
+      "sentence_index": 2,
+      "attribute": "OCCUPATION",
+      "attribute_value": "consultant radiologist",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "hr-001",
+      "start": 106,
+      "end": 125,
+      "entity_type": "ORGANIZATION",
+      "person_id": "T01",
+      "value_kind": "employer",
+      "sentence_index": 2,
+      "attribute": "ORGANIZATION",
+      "attribute_value": "Marlow Bay Hospital",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "hr-001",
+      "start": 136,
+      "end": 158,
+      "entity_type": "EMAIL_ADDRESS",
+      "person_id": "T01",
+      "value_kind": "email",
+      "sentence_index": 3,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "hr-001",
+      "start": 160,
+      "end": 175,
+      "entity_type": "PHONE_NUMBER",
+      "person_id": "T01",
+      "value_kind": "phone",
+      "sentence_index": 3,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "hr-001",
+      "start": 190,
+      "end": 199,
+      "entity_type": "RECORD_IDENTIFIER",
+      "person_id": "T01",
+      "value_kind": "employee_id",
+      "sentence_index": 4,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "bio-001",
+      "start": 17,
+      "end": 23,
+      "entity_type": "PERSON",
+      "person_id": "T01",
+      "value_kind": "initial_surname",
+      "sentence_index": 0,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "bio-001",
+      "start": 40,
+      "end": 54,
+      "entity_type": "AGE",
+      "person_id": "T01",
+      "value_kind": "age_decade_phrase",
+      "sentence_index": 1,
+      "attribute": "AGE",
+      "attribute_value": "40-49",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "bio-001",
+      "start": 68,
+      "end": 74,
+      "entity_type": "LOCATION",
+      "person_id": "T01",
+      "value_kind": "city",
+      "sentence_index": 1,
+      "attribute": "LOCATION",
+      "attribute_value": "Mumbai",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "news-001",
+      "start": 25,
+      "end": 32,
+      "entity_type": "PERSON",
+      "person_id": "T01",
+      "value_kind": "titled_surname",
+      "sentence_index": 1,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "news-001",
+      "start": 54,
+      "end": 71,
+      "entity_type": "EVENT",
+      "person_id": "T01",
+      "value_kind": "award",
+      "sentence_index": 1,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "alumni-001",
+      "start": 0,
+      "end": 22,
+      "entity_type": "ORGANIZATION",
+      "person_id": null,
+      "value_kind": "publisher",
+      "sentence_index": 0,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "alumni-001",
+      "start": 37,
+      "end": 47,
+      "entity_type": "PERSON",
+      "person_id": "T01",
+      "value_kind": "full_name",
+      "sentence_index": 1,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "alumni-001",
+      "start": 64,
+      "end": 68,
+      "entity_type": "DATE",
+      "person_id": "T01",
+      "value_kind": "graduation_year",
+      "sentence_index": 1,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "alumni-001",
+      "start": 104,
+      "end": 114,
+      "entity_type": "PERSON",
+      "person_id": "T02",
+      "value_kind": "full_name",
+      "sentence_index": 2,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "alumni-001",
+      "start": 132,
+      "end": 136,
+      "entity_type": "DATE",
+      "person_id": "T02",
+      "value_kind": "graduation_year",
+      "sentence_index": 2,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "alumni-001",
+      "start": 169,
+      "end": 185,
+      "entity_type": "PERSON",
+      "person_id": "T08",
+      "value_kind": "full_name",
+      "sentence_index": 3,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "alumni-001",
+      "start": 191,
+      "end": 206,
+      "entity_type": "AGE",
+      "person_id": "T08",
+      "value_kind": "age_decade_phrase",
+      "sentence_index": 3,
+      "attribute": "AGE",
+      "attribute_value": "30-39",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "tkt-001",
+      "start": 26,
+      "end": 49,
+      "entity_type": "EMAIL_ADDRESS",
+      "person_id": "T04",
+      "value_kind": "email",
+      "sentence_index": 1,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "tkt-001",
+      "start": 77,
+      "end": 81,
+      "entity_type": "LOCATION",
+      "person_id": "T04",
+      "value_kind": "city",
+      "sentence_index": 1,
+      "attribute": "LOCATION",
+      "attribute_value": "Pune",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "tkt-001",
+      "start": 102,
+      "end": 112,
+      "entity_type": "PERSON",
+      "person_id": "T02",
+      "value_kind": "full_name",
+      "sentence_index": 2,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "tkt-001",
+      "start": 114,
+      "end": 139,
+      "entity_type": "OCCUPATION",
+      "person_id": "T02",
+      "value_kind": "job_title",
+      "sentence_index": 2,
+      "attribute": "OCCUPATION",
+      "attribute_value": "customer support engineer",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 28,
+      "end": 41,
+      "entity_type": "PERSON",
+      "person_id": "C12",
+      "value_kind": "full_name",
+      "sentence_index": 1,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 44,
+      "end": 69,
+      "entity_type": "OCCUPATION",
+      "person_id": "C12",
+      "value_kind": "job_title",
+      "sentence_index": 1,
+      "attribute": "OCCUPATION",
+      "attribute_value": "customer support engineer",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 71,
+      "end": 87,
+      "entity_type": "ORGANIZATION",
+      "person_id": "C12",
+      "value_kind": "department",
+      "sentence_index": 1,
+      "attribute": "DEPARTMENT",
+      "attribute_value": "Customer Support",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 89,
+      "end": 106,
+      "entity_type": "ORGANIZATION",
+      "person_id": "C12",
+      "value_kind": "employer",
+      "sentence_index": 1,
+      "attribute": "ORGANIZATION",
+      "attribute_value": "Quillon Analytics",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 108,
+      "end": 112,
+      "entity_type": "LOCATION",
+      "person_id": "C12",
+      "value_kind": "city",
+      "sentence_index": 1,
+      "attribute": "LOCATION",
+      "attribute_value": "Pune",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 113,
+      "end": 125,
+      "entity_type": "PERSON",
+      "person_id": "C10",
+      "value_kind": "full_name",
+      "sentence_index": 2,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 128,
+      "end": 153,
+      "entity_type": "OCCUPATION",
+      "person_id": "C10",
+      "value_kind": "job_title",
+      "sentence_index": 2,
+      "attribute": "OCCUPATION",
+      "attribute_value": "customer support engineer",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 155,
+      "end": 171,
+      "entity_type": "ORGANIZATION",
+      "person_id": "C10",
+      "value_kind": "department",
+      "sentence_index": 2,
+      "attribute": "DEPARTMENT",
+      "attribute_value": "Customer Support",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 173,
+      "end": 190,
+      "entity_type": "ORGANIZATION",
+      "person_id": "C10",
+      "value_kind": "employer",
+      "sentence_index": 2,
+      "attribute": "ORGANIZATION",
+      "attribute_value": "Quillon Analytics",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 192,
+      "end": 196,
+      "entity_type": "LOCATION",
+      "person_id": "C10",
+      "value_kind": "city",
+      "sentence_index": 2,
+      "attribute": "LOCATION",
+      "attribute_value": "Pune",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 197,
+      "end": 207,
+      "entity_type": "PERSON",
+      "person_id": "T02",
+      "value_kind": "full_name",
+      "sentence_index": 3,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 210,
+      "end": 235,
+      "entity_type": "OCCUPATION",
+      "person_id": "T02",
+      "value_kind": "job_title",
+      "sentence_index": 3,
+      "attribute": "OCCUPATION",
+      "attribute_value": "customer support engineer",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 237,
+      "end": 253,
+      "entity_type": "ORGANIZATION",
+      "person_id": "T02",
+      "value_kind": "department",
+      "sentence_index": 3,
+      "attribute": "DEPARTMENT",
+      "attribute_value": "Customer Support",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 255,
+      "end": 272,
+      "entity_type": "ORGANIZATION",
+      "person_id": "T02",
+      "value_kind": "employer",
+      "sentence_index": 3,
+      "attribute": "ORGANIZATION",
+      "attribute_value": "Quillon Analytics",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 274,
+      "end": 278,
+      "entity_type": "LOCATION",
+      "person_id": "T02",
+      "value_kind": "city",
+      "sentence_index": 3,
+      "attribute": "LOCATION",
+      "attribute_value": "Pune",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 279,
+      "end": 291,
+      "entity_type": "PERSON",
+      "person_id": "C11",
+      "value_kind": "full_name",
+      "sentence_index": 4,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 294,
+      "end": 319,
+      "entity_type": "OCCUPATION",
+      "person_id": "C11",
+      "value_kind": "job_title",
+      "sentence_index": 4,
+      "attribute": "OCCUPATION",
+      "attribute_value": "customer support engineer",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 321,
+      "end": 337,
+      "entity_type": "ORGANIZATION",
+      "person_id": "C11",
+      "value_kind": "department",
+      "sentence_index": 4,
+      "attribute": "DEPARTMENT",
+      "attribute_value": "Customer Support",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 339,
+      "end": 356,
+      "entity_type": "ORGANIZATION",
+      "person_id": "C11",
+      "value_kind": "employer",
+      "sentence_index": 4,
+      "attribute": "ORGANIZATION",
+      "attribute_value": "Quillon Analytics",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 358,
+      "end": 362,
+      "entity_type": "LOCATION",
+      "person_id": "C11",
+      "value_kind": "city",
+      "sentence_index": 4,
+      "attribute": "LOCATION",
+      "attribute_value": "Pune",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 363,
+      "end": 376,
+      "entity_type": "PERSON",
+      "person_id": "C13",
+      "value_kind": "full_name",
+      "sentence_index": 5,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 379,
+      "end": 404,
+      "entity_type": "OCCUPATION",
+      "person_id": "C13",
+      "value_kind": "job_title",
+      "sentence_index": 5,
+      "attribute": "OCCUPATION",
+      "attribute_value": "customer support engineer",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 406,
+      "end": 422,
+      "entity_type": "ORGANIZATION",
+      "person_id": "C13",
+      "value_kind": "department",
+      "sentence_index": 5,
+      "attribute": "DEPARTMENT",
+      "attribute_value": "Customer Support",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 424,
+      "end": 441,
+      "entity_type": "ORGANIZATION",
+      "person_id": "C13",
+      "value_kind": "employer",
+      "sentence_index": 5,
+      "attribute": "ORGANIZATION",
+      "attribute_value": "Quillon Analytics",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 443,
+      "end": 447,
+      "entity_type": "LOCATION",
+      "person_id": "C13",
+      "value_kind": "city",
+      "sentence_index": 5,
+      "attribute": "LOCATION",
+      "attribute_value": "Pune",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-001",
+      "start": 19,
+      "end": 29,
+      "entity_type": "PERSON",
+      "person_id": "C17",
+      "value_kind": "full_name",
+      "sentence_index": 1,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-001",
+      "start": 31,
+      "end": 33,
+      "entity_type": "AGE",
+      "person_id": "C17",
+      "value_kind": "exact_age",
+      "sentence_index": 1,
+      "attribute": "AGE",
+      "attribute_value": "30-39",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-001",
+      "start": 44,
+      "end": 70,
+      "entity_type": "EVENT",
+      "person_id": "C17",
+      "value_kind": "named_event",
+      "sentence_index": 1,
+      "attribute": "EVENT",
+      "attribute_value": "Quillon Founders' Day 2025",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-001",
+      "start": 72,
+      "end": 82,
+      "entity_type": "PERSON",
+      "person_id": "T02",
+      "value_kind": "full_name",
+      "sentence_index": 2,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-001",
+      "start": 84,
+      "end": 86,
+      "entity_type": "AGE",
+      "person_id": "T02",
+      "value_kind": "exact_age",
+      "sentence_index": 2,
+      "attribute": "AGE",
+      "attribute_value": "20-29",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-001",
+      "start": 97,
+      "end": 123,
+      "entity_type": "EVENT",
+      "person_id": "T02",
+      "value_kind": "named_event",
+      "sentence_index": 2,
+      "attribute": "EVENT",
+      "attribute_value": "Quillon Founders' Day 2025",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-001",
+      "start": 125,
+      "end": 138,
+      "entity_type": "PERSON",
+      "person_id": "C12",
+      "value_kind": "full_name",
+      "sentence_index": 3,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-001",
+      "start": 140,
+      "end": 142,
+      "entity_type": "AGE",
+      "person_id": "C12",
+      "value_kind": "exact_age",
+      "sentence_index": 3,
+      "attribute": "AGE",
+      "attribute_value": "20-29",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-001",
+      "start": 153,
+      "end": 179,
+      "entity_type": "EVENT",
+      "person_id": "C12",
+      "value_kind": "named_event",
+      "sentence_index": 3,
+      "attribute": "EVENT",
+      "attribute_value": "Quillon Founders' Day 2025",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-001",
+      "start": 181,
+      "end": 194,
+      "entity_type": "PERSON",
+      "person_id": "C16",
+      "value_kind": "full_name",
+      "sentence_index": 4,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-001",
+      "start": 196,
+      "end": 198,
+      "entity_type": "AGE",
+      "person_id": "C16",
+      "value_kind": "exact_age",
+      "sentence_index": 4,
+      "attribute": "AGE",
+      "attribute_value": "20-29",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-001",
+      "start": 209,
+      "end": 235,
+      "entity_type": "EVENT",
+      "person_id": "C16",
+      "value_kind": "named_event",
+      "sentence_index": 4,
+      "attribute": "EVENT",
+      "attribute_value": "Quillon Founders' Day 2025",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-001",
+      "start": 237,
+      "end": 249,
+      "entity_type": "PERSON",
+      "person_id": "C11",
+      "value_kind": "full_name",
+      "sentence_index": 5,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-001",
+      "start": 251,
+      "end": 253,
+      "entity_type": "AGE",
+      "person_id": "C11",
+      "value_kind": "exact_age",
+      "sentence_index": 5,
+      "attribute": "AGE",
+      "attribute_value": "20-29",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-001",
+      "start": 264,
+      "end": 290,
+      "entity_type": "EVENT",
+      "person_id": "C11",
+      "value_kind": "named_event",
+      "sentence_index": 5,
+      "attribute": "EVENT",
+      "attribute_value": "Quillon Founders' Day 2025",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-001",
+      "start": 292,
+      "end": 302,
+      "entity_type": "PERSON",
+      "person_id": "C14",
+      "value_kind": "full_name",
+      "sentence_index": 6,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-001",
+      "start": 304,
+      "end": 306,
+      "entity_type": "AGE",
+      "person_id": "C14",
+      "value_kind": "exact_age",
+      "sentence_index": 6,
+      "attribute": "AGE",
+      "attribute_value": "40-49",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-001",
+      "start": 317,
+      "end": 343,
+      "entity_type": "EVENT",
+      "person_id": "C14",
+      "value_kind": "named_event",
+      "sentence_index": 6,
+      "attribute": "EVENT",
+      "attribute_value": "Quillon Founders' Day 2025",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-001",
+      "start": 345,
+      "end": 357,
+      "entity_type": "PERSON",
+      "person_id": "C10",
+      "value_kind": "full_name",
+      "sentence_index": 7,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-001",
+      "start": 359,
+      "end": 361,
+      "entity_type": "AGE",
+      "person_id": "C10",
+      "value_kind": "exact_age",
+      "sentence_index": 7,
+      "attribute": "AGE",
+      "attribute_value": "20-29",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-001",
+      "start": 372,
+      "end": 398,
+      "entity_type": "EVENT",
+      "person_id": "C10",
+      "value_kind": "named_event",
+      "sentence_index": 7,
+      "attribute": "EVENT",
+      "attribute_value": "Quillon Founders' Day 2025",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "hr-002",
+      "start": 14,
+      "end": 25,
+      "entity_type": "PERSON",
+      "person_id": "T03",
+      "value_kind": "full_name",
+      "sentence_index": 1,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "hr-002",
+      "start": 32,
+      "end": 48,
+      "entity_type": "OCCUPATION",
+      "person_id": "T03",
+      "value_kind": "job_title",
+      "sentence_index": 1,
+      "attribute": "OCCUPATION",
+      "attribute_value": "assistant warden",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "hr-002",
+      "start": 56,
+      "end": 69,
+      "entity_type": "ORGANIZATION",
+      "person_id": "T03",
+      "value_kind": "department",
+      "sentence_index": 1,
+      "attribute": "DEPARTMENT",
+      "attribute_value": "Girls' Hostel",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "hr-002",
+      "start": 73,
+      "end": 95,
+      "entity_type": "ORGANIZATION",
+      "person_id": "T03",
+      "value_kind": "employer",
+      "sentence_index": 1,
+      "attribute": "ORGANIZATION",
+      "attribute_value": "Kestrelmoor University",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "hr-002",
+      "start": 102,
+      "end": 104,
+      "entity_type": "AGE",
+      "person_id": "T03",
+      "value_kind": "exact_age",
+      "sentence_index": 2,
+      "attribute": "AGE",
+      "attribute_value": "30-39",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "hr-002",
+      "start": 113,
+      "end": 128,
+      "entity_type": "PHONE_NUMBER",
+      "person_id": "T03",
+      "value_kind": "phone",
+      "sentence_index": 3,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "leave-001",
+      "start": 12,
+      "end": 23,
+      "entity_type": "PERSON",
+      "person_id": "T03",
+      "value_kind": "full_name",
+      "sentence_index": 1,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "leave-001",
+      "start": 50,
+      "end": 68,
+      "entity_type": "DATE",
+      "person_id": "T03",
+      "value_kind": "leave_period",
+      "sentence_index": 1,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-002",
+      "start": 30,
+      "end": 46,
+      "entity_type": "OCCUPATION",
+      "person_id": "T03",
+      "value_kind": "job_title",
+      "sentence_index": 1,
+      "attribute": "OCCUPATION",
+      "attribute_value": "assistant warden",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-002",
+      "start": 54,
+      "end": 67,
+      "entity_type": "ORGANIZATION",
+      "person_id": "T03",
+      "value_kind": "department",
+      "sentence_index": 1,
+      "attribute": "DEPARTMENT",
+      "attribute_value": "Girls' Hostel",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-002",
+      "start": 71,
+      "end": 93,
+      "entity_type": "ORGANIZATION",
+      "person_id": "T03",
+      "value_kind": "employer",
+      "sentence_index": 1,
+      "attribute": "ORGANIZATION",
+      "attribute_value": "Kestrelmoor University",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-002",
+      "start": 109,
+      "end": 119,
+      "entity_type": "DATE",
+      "person_id": "T03",
+      "value_kind": "join_date",
+      "sentence_index": 1,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "hr-003",
+      "start": 17,
+      "end": 28,
+      "entity_type": "PERSON",
+      "person_id": "T04",
+      "value_kind": "full_name",
+      "sentence_index": 1,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "hr-003",
+      "start": 89,
+      "end": 109,
+      "entity_type": "OCCUPATION",
+      "person_id": "T04",
+      "value_kind": "job_title",
+      "sentence_index": 2,
+      "attribute": "OCCUPATION",
+      "attribute_value": "data science manager",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "hr-003",
+      "start": 113,
+      "end": 130,
+      "entity_type": "ORGANIZATION",
+      "person_id": "T04",
+      "value_kind": "employer",
+      "sentence_index": 2,
+      "attribute": "ORGANIZATION",
+      "attribute_value": "Quillon Analytics",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "hr-003",
+      "start": 139,
+      "end": 162,
+      "entity_type": "EMAIL_ADDRESS",
+      "person_id": "T04",
+      "value_kind": "email",
+      "sentence_index": 3,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "hr-003",
+      "start": 177,
+      "end": 186,
+      "entity_type": "RECORD_IDENTIFIER",
+      "person_id": "T04",
+      "value_kind": "employee_id",
+      "sentence_index": 4,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "leave-002",
+      "start": 38,
+      "end": 47,
+      "entity_type": "RECORD_IDENTIFIER",
+      "person_id": "T04",
+      "value_kind": "employee_id",
+      "sentence_index": 1,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "leave-002",
+      "start": 63,
+      "end": 77,
+      "entity_type": "DATE_OF_BIRTH",
+      "person_id": "T04",
+      "value_kind": "date_of_birth",
+      "sentence_index": 2,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "leave-002",
+      "start": 88,
+      "end": 94,
+      "entity_type": "POSTAL_CODE",
+      "person_id": "T04",
+      "value_kind": "postcode",
+      "sentence_index": 3,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "leave-002",
+      "start": 103,
+      "end": 107,
+      "entity_type": "DEMOGRAPHIC",
+      "person_id": "T04",
+      "value_kind": "gender",
+      "sentence_index": 4,
+      "attribute": "DEMOGRAPHIC",
+      "attribute_value": "male",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "leave-002",
+      "start": 113,
+      "end": 124,
+      "entity_type": "GOVERNMENT_ID",
+      "person_id": "T04",
+      "value_kind": "ssn_like",
+      "sentence_index": 5,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "news-005",
+      "start": 19,
+      "end": 30,
+      "entity_type": "PERSON",
+      "person_id": "T04",
+      "value_kind": "full_name",
+      "sentence_index": 1,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "news-005",
+      "start": 90,
+      "end": 104,
+      "entity_type": "AGE",
+      "person_id": "T04",
+      "value_kind": "age_decade_phrase",
+      "sentence_index": 2,
+      "attribute": "AGE",
+      "attribute_value": "40-49",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "news-005",
+      "start": 118,
+      "end": 122,
+      "entity_type": "LOCATION",
+      "person_id": "T04",
+      "value_kind": "city",
+      "sentence_index": 2,
+      "attribute": "LOCATION",
+      "attribute_value": "Pune",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "news-002",
+      "start": 14,
+      "end": 27,
+      "entity_type": "PERSON",
+      "person_id": "T05",
+      "value_kind": "full_name",
+      "sentence_index": 1,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "news-002",
+      "start": 31,
+      "end": 37,
+      "entity_type": "DEMOGRAPHIC",
+      "person_id": "T05",
+      "value_kind": "nationality",
+      "sentence_index": 1,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "news-002",
+      "start": 63,
+      "end": 67,
+      "entity_type": "LOCATION",
+      "person_id": "T05",
+      "value_kind": "city",
+      "sentence_index": 1,
+      "attribute": "LOCATION",
+      "attribute_value": "Pune",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "bio-002",
+      "start": 28,
+      "end": 41,
+      "entity_type": "PERSON",
+      "person_id": "T05",
+      "value_kind": "full_name",
+      "sentence_index": 0,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "bio-002",
+      "start": 60,
+      "end": 79,
+      "entity_type": "OCCUPATION",
+      "person_id": "T05",
+      "value_kind": "job_title",
+      "sentence_index": 1,
+      "attribute": "OCCUPATION",
+      "attribute_value": "solutions architect",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "bio-002",
+      "start": 83,
+      "end": 100,
+      "entity_type": "ORGANIZATION",
+      "person_id": "T05",
+      "value_kind": "employer",
+      "sentence_index": 1,
+      "attribute": "ORGANIZATION",
+      "attribute_value": "Quillon Analytics",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "news-003",
+      "start": 55,
+      "end": 65,
+      "entity_type": "PERSON",
+      "person_id": "T05",
+      "value_kind": "initial_surname",
+      "sentence_index": 1,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "news-003",
+      "start": 84,
+      "end": 86,
+      "entity_type": "AGE",
+      "person_id": "T05",
+      "value_kind": "exact_age",
+      "sentence_index": 2,
+      "attribute": "AGE",
+      "attribute_value": "30-39",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-003",
+      "start": 23,
+      "end": 37,
+      "entity_type": "PERSON",
+      "person_id": "C23",
+      "value_kind": "full_name",
+      "sentence_index": 1,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-003",
+      "start": 39,
+      "end": 61,
+      "entity_type": "ORGANIZATION",
+      "person_id": "C23",
+      "value_kind": "employer",
+      "sentence_index": 1,
+      "attribute": "ORGANIZATION",
+      "attribute_value": "Kestrelmoor University",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-003",
+      "start": 76,
+      "end": 101,
+      "entity_type": "EVENT",
+      "person_id": "C23",
+      "value_kind": "named_event",
+      "sentence_index": 1,
+      "attribute": "EVENT",
+      "attribute_value": "Deccan AI Conference 2025",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-003",
+      "start": 103,
+      "end": 116,
+      "entity_type": "PERSON",
+      "person_id": "T05",
+      "value_kind": "full_name",
+      "sentence_index": 2,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-003",
+      "start": 118,
+      "end": 135,
+      "entity_type": "ORGANIZATION",
+      "person_id": "T05",
+      "value_kind": "employer",
+      "sentence_index": 2,
+      "attribute": "ORGANIZATION",
+      "attribute_value": "Quillon Analytics",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-003",
+      "start": 150,
+      "end": 175,
+      "entity_type": "EVENT",
+      "person_id": "T05",
+      "value_kind": "named_event",
+      "sentence_index": 2,
+      "attribute": "EVENT",
+      "attribute_value": "Deccan AI Conference 2025",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-003",
+      "start": 177,
+      "end": 189,
+      "entity_type": "PERSON",
+      "person_id": "C20",
+      "value_kind": "full_name",
+      "sentence_index": 3,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-003",
+      "start": 191,
+      "end": 213,
+      "entity_type": "ORGANIZATION",
+      "person_id": "C20",
+      "value_kind": "employer",
+      "sentence_index": 3,
+      "attribute": "ORGANIZATION",
+      "attribute_value": "Kestrelmoor University",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-003",
+      "start": 228,
+      "end": 253,
+      "entity_type": "EVENT",
+      "person_id": "C20",
+      "value_kind": "named_event",
+      "sentence_index": 3,
+      "attribute": "EVENT",
+      "attribute_value": "Deccan AI Conference 2025",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-003",
+      "start": 255,
+      "end": 267,
+      "entity_type": "PERSON",
+      "person_id": "C21",
+      "value_kind": "full_name",
+      "sentence_index": 4,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-003",
+      "start": 269,
+      "end": 291,
+      "entity_type": "ORGANIZATION",
+      "person_id": "C21",
+      "value_kind": "employer",
+      "sentence_index": 4,
+      "attribute": "ORGANIZATION",
+      "attribute_value": "Kestrelmoor University",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-003",
+      "start": 306,
+      "end": 331,
+      "entity_type": "EVENT",
+      "person_id": "C21",
+      "value_kind": "named_event",
+      "sentence_index": 4,
+      "attribute": "EVENT",
+      "attribute_value": "Deccan AI Conference 2025",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-003",
+      "start": 333,
+      "end": 347,
+      "entity_type": "PERSON",
+      "person_id": "C22",
+      "value_kind": "full_name",
+      "sentence_index": 5,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-003",
+      "start": 349,
+      "end": 371,
+      "entity_type": "ORGANIZATION",
+      "person_id": "C22",
+      "value_kind": "employer",
+      "sentence_index": 5,
+      "attribute": "ORGANIZATION",
+      "attribute_value": "Kestrelmoor University",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-003",
+      "start": 386,
+      "end": 411,
+      "entity_type": "EVENT",
+      "person_id": "C22",
+      "value_kind": "named_event",
+      "sentence_index": 5,
+      "attribute": "EVENT",
+      "attribute_value": "Deccan AI Conference 2025",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-003",
+      "start": 413,
+      "end": 429,
+      "entity_type": "PERSON",
+      "person_id": "T08",
+      "value_kind": "full_name",
+      "sentence_index": 6,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-003",
+      "start": 431,
+      "end": 453,
+      "entity_type": "ORGANIZATION",
+      "person_id": "T08",
+      "value_kind": "employer",
+      "sentence_index": 6,
+      "attribute": "ORGANIZATION",
+      "attribute_value": "Kestrelmoor University",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-003",
+      "start": 468,
+      "end": 493,
+      "entity_type": "EVENT",
+      "person_id": "T08",
+      "value_kind": "named_event",
+      "sentence_index": 6,
+      "attribute": "EVENT",
+      "attribute_value": "Deccan AI Conference 2025",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-003",
+      "start": 495,
+      "end": 505,
+      "entity_type": "PERSON",
+      "person_id": "C14",
+      "value_kind": "full_name",
+      "sentence_index": 7,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-003",
+      "start": 507,
+      "end": 524,
+      "entity_type": "ORGANIZATION",
+      "person_id": "C14",
+      "value_kind": "employer",
+      "sentence_index": 7,
+      "attribute": "ORGANIZATION",
+      "attribute_value": "Quillon Analytics",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-003",
+      "start": 539,
+      "end": 564,
+      "entity_type": "EVENT",
+      "person_id": "C14",
+      "value_kind": "named_event",
+      "sentence_index": 7,
+      "attribute": "EVENT",
+      "attribute_value": "Deccan AI Conference 2025",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "hr-004",
+      "start": 16,
+      "end": 27,
+      "entity_type": "PERSON",
+      "person_id": "T06",
+      "value_kind": "full_name",
+      "sentence_index": 1,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "hr-004",
+      "start": 70,
+      "end": 88,
+      "entity_type": "OCCUPATION",
+      "person_id": "T06",
+      "value_kind": "job_title",
+      "sentence_index": 2,
+      "attribute": "OCCUPATION",
+      "attribute_value": "events coordinator",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "hr-004",
+      "start": 92,
+      "end": 112,
+      "entity_type": "ORGANIZATION",
+      "person_id": "T06",
+      "value_kind": "employer",
+      "sentence_index": 2,
+      "attribute": "ORGANIZATION",
+      "attribute_value": "Velloran Finance Ltd",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "hr-004",
+      "start": 123,
+      "end": 146,
+      "entity_type": "EMAIL_ADDRESS",
+      "person_id": "T06",
+      "value_kind": "email",
+      "sentence_index": 3,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "leave-004",
+      "start": 15,
+      "end": 26,
+      "entity_type": "PERSON",
+      "person_id": "T06",
+      "value_kind": "full_name",
+      "sentence_index": 1,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "leave-004",
+      "start": 74,
+      "end": 76,
+      "entity_type": "AGE",
+      "person_id": "T06",
+      "value_kind": "exact_age",
+      "sentence_index": 2,
+      "attribute": "AGE",
+      "attribute_value": "30-39",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "leave-004",
+      "start": 96,
+      "end": 103,
+      "entity_type": "LOCATION",
+      "person_id": "T06",
+      "value_kind": "city",
+      "sentence_index": 2,
+      "attribute": "LOCATION",
+      "attribute_value": "Chennai",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "news-004",
+      "start": 17,
+      "end": 43,
+      "entity_type": "EVENT",
+      "person_id": "T06",
+      "value_kind": "named_event",
+      "sentence_index": 1,
+      "attribute": "EVENT",
+      "attribute_value": "Coastal Finance Forum 2024",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "news-004",
+      "start": 61,
+      "end": 72,
+      "entity_type": "PERSON",
+      "person_id": "T06",
+      "value_kind": "full_name",
+      "sentence_index": 1,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "news-004",
+      "start": 90,
+      "end": 95,
+      "entity_type": "LOCATION",
+      "person_id": "T06",
+      "value_kind": "city",
+      "sentence_index": 1,
+      "attribute": "LOCATION",
+      "attribute_value": "Kochi",
+      "contradicts_registry": true
+    },
+    {
+      "doc_id": "leave-003",
+      "start": 20,
+      "end": 30,
+      "entity_type": "PERSON",
+      "person_id": "T07",
+      "value_kind": "full_name",
+      "sentence_index": 1,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "leave-003",
+      "start": 32,
+      "end": 43,
+      "entity_type": "OCCUPATION",
+      "person_id": "T07",
+      "value_kind": "job_title",
+      "sentence_index": 1,
+      "attribute": "OCCUPATION",
+      "attribute_value": "staff nurse",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "leave-003",
+      "start": 71,
+      "end": 87,
+      "entity_type": "DATE",
+      "person_id": "T07",
+      "value_kind": "leave_end",
+      "sentence_index": 1,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "leave-003",
+      "start": 119,
+      "end": 133,
+      "entity_type": "MEDICAL_CONDITION",
+      "person_id": "T07",
+      "value_kind": "diagnosis",
+      "sentence_index": 2,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "leave-003",
+      "start": 143,
+      "end": 154,
+      "entity_type": "RECORD_IDENTIFIER",
+      "person_id": "T07",
+      "value_kind": "mrn",
+      "sentence_index": 3,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 34,
+      "end": 47,
+      "entity_type": "PERSON",
+      "person_id": "C03",
+      "value_kind": "full_name",
+      "sentence_index": 1,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 50,
+      "end": 61,
+      "entity_type": "OCCUPATION",
+      "person_id": "C03",
+      "value_kind": "job_title",
+      "sentence_index": 1,
+      "attribute": "OCCUPATION",
+      "attribute_value": "staff nurse",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 63,
+      "end": 82,
+      "entity_type": "ORGANIZATION",
+      "person_id": "C03",
+      "value_kind": "employer",
+      "sentence_index": 1,
+      "attribute": "ORGANIZATION",
+      "attribute_value": "Marlow Bay Hospital",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 84,
+      "end": 90,
+      "entity_type": "LOCATION",
+      "person_id": "C03",
+      "value_kind": "city",
+      "sentence_index": 1,
+      "attribute": "LOCATION",
+      "attribute_value": "Mumbai",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 91,
+      "end": 104,
+      "entity_type": "PERSON",
+      "person_id": "C05",
+      "value_kind": "full_name",
+      "sentence_index": 2,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 107,
+      "end": 118,
+      "entity_type": "OCCUPATION",
+      "person_id": "C05",
+      "value_kind": "job_title",
+      "sentence_index": 2,
+      "attribute": "OCCUPATION",
+      "attribute_value": "staff nurse",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 120,
+      "end": 139,
+      "entity_type": "ORGANIZATION",
+      "person_id": "C05",
+      "value_kind": "employer",
+      "sentence_index": 2,
+      "attribute": "ORGANIZATION",
+      "attribute_value": "Marlow Bay Hospital",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 141,
+      "end": 147,
+      "entity_type": "LOCATION",
+      "person_id": "C05",
+      "value_kind": "city",
+      "sentence_index": 2,
+      "attribute": "LOCATION",
+      "attribute_value": "Mumbai",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 148,
+      "end": 157,
+      "entity_type": "PERSON",
+      "person_id": "C07",
+      "value_kind": "full_name",
+      "sentence_index": 3,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 160,
+      "end": 171,
+      "entity_type": "OCCUPATION",
+      "person_id": "C07",
+      "value_kind": "job_title",
+      "sentence_index": 3,
+      "attribute": "OCCUPATION",
+      "attribute_value": "staff nurse",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 173,
+      "end": 192,
+      "entity_type": "ORGANIZATION",
+      "person_id": "C07",
+      "value_kind": "employer",
+      "sentence_index": 3,
+      "attribute": "ORGANIZATION",
+      "attribute_value": "Marlow Bay Hospital",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 194,
+      "end": 200,
+      "entity_type": "LOCATION",
+      "person_id": "C07",
+      "value_kind": "city",
+      "sentence_index": 3,
+      "attribute": "LOCATION",
+      "attribute_value": "Mumbai",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 201,
+      "end": 211,
+      "entity_type": "PERSON",
+      "person_id": "T07",
+      "value_kind": "full_name",
+      "sentence_index": 4,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 214,
+      "end": 225,
+      "entity_type": "OCCUPATION",
+      "person_id": "T07",
+      "value_kind": "job_title",
+      "sentence_index": 4,
+      "attribute": "OCCUPATION",
+      "attribute_value": "staff nurse",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 227,
+      "end": 246,
+      "entity_type": "ORGANIZATION",
+      "person_id": "T07",
+      "value_kind": "employer",
+      "sentence_index": 4,
+      "attribute": "ORGANIZATION",
+      "attribute_value": "Marlow Bay Hospital",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 248,
+      "end": 254,
+      "entity_type": "LOCATION",
+      "person_id": "T07",
+      "value_kind": "city",
+      "sentence_index": 4,
+      "attribute": "LOCATION",
+      "attribute_value": "Mumbai",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 255,
+      "end": 271,
+      "entity_type": "PERSON",
+      "person_id": "C06",
+      "value_kind": "full_name",
+      "sentence_index": 5,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 274,
+      "end": 285,
+      "entity_type": "OCCUPATION",
+      "person_id": "C06",
+      "value_kind": "job_title",
+      "sentence_index": 5,
+      "attribute": "OCCUPATION",
+      "attribute_value": "staff nurse",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 287,
+      "end": 306,
+      "entity_type": "ORGANIZATION",
+      "person_id": "C06",
+      "value_kind": "employer",
+      "sentence_index": 5,
+      "attribute": "ORGANIZATION",
+      "attribute_value": "Marlow Bay Hospital",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 308,
+      "end": 314,
+      "entity_type": "LOCATION",
+      "person_id": "C06",
+      "value_kind": "city",
+      "sentence_index": 5,
+      "attribute": "LOCATION",
+      "attribute_value": "Mumbai",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 315,
+      "end": 328,
+      "entity_type": "PERSON",
+      "person_id": "C04",
+      "value_kind": "full_name",
+      "sentence_index": 6,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 331,
+      "end": 342,
+      "entity_type": "OCCUPATION",
+      "person_id": "C04",
+      "value_kind": "job_title",
+      "sentence_index": 6,
+      "attribute": "OCCUPATION",
+      "attribute_value": "staff nurse",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 344,
+      "end": 363,
+      "entity_type": "ORGANIZATION",
+      "person_id": "C04",
+      "value_kind": "employer",
+      "sentence_index": 6,
+      "attribute": "ORGANIZATION",
+      "attribute_value": "Marlow Bay Hospital",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 365,
+      "end": 371,
+      "entity_type": "LOCATION",
+      "person_id": "C04",
+      "value_kind": "city",
+      "sentence_index": 6,
+      "attribute": "LOCATION",
+      "attribute_value": "Mumbai",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-002",
+      "start": 24,
+      "end": 33,
+      "entity_type": "PERSON",
+      "person_id": "C07",
+      "value_kind": "full_name",
+      "sentence_index": 1,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-002",
+      "start": 35,
+      "end": 54,
+      "entity_type": "ORGANIZATION",
+      "person_id": "C07",
+      "value_kind": "employer",
+      "sentence_index": 1,
+      "attribute": "ORGANIZATION",
+      "attribute_value": "Marlow Bay Hospital",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-002",
+      "start": 56,
+      "end": 59,
+      "entity_type": "AGE",
+      "person_id": "C07",
+      "value_kind": "age_decade_phrase",
+      "sentence_index": 1,
+      "attribute": "AGE",
+      "attribute_value": "30-39",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-002",
+      "start": 77,
+      "end": 110,
+      "entity_type": "EVENT",
+      "person_id": "C07",
+      "value_kind": "named_event",
+      "sentence_index": 1,
+      "attribute": "EVENT",
+      "attribute_value": "Western India Nursing Summit 2025",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-002",
+      "start": 112,
+      "end": 122,
+      "entity_type": "PERSON",
+      "person_id": "T07",
+      "value_kind": "full_name",
+      "sentence_index": 2,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-002",
+      "start": 124,
+      "end": 143,
+      "entity_type": "ORGANIZATION",
+      "person_id": "T07",
+      "value_kind": "employer",
+      "sentence_index": 2,
+      "attribute": "ORGANIZATION",
+      "attribute_value": "Marlow Bay Hospital",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-002",
+      "start": 145,
+      "end": 148,
+      "entity_type": "AGE",
+      "person_id": "T07",
+      "value_kind": "age_decade_phrase",
+      "sentence_index": 2,
+      "attribute": "AGE",
+      "attribute_value": "30-39",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-002",
+      "start": 166,
+      "end": 199,
+      "entity_type": "EVENT",
+      "person_id": "T07",
+      "value_kind": "named_event",
+      "sentence_index": 2,
+      "attribute": "EVENT",
+      "attribute_value": "Western India Nursing Summit 2025",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-002",
+      "start": 201,
+      "end": 217,
+      "entity_type": "PERSON",
+      "person_id": "C06",
+      "value_kind": "full_name",
+      "sentence_index": 3,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-002",
+      "start": 219,
+      "end": 238,
+      "entity_type": "ORGANIZATION",
+      "person_id": "C06",
+      "value_kind": "employer",
+      "sentence_index": 3,
+      "attribute": "ORGANIZATION",
+      "attribute_value": "Marlow Bay Hospital",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-002",
+      "start": 240,
+      "end": 243,
+      "entity_type": "AGE",
+      "person_id": "C06",
+      "value_kind": "age_decade_phrase",
+      "sentence_index": 3,
+      "attribute": "AGE",
+      "attribute_value": "30-39",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-002",
+      "start": 261,
+      "end": 294,
+      "entity_type": "EVENT",
+      "person_id": "C06",
+      "value_kind": "named_event",
+      "sentence_index": 3,
+      "attribute": "EVENT",
+      "attribute_value": "Western India Nursing Summit 2025",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-002",
+      "start": 296,
+      "end": 309,
+      "entity_type": "PERSON",
+      "person_id": "C05",
+      "value_kind": "full_name",
+      "sentence_index": 4,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-002",
+      "start": 311,
+      "end": 330,
+      "entity_type": "ORGANIZATION",
+      "person_id": "C05",
+      "value_kind": "employer",
+      "sentence_index": 4,
+      "attribute": "ORGANIZATION",
+      "attribute_value": "Marlow Bay Hospital",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-002",
+      "start": 332,
+      "end": 335,
+      "entity_type": "AGE",
+      "person_id": "C05",
+      "value_kind": "age_decade_phrase",
+      "sentence_index": 4,
+      "attribute": "AGE",
+      "attribute_value": "30-39",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-002",
+      "start": 353,
+      "end": 386,
+      "entity_type": "EVENT",
+      "person_id": "C05",
+      "value_kind": "named_event",
+      "sentence_index": 4,
+      "attribute": "EVENT",
+      "attribute_value": "Western India Nursing Summit 2025",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-002",
+      "start": 388,
+      "end": 401,
+      "entity_type": "PERSON",
+      "person_id": "C04",
+      "value_kind": "full_name",
+      "sentence_index": 5,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-002",
+      "start": 403,
+      "end": 422,
+      "entity_type": "ORGANIZATION",
+      "person_id": "C04",
+      "value_kind": "employer",
+      "sentence_index": 5,
+      "attribute": "ORGANIZATION",
+      "attribute_value": "Marlow Bay Hospital",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-002",
+      "start": 424,
+      "end": 427,
+      "entity_type": "AGE",
+      "person_id": "C04",
+      "value_kind": "age_decade_phrase",
+      "sentence_index": 5,
+      "attribute": "AGE",
+      "attribute_value": "30-39",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-002",
+      "start": 445,
+      "end": 478,
+      "entity_type": "EVENT",
+      "person_id": "C04",
+      "value_kind": "named_event",
+      "sentence_index": 5,
+      "attribute": "EVENT",
+      "attribute_value": "Western India Nursing Summit 2025",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-002",
+      "start": 480,
+      "end": 493,
+      "entity_type": "PERSON",
+      "person_id": "C03",
+      "value_kind": "full_name",
+      "sentence_index": 6,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-002",
+      "start": 495,
+      "end": 514,
+      "entity_type": "ORGANIZATION",
+      "person_id": "C03",
+      "value_kind": "employer",
+      "sentence_index": 6,
+      "attribute": "ORGANIZATION",
+      "attribute_value": "Marlow Bay Hospital",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-002",
+      "start": 516,
+      "end": 519,
+      "entity_type": "AGE",
+      "person_id": "C03",
+      "value_kind": "age_decade_phrase",
+      "sentence_index": 6,
+      "attribute": "AGE",
+      "attribute_value": "30-39",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "att-002",
+      "start": 537,
+      "end": 570,
+      "entity_type": "EVENT",
+      "person_id": "C03",
+      "value_kind": "named_event",
+      "sentence_index": 6,
+      "attribute": "EVENT",
+      "attribute_value": "Western India Nursing Summit 2025",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "bio-003",
+      "start": 20,
+      "end": 36,
+      "entity_type": "PERSON",
+      "person_id": "T08",
+      "value_kind": "full_name",
+      "sentence_index": 0,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "bio-003",
+      "start": 38,
+      "end": 54,
+      "entity_type": "PERSON",
+      "person_id": "T08",
+      "value_kind": "full_name",
+      "sentence_index": 1,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "bio-003",
+      "start": 61,
+      "end": 80,
+      "entity_type": "OCCUPATION",
+      "person_id": "T08",
+      "value_kind": "job_title",
+      "sentence_index": 1,
+      "attribute": "OCCUPATION",
+      "attribute_value": "assistant professor",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "bio-003",
+      "start": 84,
+      "end": 100,
+      "entity_type": "ORGANIZATION",
+      "person_id": "T08",
+      "value_kind": "department",
+      "sentence_index": 1,
+      "attribute": "DEPARTMENT",
+      "attribute_value": "Computer Science",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "bio-003",
+      "start": 104,
+      "end": 126,
+      "entity_type": "ORGANIZATION",
+      "person_id": "T08",
+      "value_kind": "employer",
+      "sentence_index": 1,
+      "attribute": "ORGANIZATION",
+      "attribute_value": "Kestrelmoor University",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "bio-003",
+      "start": 130,
+      "end": 139,
+      "entity_type": "LOCATION",
+      "person_id": "T08",
+      "value_kind": "city",
+      "sentence_index": 1,
+      "attribute": "LOCATION",
+      "attribute_value": "Bengaluru",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "bio-003",
+      "start": 162,
+      "end": 187,
+      "entity_type": "EVENT",
+      "person_id": "T08",
+      "value_kind": "named_event",
+      "sentence_index": 2,
+      "attribute": "EVENT",
+      "attribute_value": "Deccan AI Conference 2025",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "hr-005",
+      "start": 14,
+      "end": 24,
+      "entity_type": "PERSON",
+      "person_id": "T09",
+      "value_kind": "full_name",
+      "sentence_index": 1,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "hr-005",
+      "start": 30,
+      "end": 48,
+      "entity_type": "OCCUPATION",
+      "person_id": "T09",
+      "value_kind": "job_title",
+      "sentence_index": 1,
+      "attribute": "OCCUPATION",
+      "attribute_value": "research scientist",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "hr-005",
+      "start": 56,
+      "end": 64,
+      "entity_type": "ORGANIZATION",
+      "person_id": "T09",
+      "value_kind": "department",
+      "sentence_index": 1,
+      "attribute": "DEPARTMENT",
+      "attribute_value": "Genomics",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "hr-005",
+      "start": 74,
+      "end": 92,
+      "entity_type": "ORGANIZATION",
+      "person_id": "T09",
+      "value_kind": "employer",
+      "sentence_index": 1,
+      "attribute": "ORGANIZATION",
+      "attribute_value": "Fernhollow Biolabs",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "hr-005",
+      "start": 94,
+      "end": 103,
+      "entity_type": "LOCATION",
+      "person_id": "T09",
+      "value_kind": "city",
+      "sentence_index": 1,
+      "attribute": "LOCATION",
+      "attribute_value": "Hyderabad",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "hr-005",
+      "start": 110,
+      "end": 112,
+      "entity_type": "AGE",
+      "person_id": "T09",
+      "value_kind": "exact_age",
+      "sentence_index": 2,
+      "attribute": "AGE",
+      "attribute_value": "20-29",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-004",
+      "start": 13,
+      "end": 28,
+      "entity_type": "DATE",
+      "person_id": null,
+      "value_kind": "dateline",
+      "sentence_index": 0,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-004",
+      "start": 44,
+      "end": 54,
+      "entity_type": "PERSON",
+      "person_id": "T09",
+      "value_kind": "full_name",
+      "sentence_index": 2,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-004",
+      "start": 61,
+      "end": 63,
+      "entity_type": "AGE",
+      "person_id": "T09",
+      "value_kind": "exact_age",
+      "sentence_index": 2,
+      "attribute": "AGE",
+      "attribute_value": "20-29",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "memo-004",
+      "start": 94,
+      "end": 129,
+      "entity_type": "EVENT",
+      "person_id": "T09",
+      "value_kind": "named_event",
+      "sentence_index": 2,
+      "attribute": "EVENT",
+      "attribute_value": "Indus Bioinformatics Symposium 2025",
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "tkt-002",
+      "start": 16,
+      "end": 26,
+      "entity_type": "PERSON",
+      "person_id": "T09",
+      "value_kind": "full_name",
+      "sentence_index": 1,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "tkt-002",
+      "start": 79,
+      "end": 101,
+      "entity_type": "EMAIL_ADDRESS",
+      "person_id": "T09",
+      "value_kind": "email",
+      "sentence_index": 2,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "tkt-002",
+      "start": 103,
+      "end": 118,
+      "entity_type": "PHONE_NUMBER",
+      "person_id": "T09",
+      "value_kind": "phone",
+      "sentence_index": 2,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "news-006",
+      "start": 0,
+      "end": 19,
+      "entity_type": "ORGANIZATION",
+      "person_id": null,
+      "value_kind": "subject_organisation",
+      "sentence_index": 0,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "news-006",
+      "start": 56,
+      "end": 71,
+      "entity_type": "DATE",
+      "person_id": null,
+      "value_kind": "release_date",
+      "sentence_index": 1,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    },
+    {
+      "doc_id": "news-006",
+      "start": 83,
+      "end": 89,
+      "entity_type": "LOCATION",
+      "person_id": null,
+      "value_kind": "city",
+      "sentence_index": 2,
+      "attribute": null,
+      "attribute_value": null,
+      "contradicts_registry": false
+    }
+  ],
+  "expected_strategies": [
+    {
+      "doc_id": "hr-001",
+      "start": 21,
+      "end": 35,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "hr-001",
+      "start": 80,
+      "end": 102,
+      "entity_type": "OCCUPATION",
+      "expected_strategy": "keep",
+      "risk": "low",
+      "fired_rules": [],
+      "why": "OCCUPATION base risk low; final risk low -> keep."
+    },
+    {
+      "doc_id": "hr-001",
+      "start": 106,
+      "end": 125,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "keep",
+      "risk": "low",
+      "fired_rules": [],
+      "why": "ORGANIZATION base risk low; final risk low -> keep."
+    },
+    {
+      "doc_id": "hr-001",
+      "start": 136,
+      "end": 158,
+      "entity_type": "EMAIL_ADDRESS",
+      "expected_strategy": "mask",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "EMAIL_ADDRESS base risk high; final risk high -> mask."
+    },
+    {
+      "doc_id": "hr-001",
+      "start": 160,
+      "end": 175,
+      "entity_type": "PHONE_NUMBER",
+      "expected_strategy": "mask",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PHONE_NUMBER base risk high; final risk high -> mask."
+    },
+    {
+      "doc_id": "hr-001",
+      "start": 190,
+      "end": 199,
+      "entity_type": "RECORD_IDENTIFIER",
+      "expected_strategy": "mask",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "RECORD_IDENTIFIER base risk high; final risk high -> mask."
+    },
+    {
+      "doc_id": "bio-001",
+      "start": 17,
+      "end": 23,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "bio-001",
+      "start": 40,
+      "end": 54,
+      "entity_type": "AGE",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [],
+      "why": "AGE base risk medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "bio-001",
+      "start": 68,
+      "end": 74,
+      "entity_type": "LOCATION",
+      "expected_strategy": "keep",
+      "risk": "low",
+      "fired_rules": [],
+      "why": "LOCATION base risk low; final risk low -> keep."
+    },
+    {
+      "doc_id": "news-001",
+      "start": 25,
+      "end": 32,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "news-001",
+      "start": 54,
+      "end": 71,
+      "entity_type": "EVENT",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04"
+      ],
+      "why": "EVENT base risk low; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "alumni-001",
+      "start": 0,
+      "end": 22,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-01 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "alumni-001",
+      "start": 37,
+      "end": 47,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "alumni-001",
+      "start": 64,
+      "end": 68,
+      "entity_type": "DATE",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04",
+        "CTX-07"
+      ],
+      "why": "DATE base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; CTX-07 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "alumni-001",
+      "start": 104,
+      "end": 114,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "alumni-001",
+      "start": 132,
+      "end": 136,
+      "entity_type": "DATE",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04",
+        "CTX-07"
+      ],
+      "why": "DATE base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; CTX-07 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "alumni-001",
+      "start": 169,
+      "end": 185,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "alumni-001",
+      "start": 191,
+      "end": 206,
+      "entity_type": "AGE",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "AGE base risk medium; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "tkt-001",
+      "start": 26,
+      "end": 49,
+      "entity_type": "EMAIL_ADDRESS",
+      "expected_strategy": "mask",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "EMAIL_ADDRESS base risk high; final risk high -> mask."
+    },
+    {
+      "doc_id": "tkt-001",
+      "start": 77,
+      "end": 81,
+      "entity_type": "LOCATION",
+      "expected_strategy": "keep",
+      "risk": "low",
+      "fired_rules": [],
+      "why": "LOCATION base risk low; final risk low -> keep."
+    },
+    {
+      "doc_id": "tkt-001",
+      "start": 102,
+      "end": 112,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "tkt-001",
+      "start": 114,
+      "end": 139,
+      "entity_type": "OCCUPATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04"
+      ],
+      "why": "OCCUPATION base risk low; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 28,
+      "end": 41,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 44,
+      "end": 69,
+      "entity_type": "OCCUPATION",
+      "expected_strategy": "generalize",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-02",
+        "CTX-04"
+      ],
+      "why": "OCCUPATION base risk low; CTX-01 raises it to at least medium; CTX-02 raises it to at least high; CTX-04 raises it to at least medium; final risk high -> generalize."
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 71,
+      "end": 87,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-02",
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-01 raises it to at least medium; CTX-02 raises it to at least high; CTX-04 raises it to at least medium; final risk high -> generalize."
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 89,
+      "end": 106,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-02",
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-01 raises it to at least medium; CTX-02 raises it to at least high; CTX-04 raises it to at least medium; final risk high -> generalize."
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 108,
+      "end": 112,
+      "entity_type": "LOCATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "LOCATION base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 113,
+      "end": 125,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 128,
+      "end": 153,
+      "entity_type": "OCCUPATION",
+      "expected_strategy": "generalize",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-02",
+        "CTX-04"
+      ],
+      "why": "OCCUPATION base risk low; CTX-01 raises it to at least medium; CTX-02 raises it to at least high; CTX-04 raises it to at least medium; final risk high -> generalize."
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 155,
+      "end": 171,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-02",
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-01 raises it to at least medium; CTX-02 raises it to at least high; CTX-04 raises it to at least medium; final risk high -> generalize."
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 173,
+      "end": 190,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-02",
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-01 raises it to at least medium; CTX-02 raises it to at least high; CTX-04 raises it to at least medium; final risk high -> generalize."
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 192,
+      "end": 196,
+      "entity_type": "LOCATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "LOCATION base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 197,
+      "end": 207,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 210,
+      "end": 235,
+      "entity_type": "OCCUPATION",
+      "expected_strategy": "generalize",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-02",
+        "CTX-04"
+      ],
+      "why": "OCCUPATION base risk low; CTX-01 raises it to at least medium; CTX-02 raises it to at least high; CTX-04 raises it to at least medium; final risk high -> generalize."
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 237,
+      "end": 253,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-02",
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-01 raises it to at least medium; CTX-02 raises it to at least high; CTX-04 raises it to at least medium; final risk high -> generalize."
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 255,
+      "end": 272,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-02",
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-01 raises it to at least medium; CTX-02 raises it to at least high; CTX-04 raises it to at least medium; final risk high -> generalize."
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 274,
+      "end": 278,
+      "entity_type": "LOCATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "LOCATION base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 279,
+      "end": 291,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 294,
+      "end": 319,
+      "entity_type": "OCCUPATION",
+      "expected_strategy": "generalize",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-02",
+        "CTX-04"
+      ],
+      "why": "OCCUPATION base risk low; CTX-01 raises it to at least medium; CTX-02 raises it to at least high; CTX-04 raises it to at least medium; final risk high -> generalize."
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 321,
+      "end": 337,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-02",
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-01 raises it to at least medium; CTX-02 raises it to at least high; CTX-04 raises it to at least medium; final risk high -> generalize."
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 339,
+      "end": 356,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-02",
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-01 raises it to at least medium; CTX-02 raises it to at least high; CTX-04 raises it to at least medium; final risk high -> generalize."
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 358,
+      "end": 362,
+      "entity_type": "LOCATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "LOCATION base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 363,
+      "end": 376,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 379,
+      "end": 404,
+      "entity_type": "OCCUPATION",
+      "expected_strategy": "generalize",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-02",
+        "CTX-04"
+      ],
+      "why": "OCCUPATION base risk low; CTX-01 raises it to at least medium; CTX-02 raises it to at least high; CTX-04 raises it to at least medium; final risk high -> generalize."
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 406,
+      "end": 422,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-02",
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-01 raises it to at least medium; CTX-02 raises it to at least high; CTX-04 raises it to at least medium; final risk high -> generalize."
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 424,
+      "end": 441,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-02",
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-01 raises it to at least medium; CTX-02 raises it to at least high; CTX-04 raises it to at least medium; final risk high -> generalize."
+    },
+    {
+      "doc_id": "memo-001",
+      "start": 443,
+      "end": 447,
+      "entity_type": "LOCATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "LOCATION base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-001",
+      "start": 19,
+      "end": 29,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "att-001",
+      "start": 31,
+      "end": 33,
+      "entity_type": "AGE",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04"
+      ],
+      "why": "AGE base risk medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-001",
+      "start": 44,
+      "end": 70,
+      "entity_type": "EVENT",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04"
+      ],
+      "why": "EVENT base risk low; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-001",
+      "start": 72,
+      "end": 82,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "att-001",
+      "start": 84,
+      "end": 86,
+      "entity_type": "AGE",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04"
+      ],
+      "why": "AGE base risk medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-001",
+      "start": 97,
+      "end": 123,
+      "entity_type": "EVENT",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04"
+      ],
+      "why": "EVENT base risk low; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-001",
+      "start": 125,
+      "end": 138,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "att-001",
+      "start": 140,
+      "end": 142,
+      "entity_type": "AGE",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04"
+      ],
+      "why": "AGE base risk medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-001",
+      "start": 153,
+      "end": 179,
+      "entity_type": "EVENT",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04"
+      ],
+      "why": "EVENT base risk low; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-001",
+      "start": 181,
+      "end": 194,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "att-001",
+      "start": 196,
+      "end": 198,
+      "entity_type": "AGE",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04"
+      ],
+      "why": "AGE base risk medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-001",
+      "start": 209,
+      "end": 235,
+      "entity_type": "EVENT",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04"
+      ],
+      "why": "EVENT base risk low; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-001",
+      "start": 237,
+      "end": 249,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "att-001",
+      "start": 251,
+      "end": 253,
+      "entity_type": "AGE",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04"
+      ],
+      "why": "AGE base risk medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-001",
+      "start": 264,
+      "end": 290,
+      "entity_type": "EVENT",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04"
+      ],
+      "why": "EVENT base risk low; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-001",
+      "start": 292,
+      "end": 302,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "att-001",
+      "start": 304,
+      "end": 306,
+      "entity_type": "AGE",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04"
+      ],
+      "why": "AGE base risk medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-001",
+      "start": 317,
+      "end": 343,
+      "entity_type": "EVENT",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04"
+      ],
+      "why": "EVENT base risk low; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-001",
+      "start": 345,
+      "end": 357,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "att-001",
+      "start": 359,
+      "end": 361,
+      "entity_type": "AGE",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04"
+      ],
+      "why": "AGE base risk medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-001",
+      "start": 372,
+      "end": 398,
+      "entity_type": "EVENT",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04"
+      ],
+      "why": "EVENT base risk low; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "hr-002",
+      "start": 14,
+      "end": 25,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "hr-002",
+      "start": 32,
+      "end": 48,
+      "entity_type": "OCCUPATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "OCCUPATION base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "hr-002",
+      "start": 56,
+      "end": 69,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "hr-002",
+      "start": 73,
+      "end": 95,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "hr-002",
+      "start": 102,
+      "end": 104,
+      "entity_type": "AGE",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01"
+      ],
+      "why": "AGE base risk medium; CTX-01 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "hr-002",
+      "start": 113,
+      "end": 128,
+      "entity_type": "PHONE_NUMBER",
+      "expected_strategy": "mask",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PHONE_NUMBER base risk high; final risk high -> mask."
+    },
+    {
+      "doc_id": "leave-001",
+      "start": 12,
+      "end": 23,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "leave-001",
+      "start": 50,
+      "end": 68,
+      "entity_type": "DATE",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04",
+        "CTX-07"
+      ],
+      "why": "DATE base risk low; CTX-04 raises it to at least medium; CTX-07 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "memo-002",
+      "start": 30,
+      "end": 46,
+      "entity_type": "OCCUPATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01"
+      ],
+      "why": "OCCUPATION base risk low; CTX-01 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "memo-002",
+      "start": 54,
+      "end": 67,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-01 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "memo-002",
+      "start": 71,
+      "end": 93,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-01 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "memo-002",
+      "start": 109,
+      "end": 119,
+      "entity_type": "DATE",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01"
+      ],
+      "why": "DATE base risk low; CTX-01 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "hr-003",
+      "start": 17,
+      "end": 28,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "hr-003",
+      "start": 89,
+      "end": 109,
+      "entity_type": "OCCUPATION",
+      "expected_strategy": "keep",
+      "risk": "low",
+      "fired_rules": [],
+      "why": "OCCUPATION base risk low; final risk low -> keep."
+    },
+    {
+      "doc_id": "hr-003",
+      "start": 113,
+      "end": 130,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "keep",
+      "risk": "low",
+      "fired_rules": [],
+      "why": "ORGANIZATION base risk low; final risk low -> keep."
+    },
+    {
+      "doc_id": "hr-003",
+      "start": 139,
+      "end": 162,
+      "entity_type": "EMAIL_ADDRESS",
+      "expected_strategy": "mask",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "EMAIL_ADDRESS base risk high; final risk high -> mask."
+    },
+    {
+      "doc_id": "hr-003",
+      "start": 177,
+      "end": 186,
+      "entity_type": "RECORD_IDENTIFIER",
+      "expected_strategy": "mask",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "RECORD_IDENTIFIER base risk high; final risk high -> mask."
+    },
+    {
+      "doc_id": "leave-002",
+      "start": 38,
+      "end": 47,
+      "entity_type": "RECORD_IDENTIFIER",
+      "expected_strategy": "mask",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "RECORD_IDENTIFIER base risk high; final risk high -> mask."
+    },
+    {
+      "doc_id": "leave-002",
+      "start": 63,
+      "end": 77,
+      "entity_type": "DATE_OF_BIRTH",
+      "expected_strategy": "generalize",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-03"
+      ],
+      "why": "DATE_OF_BIRTH base risk high; CTX-01 raises it to at least medium; CTX-03 raises it to at least high; final risk high -> generalize."
+    },
+    {
+      "doc_id": "leave-002",
+      "start": 88,
+      "end": 94,
+      "entity_type": "POSTAL_CODE",
+      "expected_strategy": "mask",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-03"
+      ],
+      "why": "POSTAL_CODE base risk medium; CTX-01 raises it to at least medium; CTX-03 raises it to at least high; final risk high -> mask."
+    },
+    {
+      "doc_id": "leave-002",
+      "start": 103,
+      "end": 107,
+      "entity_type": "DEMOGRAPHIC",
+      "expected_strategy": "mask",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-03"
+      ],
+      "why": "DEMOGRAPHIC base risk medium; CTX-01 raises it to at least medium; CTX-03 raises it to at least high; final risk high -> mask."
+    },
+    {
+      "doc_id": "leave-002",
+      "start": 113,
+      "end": 124,
+      "entity_type": "GOVERNMENT_ID",
+      "expected_strategy": "suppress",
+      "risk": "critical",
+      "fired_rules": [],
+      "why": "GOVERNMENT_ID base risk critical; final risk critical -> suppress."
+    },
+    {
+      "doc_id": "news-005",
+      "start": 19,
+      "end": 30,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "news-005",
+      "start": 90,
+      "end": 104,
+      "entity_type": "AGE",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [],
+      "why": "AGE base risk medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "news-005",
+      "start": 118,
+      "end": 122,
+      "entity_type": "LOCATION",
+      "expected_strategy": "keep",
+      "risk": "low",
+      "fired_rules": [],
+      "why": "LOCATION base risk low; final risk low -> keep."
+    },
+    {
+      "doc_id": "news-002",
+      "start": 14,
+      "end": 27,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "news-002",
+      "start": 31,
+      "end": 37,
+      "entity_type": "DEMOGRAPHIC",
+      "expected_strategy": "mask",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-04",
+        "CTX-06"
+      ],
+      "why": "DEMOGRAPHIC base risk medium; CTX-04 raises it to at least medium; CTX-06 raises it to at least high; final risk high -> mask."
+    },
+    {
+      "doc_id": "news-002",
+      "start": 63,
+      "end": 67,
+      "entity_type": "LOCATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04"
+      ],
+      "why": "LOCATION base risk low; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "bio-002",
+      "start": 28,
+      "end": 41,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "bio-002",
+      "start": 60,
+      "end": 79,
+      "entity_type": "OCCUPATION",
+      "expected_strategy": "keep",
+      "risk": "low",
+      "fired_rules": [],
+      "why": "OCCUPATION base risk low; final risk low -> keep."
+    },
+    {
+      "doc_id": "bio-002",
+      "start": 83,
+      "end": 100,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "keep",
+      "risk": "low",
+      "fired_rules": [],
+      "why": "ORGANIZATION base risk low; final risk low -> keep."
+    },
+    {
+      "doc_id": "news-003",
+      "start": 55,
+      "end": 65,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "news-003",
+      "start": 84,
+      "end": 86,
+      "entity_type": "AGE",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [],
+      "why": "AGE base risk medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-003",
+      "start": 23,
+      "end": 37,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "att-003",
+      "start": 39,
+      "end": 61,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-003",
+      "start": 76,
+      "end": 101,
+      "entity_type": "EVENT",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04"
+      ],
+      "why": "EVENT base risk low; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-003",
+      "start": 103,
+      "end": 116,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "att-003",
+      "start": 118,
+      "end": 135,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-003",
+      "start": 150,
+      "end": 175,
+      "entity_type": "EVENT",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04"
+      ],
+      "why": "EVENT base risk low; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-003",
+      "start": 177,
+      "end": 189,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "att-003",
+      "start": 191,
+      "end": 213,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-003",
+      "start": 228,
+      "end": 253,
+      "entity_type": "EVENT",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04"
+      ],
+      "why": "EVENT base risk low; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-003",
+      "start": 255,
+      "end": 267,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "att-003",
+      "start": 269,
+      "end": 291,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-003",
+      "start": 306,
+      "end": 331,
+      "entity_type": "EVENT",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04"
+      ],
+      "why": "EVENT base risk low; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-003",
+      "start": 333,
+      "end": 347,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "att-003",
+      "start": 349,
+      "end": 371,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-003",
+      "start": 386,
+      "end": 411,
+      "entity_type": "EVENT",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04"
+      ],
+      "why": "EVENT base risk low; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-003",
+      "start": 413,
+      "end": 429,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "att-003",
+      "start": 431,
+      "end": 453,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-003",
+      "start": 468,
+      "end": 493,
+      "entity_type": "EVENT",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04"
+      ],
+      "why": "EVENT base risk low; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-003",
+      "start": 495,
+      "end": 505,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "att-003",
+      "start": 507,
+      "end": 524,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-003",
+      "start": 539,
+      "end": 564,
+      "entity_type": "EVENT",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04"
+      ],
+      "why": "EVENT base risk low; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "hr-004",
+      "start": 16,
+      "end": 27,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "hr-004",
+      "start": 70,
+      "end": 88,
+      "entity_type": "OCCUPATION",
+      "expected_strategy": "keep",
+      "risk": "low",
+      "fired_rules": [],
+      "why": "OCCUPATION base risk low; final risk low -> keep."
+    },
+    {
+      "doc_id": "hr-004",
+      "start": 92,
+      "end": 112,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "keep",
+      "risk": "low",
+      "fired_rules": [],
+      "why": "ORGANIZATION base risk low; final risk low -> keep."
+    },
+    {
+      "doc_id": "hr-004",
+      "start": 123,
+      "end": 146,
+      "entity_type": "EMAIL_ADDRESS",
+      "expected_strategy": "mask",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "EMAIL_ADDRESS base risk high; final risk high -> mask."
+    },
+    {
+      "doc_id": "leave-004",
+      "start": 15,
+      "end": 26,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "leave-004",
+      "start": 74,
+      "end": 76,
+      "entity_type": "AGE",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [],
+      "why": "AGE base risk medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "leave-004",
+      "start": 96,
+      "end": 103,
+      "entity_type": "LOCATION",
+      "expected_strategy": "keep",
+      "risk": "low",
+      "fired_rules": [],
+      "why": "LOCATION base risk low; final risk low -> keep."
+    },
+    {
+      "doc_id": "news-004",
+      "start": 17,
+      "end": 43,
+      "entity_type": "EVENT",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04"
+      ],
+      "why": "EVENT base risk low; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "news-004",
+      "start": 61,
+      "end": 72,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "news-004",
+      "start": 90,
+      "end": 95,
+      "entity_type": "LOCATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04"
+      ],
+      "why": "LOCATION base risk low; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "leave-003",
+      "start": 20,
+      "end": 30,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "leave-003",
+      "start": 32,
+      "end": 43,
+      "entity_type": "OCCUPATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04"
+      ],
+      "why": "OCCUPATION base risk low; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "leave-003",
+      "start": 71,
+      "end": 87,
+      "entity_type": "DATE",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-04",
+        "CTX-07"
+      ],
+      "why": "DATE base risk low; CTX-04 raises it to at least medium; CTX-07 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "leave-003",
+      "start": 119,
+      "end": 133,
+      "entity_type": "MEDICAL_CONDITION",
+      "expected_strategy": "suppress",
+      "risk": "critical",
+      "fired_rules": [
+        "CTX-05"
+      ],
+      "why": "MEDICAL_CONDITION base risk high; CTX-05 raises it to at least critical; final risk critical -> suppress."
+    },
+    {
+      "doc_id": "leave-003",
+      "start": 143,
+      "end": 154,
+      "entity_type": "RECORD_IDENTIFIER",
+      "expected_strategy": "mask",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "RECORD_IDENTIFIER base risk high; final risk high -> mask."
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 34,
+      "end": 47,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 50,
+      "end": 61,
+      "entity_type": "OCCUPATION",
+      "expected_strategy": "generalize",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-02",
+        "CTX-04"
+      ],
+      "why": "OCCUPATION base risk low; CTX-01 raises it to at least medium; CTX-02 raises it to at least high; CTX-04 raises it to at least medium; final risk high -> generalize."
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 63,
+      "end": 82,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-02",
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-01 raises it to at least medium; CTX-02 raises it to at least high; CTX-04 raises it to at least medium; final risk high -> generalize."
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 84,
+      "end": 90,
+      "entity_type": "LOCATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "LOCATION base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 91,
+      "end": 104,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 107,
+      "end": 118,
+      "entity_type": "OCCUPATION",
+      "expected_strategy": "generalize",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-02",
+        "CTX-04"
+      ],
+      "why": "OCCUPATION base risk low; CTX-01 raises it to at least medium; CTX-02 raises it to at least high; CTX-04 raises it to at least medium; final risk high -> generalize."
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 120,
+      "end": 139,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-02",
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-01 raises it to at least medium; CTX-02 raises it to at least high; CTX-04 raises it to at least medium; final risk high -> generalize."
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 141,
+      "end": 147,
+      "entity_type": "LOCATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "LOCATION base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 148,
+      "end": 157,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 160,
+      "end": 171,
+      "entity_type": "OCCUPATION",
+      "expected_strategy": "generalize",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-02",
+        "CTX-04"
+      ],
+      "why": "OCCUPATION base risk low; CTX-01 raises it to at least medium; CTX-02 raises it to at least high; CTX-04 raises it to at least medium; final risk high -> generalize."
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 173,
+      "end": 192,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-02",
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-01 raises it to at least medium; CTX-02 raises it to at least high; CTX-04 raises it to at least medium; final risk high -> generalize."
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 194,
+      "end": 200,
+      "entity_type": "LOCATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "LOCATION base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 201,
+      "end": 211,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 214,
+      "end": 225,
+      "entity_type": "OCCUPATION",
+      "expected_strategy": "generalize",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-02",
+        "CTX-04"
+      ],
+      "why": "OCCUPATION base risk low; CTX-01 raises it to at least medium; CTX-02 raises it to at least high; CTX-04 raises it to at least medium; final risk high -> generalize."
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 227,
+      "end": 246,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-02",
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-01 raises it to at least medium; CTX-02 raises it to at least high; CTX-04 raises it to at least medium; final risk high -> generalize."
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 248,
+      "end": 254,
+      "entity_type": "LOCATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "LOCATION base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 255,
+      "end": 271,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 274,
+      "end": 285,
+      "entity_type": "OCCUPATION",
+      "expected_strategy": "generalize",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-02",
+        "CTX-04"
+      ],
+      "why": "OCCUPATION base risk low; CTX-01 raises it to at least medium; CTX-02 raises it to at least high; CTX-04 raises it to at least medium; final risk high -> generalize."
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 287,
+      "end": 306,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-02",
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-01 raises it to at least medium; CTX-02 raises it to at least high; CTX-04 raises it to at least medium; final risk high -> generalize."
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 308,
+      "end": 314,
+      "entity_type": "LOCATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "LOCATION base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 315,
+      "end": 328,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 331,
+      "end": 342,
+      "entity_type": "OCCUPATION",
+      "expected_strategy": "generalize",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-02",
+        "CTX-04"
+      ],
+      "why": "OCCUPATION base risk low; CTX-01 raises it to at least medium; CTX-02 raises it to at least high; CTX-04 raises it to at least medium; final risk high -> generalize."
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 344,
+      "end": 363,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-02",
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-01 raises it to at least medium; CTX-02 raises it to at least high; CTX-04 raises it to at least medium; final risk high -> generalize."
+    },
+    {
+      "doc_id": "memo-003",
+      "start": 365,
+      "end": 371,
+      "entity_type": "LOCATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "LOCATION base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-002",
+      "start": 24,
+      "end": 33,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "att-002",
+      "start": 35,
+      "end": 54,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-002",
+      "start": 56,
+      "end": 59,
+      "entity_type": "AGE",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "AGE base risk medium; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-002",
+      "start": 77,
+      "end": 110,
+      "entity_type": "EVENT",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "EVENT base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-002",
+      "start": 112,
+      "end": 122,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "att-002",
+      "start": 124,
+      "end": 143,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-002",
+      "start": 145,
+      "end": 148,
+      "entity_type": "AGE",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "AGE base risk medium; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-002",
+      "start": 166,
+      "end": 199,
+      "entity_type": "EVENT",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "EVENT base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-002",
+      "start": 201,
+      "end": 217,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "att-002",
+      "start": 219,
+      "end": 238,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-002",
+      "start": 240,
+      "end": 243,
+      "entity_type": "AGE",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "AGE base risk medium; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-002",
+      "start": 261,
+      "end": 294,
+      "entity_type": "EVENT",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "EVENT base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-002",
+      "start": 296,
+      "end": 309,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "att-002",
+      "start": 311,
+      "end": 330,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-002",
+      "start": 332,
+      "end": 335,
+      "entity_type": "AGE",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "AGE base risk medium; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-002",
+      "start": 353,
+      "end": 386,
+      "entity_type": "EVENT",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "EVENT base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-002",
+      "start": 388,
+      "end": 401,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "att-002",
+      "start": 403,
+      "end": 422,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-002",
+      "start": 424,
+      "end": 427,
+      "entity_type": "AGE",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "AGE base risk medium; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-002",
+      "start": 445,
+      "end": 478,
+      "entity_type": "EVENT",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "EVENT base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-002",
+      "start": 480,
+      "end": 493,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "att-002",
+      "start": 495,
+      "end": 514,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-002",
+      "start": 516,
+      "end": 519,
+      "entity_type": "AGE",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "AGE base risk medium; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "att-002",
+      "start": 537,
+      "end": 570,
+      "entity_type": "EVENT",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "EVENT base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "bio-003",
+      "start": 20,
+      "end": 36,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "bio-003",
+      "start": 38,
+      "end": 54,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "bio-003",
+      "start": 61,
+      "end": 80,
+      "entity_type": "OCCUPATION",
+      "expected_strategy": "generalize",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-02",
+        "CTX-04"
+      ],
+      "why": "OCCUPATION base risk low; CTX-01 raises it to at least medium; CTX-02 raises it to at least high; CTX-04 raises it to at least medium; final risk high -> generalize."
+    },
+    {
+      "doc_id": "bio-003",
+      "start": 84,
+      "end": 100,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-02",
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-01 raises it to at least medium; CTX-02 raises it to at least high; CTX-04 raises it to at least medium; final risk high -> generalize."
+    },
+    {
+      "doc_id": "bio-003",
+      "start": 104,
+      "end": 126,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-02",
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-01 raises it to at least medium; CTX-02 raises it to at least high; CTX-04 raises it to at least medium; final risk high -> generalize."
+    },
+    {
+      "doc_id": "bio-003",
+      "start": 130,
+      "end": 139,
+      "entity_type": "LOCATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "LOCATION base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "bio-003",
+      "start": 162,
+      "end": 187,
+      "entity_type": "EVENT",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01"
+      ],
+      "why": "EVENT base risk low; CTX-01 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "hr-005",
+      "start": 14,
+      "end": 24,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "hr-005",
+      "start": 30,
+      "end": 48,
+      "entity_type": "OCCUPATION",
+      "expected_strategy": "generalize",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-02",
+        "CTX-04"
+      ],
+      "why": "OCCUPATION base risk low; CTX-01 raises it to at least medium; CTX-02 raises it to at least high; CTX-04 raises it to at least medium; final risk high -> generalize."
+    },
+    {
+      "doc_id": "hr-005",
+      "start": 56,
+      "end": 64,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-02",
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-01 raises it to at least medium; CTX-02 raises it to at least high; CTX-04 raises it to at least medium; final risk high -> generalize."
+    },
+    {
+      "doc_id": "hr-005",
+      "start": 74,
+      "end": 92,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "high",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-02",
+        "CTX-04"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-01 raises it to at least medium; CTX-02 raises it to at least high; CTX-04 raises it to at least medium; final risk high -> generalize."
+    },
+    {
+      "doc_id": "hr-005",
+      "start": 94,
+      "end": 103,
+      "entity_type": "LOCATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "LOCATION base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "hr-005",
+      "start": 110,
+      "end": 112,
+      "entity_type": "AGE",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01"
+      ],
+      "why": "AGE base risk medium; CTX-01 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "memo-004",
+      "start": 13,
+      "end": 28,
+      "entity_type": "DATE",
+      "expected_strategy": "keep",
+      "risk": "low",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-07",
+        "EXC-01"
+      ],
+      "why": "DATE base risk low; CTX-01 raises it to at least medium; CTX-07 raises it to at least medium; EXC-01 caps it at low (alone in its sentence); final risk low -> keep."
+    },
+    {
+      "doc_id": "memo-004",
+      "start": 44,
+      "end": 54,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "memo-004",
+      "start": 61,
+      "end": 63,
+      "entity_type": "AGE",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "AGE base risk medium; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "memo-004",
+      "start": 94,
+      "end": 129,
+      "entity_type": "EVENT",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01",
+        "CTX-04"
+      ],
+      "why": "EVENT base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "tkt-002",
+      "start": 16,
+      "end": 26,
+      "entity_type": "PERSON",
+      "expected_strategy": "pseudonymize",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PERSON base risk high; final risk high -> pseudonymize with a batch-consistent pseudonym."
+    },
+    {
+      "doc_id": "tkt-002",
+      "start": 79,
+      "end": 101,
+      "entity_type": "EMAIL_ADDRESS",
+      "expected_strategy": "mask",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "EMAIL_ADDRESS base risk high; final risk high -> mask."
+    },
+    {
+      "doc_id": "tkt-002",
+      "start": 103,
+      "end": 118,
+      "entity_type": "PHONE_NUMBER",
+      "expected_strategy": "mask",
+      "risk": "high",
+      "fired_rules": [],
+      "why": "PHONE_NUMBER base risk high; final risk high -> mask."
+    },
+    {
+      "doc_id": "news-006",
+      "start": 0,
+      "end": 19,
+      "entity_type": "ORGANIZATION",
+      "expected_strategy": "generalize",
+      "risk": "medium",
+      "fired_rules": [
+        "CTX-01"
+      ],
+      "why": "ORGANIZATION base risk low; CTX-01 raises it to at least medium; final risk medium -> generalize."
+    },
+    {
+      "doc_id": "news-006",
+      "start": 56,
+      "end": 71,
+      "entity_type": "DATE",
+      "expected_strategy": "keep",
+      "risk": "low",
+      "fired_rules": [
+        "CTX-01",
+        "EXC-01"
+      ],
+      "why": "DATE base risk low; CTX-01 raises it to at least medium; EXC-01 caps it at low (alone in its sentence); final risk low -> keep."
+    },
+    {
+      "doc_id": "news-006",
+      "start": 83,
+      "end": 89,
+      "entity_type": "LOCATION",
+      "expected_strategy": "keep",
+      "risk": "low",
+      "fired_rules": [
+        "CTX-01",
+        "EXC-02"
+      ],
+      "why": "LOCATION base risk low; CTX-01 raises it to at least medium; EXC-02 caps it at low (alone in its sentence); final risk low -> keep."
+    }
+  ],
+  "planted_risks": [
+    {
+      "risk_id": "R01",
+      "person_id": "T01",
+      "doc_ids": [
+        "hr-001",
+        "bio-001"
+      ],
+      "combined_attribute_types": [
+        "AGE",
+        "LOCATION",
+        "OCCUPATION",
+        "ORGANIZATION"
+      ],
+      "combined_attributes": {
+        "AGE": "40-49",
+        "LOCATION": "Mumbai",
+        "OCCUPATION": "consultant radiologist",
+        "ORGANIZATION": "Marlow Bay Hospital"
+      },
+      "anonymity_set_size": 1,
+      "reidentifiable": true,
+      "anonymity_set_size_after_first_pass": 1,
+      "survives_first_pass": true,
+      "why": "Each document shows two quasi-identifier types away from the name, so first-pass policy keeps them. Combined: the only consultant radiologist at Marlow Bay Hospital in Mumbai aged 40-49. Linking needs 'Dr. Ananya Rao' and 'A. Rao' to share a pseudonym."
+    },
+    {
+      "risk_id": "R02",
+      "person_id": "T04",
+      "doc_ids": [
+        "hr-003",
+        "news-005"
+      ],
+      "combined_attribute_types": [
+        "AGE",
+        "LOCATION",
+        "OCCUPATION",
+        "ORGANIZATION"
+      ],
+      "combined_attributes": {
+        "AGE": "40-49",
+        "LOCATION": "Pune",
+        "OCCUPATION": "data science manager",
+        "ORGANIZATION": "Quillon Analytics"
+      },
+      "anonymity_set_size": 1,
+      "reidentifiable": true,
+      "anonymity_set_size_after_first_pass": 1,
+      "survives_first_pass": true,
+      "why": "Job title and employer in one document, age band and city in another. Two data science managers work at Quillon Analytics; only one is in Pune and in his forties."
+    },
+    {
+      "risk_id": "R03",
+      "person_id": "T05",
+      "doc_ids": [
+        "bio-002",
+        "news-003"
+      ],
+      "combined_attribute_types": [
+        "AGE",
+        "OCCUPATION",
+        "ORGANIZATION"
+      ],
+      "combined_attributes": {
+        "AGE": "30-39",
+        "OCCUPATION": "solutions architect",
+        "ORGANIZATION": "Quillon Analytics"
+      },
+      "anonymity_set_size": 1,
+      "reidentifiable": true,
+      "anonymity_set_size_after_first_pass": 1,
+      "survives_first_pass": true,
+      "why": "Job title and employer in the speaker bio, exact age in the award item. Quillon has two solutions architects; only one is 30-39."
+    },
+    {
+      "risk_id": "R04",
+      "person_id": "T06",
+      "doc_ids": [
+        "hr-004",
+        "leave-004"
+      ],
+      "combined_attribute_types": [
+        "AGE",
+        "LOCATION",
+        "OCCUPATION",
+        "ORGANIZATION"
+      ],
+      "combined_attributes": {
+        "AGE": "30-39",
+        "LOCATION": "Chennai",
+        "OCCUPATION": "events coordinator",
+        "ORGANIZATION": "Velloran Finance Ltd"
+      },
+      "anonymity_set_size": 1,
+      "reidentifiable": true,
+      "anonymity_set_size_after_first_pass": 1,
+      "survives_first_pass": true,
+      "why": "Velloran has two events coordinators (Chennai and Kochi), both at the Coastal Finance Forum. Job title and employer in the personnel note; age 31 and Chennai, away from her name, in the leave request. Either the age band or the city separates them."
+    },
+    {
+      "risk_id": "R05",
+      "person_id": "T03",
+      "doc_ids": [
+        "memo-002"
+      ],
+      "combined_attribute_types": [
+        "DEPARTMENT",
+        "OCCUPATION",
+        "ORGANIZATION"
+      ],
+      "combined_attributes": {
+        "DEPARTMENT": "Girls' Hostel",
+        "OCCUPATION": "assistant warden",
+        "ORGANIZATION": "Kestrelmoor University"
+      },
+      "anonymity_set_size": 1,
+      "reidentifiable": true,
+      "anonymity_set_size_after_first_pass": 40,
+      "survives_first_pass": false,
+      "why": "No name anywhere, yet 'the only assistant warden of the girls' hostel' at Kestrelmoor is one person. The document has three quasi-identifier types, so CTX-01 generalises them in the first pass; the risk is caught by policy rather than by linkage."
+    },
+    {
+      "risk_id": "R06",
+      "person_id": "T07",
+      "doc_ids": [
+        "leave-003",
+        "memo-003",
+        "att-002"
+      ],
+      "combined_attribute_types": [
+        "AGE",
+        "EVENT",
+        "LOCATION",
+        "OCCUPATION",
+        "ORGANIZATION"
+      ],
+      "combined_attributes": {
+        "AGE": "30-39",
+        "EVENT": "Western India Nursing Summit 2025",
+        "LOCATION": "Mumbai",
+        "OCCUPATION": "staff nurse",
+        "ORGANIZATION": "Marlow Bay Hospital"
+      },
+      "anonymity_set_size": 6,
+      "reidentifiable": false,
+      "anonymity_set_size_after_first_pass": 19,
+      "survives_first_pass": false,
+      "why": "CONTROL. Everything her documents reveal (staff nurse, Marlow Bay Hospital, Mumbai, 30-39, Western India Nursing Summit 2025) is shared by six registry people."
+    },
+    {
+      "risk_id": "R07",
+      "person_id": "T02",
+      "doc_ids": [
+        "tkt-001",
+        "memo-001",
+        "att-001",
+        "alumni-001"
+      ],
+      "combined_attribute_types": [
+        "AGE",
+        "DEPARTMENT",
+        "EVENT",
+        "LOCATION",
+        "OCCUPATION",
+        "ORGANIZATION"
+      ],
+      "combined_attributes": {
+        "AGE": "20-29",
+        "DEPARTMENT": "Customer Support",
+        "EVENT": "Quillon Founders' Day 2025",
+        "LOCATION": "Pune",
+        "OCCUPATION": "customer support engineer",
+        "ORGANIZATION": "Quillon Analytics"
+      },
+      "anonymity_set_size": 4,
+      "reidentifiable": false,
+      "anonymity_set_size_after_first_pass": 14,
+      "survives_first_pass": false,
+      "why": "CONTROL. Customer support engineer, Customer Support, Quillon Analytics, Pune, 20-29 and Quillon Founders' Day 2025 together still match four people."
+    },
+    {
+      "risk_id": "R08",
+      "person_id": "T08",
+      "doc_ids": [
+        "bio-003",
+        "alumni-001",
+        "att-003"
+      ],
+      "combined_attribute_types": [
+        "AGE",
+        "DEPARTMENT",
+        "EVENT",
+        "LOCATION",
+        "OCCUPATION",
+        "ORGANIZATION"
+      ],
+      "combined_attributes": {
+        "AGE": "30-39",
+        "DEPARTMENT": "Computer Science",
+        "EVENT": "Deccan AI Conference 2025",
+        "LOCATION": "Bengaluru",
+        "OCCUPATION": "assistant professor",
+        "ORGANIZATION": "Kestrelmoor University"
+      },
+      "anonymity_set_size": 5,
+      "reidentifiable": false,
+      "anonymity_set_size_after_first_pass": 19,
+      "survives_first_pass": false,
+      "why": "CONTROL. Assistant professor of Computer Science at Kestrelmoor, Bengaluru, 30-39, Deccan AI Conference 2025: five registry people share all of it."
+    },
+    {
+      "risk_id": "R09",
+      "person_id": "T09",
+      "doc_ids": [
+        "hr-005",
+        "memo-004",
+        "tkt-002"
+      ],
+      "combined_attribute_types": [
+        "AGE",
+        "DEPARTMENT",
+        "EVENT",
+        "LOCATION",
+        "OCCUPATION",
+        "ORGANIZATION"
+      ],
+      "combined_attributes": {
+        "AGE": "20-29",
+        "DEPARTMENT": "Genomics",
+        "EVENT": "Indus Bioinformatics Symposium 2025",
+        "LOCATION": "Hyderabad",
+        "OCCUPATION": "research scientist",
+        "ORGANIZATION": "Fernhollow Biolabs"
+      },
+      "anonymity_set_size": 4,
+      "reidentifiable": false,
+      "anonymity_set_size_after_first_pass": 14,
+      "survives_first_pass": false,
+      "why": "CONTROL. Research scientist, Genomics, Fernhollow Biolabs, Hyderabad, 20-29, Indus Bioinformatics Symposium 2025: four registry people share all of it."
+    }
+  ],
+  "edge_cases": [
+    {
+      "case": "name_variants_same_person",
+      "doc_ids": [
+        "hr-001",
+        "bio-001",
+        "news-001",
+        "alumni-001"
+      ],
+      "expected_behaviour": "'Dr. Ananya Rao', 'A. Rao', 'Dr. Rao' and 'Ananya Rao' are all T01. Agent 1 should cluster them as one entity so they receive one batch pseudonym."
+    },
+    {
+      "case": "shared_surname_different_people",
+      "doc_ids": [
+        "alumni-001"
+      ],
+      "expected_behaviour": "'Ananya Rao' (T01) and 'Vikram Rao' (T02) share a surname but are different people. A surname match alone must not merge them or give them the same pseudonym."
+    },
+    {
+      "case": "same_email_two_documents",
+      "doc_ids": [
+        "hr-003",
+        "tkt-001"
+      ],
+      "expected_behaviour": "rohan.mehta@example.com appears in both documents (T04). It links them in the raw text; it must be masked in both, which also breaks that link in the release."
+    },
+    {
+      "case": "no_name_still_identifying",
+      "doc_ids": [
+        "memo-002"
+      ],
+      "expected_behaviour": "No PERSON mention, but role + place + join date single out T03 (k = 1). CTX-01 should fire on the document and generalise the occupation, organisation, department and date."
+    },
+    {
+      "case": "dob_postcode_gender",
+      "doc_ids": [
+        "leave-002"
+      ],
+      "expected_behaviour": "Date of birth, postcode and gender in one document: CTX-03 raises all three to high, so the DOB is generalised and the postcode and gender masked; the SSN-like number is suppressed."
+    },
+    {
+      "case": "medical_condition_with_name",
+      "doc_ids": [
+        "leave-003"
+      ],
+      "expected_behaviour": "A diagnosis in a document that names the person (T07): CTX-05 raises it to critical, so it is suppressed, not just masked."
+    },
+    {
+      "case": "demographic_about_named_person",
+      "doc_ids": [
+        "news-002"
+      ],
+      "expected_behaviour": "Nationality stated about a named person (T05) in the same sentence: CTX-06 raises it to high and it is masked."
+    },
+    {
+      "case": "isolated_dateline",
+      "doc_ids": [
+        "memo-004",
+        "news-006"
+      ],
+      "expected_behaviour": "'3 February 2025' and '12 January 2025' stand alone in their sentences and are about nobody. CTX-01 fires on both documents, but EXC-01 caps these dates at low, so they are kept."
+    },
+    {
+      "case": "conflicting_city",
+      "doc_ids": [
+        "leave-004",
+        "news-004"
+      ],
+      "expected_behaviour": "Kavya Menon (T06) works from Chennai (registry) but news-004 says Kochi, where a different Velloran events coordinator (C29) is based. The conflict must not be resolved by merging her with C29 or by trusting either city; the Kochi mention is marked contradicts_registry."
+    },
+    {
+      "case": "organisation_only_document",
+      "doc_ids": [
+        "news-006"
+      ],
+      "expected_behaviour": "A press release about an organisation that describes no person. Mentions have no person_id; the isolated date and location stay readable (EXC-01, EXC-02); there is nobody to re-identify."
+    }
+  ]
+}
