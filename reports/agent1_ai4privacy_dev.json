@@ -7,27 +7,27 @@
     "gold_spans": 512,
     "micro": {
       "strict": {
-        "tp": 385,
-        "fp": 145,
-        "fn": 127,
-        "precision": 0.7264,
-        "recall": 0.752,
-        "f1": 0.739,
+        "tp": 389,
+        "fp": 142,
+        "fn": 123,
+        "precision": 0.7326,
+        "recall": 0.7598,
+        "f1": 0.7459,
         "support": 512
       },
       "relaxed": {
-        "tp": 409,
-        "fp": 121,
-        "fn": 103,
-        "precision": 0.7717,
-        "recall": 0.7988,
-        "f1": 0.785,
+        "tp": 413,
+        "fp": 118,
+        "fn": 99,
+        "precision": 0.7778,
+        "recall": 0.8066,
+        "f1": 0.7919,
         "support": 512
       }
     },
     "macro_f1": {
-      "strict": 0.7373,
-      "relaxed": 0.7842
+      "strict": 0.7405,
+      "relaxed": 0.7874
     },
     "per_type": {
       "strict": {
@@ -51,11 +51,11 @@
         },
         "DATE": {
           "tp": 18,
-          "fp": 18,
+          "fp": 16,
           "fn": 2,
-          "precision": 0.5,
+          "precision": 0.5294,
           "recall": 0.9,
-          "f1": 0.6429,
+          "f1": 0.6667,
           "support": 20
         },
         "DATE_OF_BIRTH": {
@@ -69,11 +69,11 @@
         },
         "DEMOGRAPHIC": {
           "tp": 21,
-          "fp": 9,
+          "fp": 8,
           "fn": 9,
-          "precision": 0.7,
+          "precision": 0.7241,
           "recall": 0.7,
-          "f1": 0.7,
+          "f1": 0.7119,
           "support": 30
         },
         "DEVICE_IDENTIFIER": {
@@ -95,12 +95,12 @@
           "support": 18
         },
         "FINANCIAL_ACCOUNT": {
-          "tp": 46,
+          "tp": 48,
           "fp": 0,
-          "fn": 16,
+          "fn": 14,
           "precision": 1.0,
-          "recall": 0.7419,
-          "f1": 0.8519,
+          "recall": 0.7742,
+          "f1": 0.8727,
           "support": 62
         },
         "GOVERNMENT_ID": {
@@ -132,11 +132,11 @@
         },
         "OCCUPATION": {
           "tp": 17,
-          "fp": 9,
+          "fp": 10,
           "fn": 16,
-          "precision": 0.6538,
+          "precision": 0.6296,
           "recall": 0.5152,
-          "f1": 0.5763,
+          "f1": 0.5667,
           "support": 33
         },
         "ONLINE_IDENTIFIER": {
@@ -150,20 +150,20 @@
         },
         "ORGANIZATION": {
           "tp": 5,
-          "fp": 55,
+          "fp": 54,
           "fn": 8,
-          "precision": 0.0833,
+          "precision": 0.0847,
           "recall": 0.3846,
-          "f1": 0.137,
+          "f1": 0.1389,
           "support": 13
         },
         "PERSON": {
-          "tp": 75,
+          "tp": 77,
           "fp": 22,
-          "fn": 21,
-          "precision": 0.7732,
-          "recall": 0.7812,
-          "f1": 0.7772,
+          "fn": 19,
+          "precision": 0.7778,
+          "recall": 0.8021,
+          "f1": 0.7897,
           "support": 96
         },
         "PHONE_NUMBER": {
@@ -224,11 +224,11 @@
         },
         "DATE": {
           "tp": 18,
-          "fp": 18,
+          "fp": 16,
           "fn": 2,
-          "precision": 0.5,
+          "precision": 0.5294,
           "recall": 0.9,
-          "f1": 0.6429,
+          "f1": 0.6667,
           "support": 20
         },
         "DATE_OF_BIRTH": {
@@ -242,11 +242,11 @@
         },
         "DEMOGRAPHIC": {
           "tp": 23,
-          "fp": 7,
+          "fp": 6,
           "fn": 7,
-          "precision": 0.7667,
+          "precision": 0.7931,
           "recall": 0.7667,
-          "f1": 0.7667,
+          "f1": 0.7797,
           "support": 30
         },
         "DEVICE_IDENTIFIER": {
@@ -268,12 +268,12 @@
           "support": 18
         },
         "FINANCIAL_ACCOUNT": {
-          "tp": 46,
+          "tp": 48,
           "fp": 0,
-          "fn": 16,
+          "fn": 14,
           "precision": 1.0,
-          "recall": 0.7419,
-          "f1": 0.8519,
+          "recall": 0.7742,
+          "f1": 0.8727,
           "support": 62
         },
         "GOVERNMENT_ID": {
@@ -305,11 +305,11 @@
         },
         "OCCUPATION": {
           "tp": 21,
-          "fp": 5,
+          "fp": 6,
           "fn": 12,
-          "precision": 0.8077,
+          "precision": 0.7778,
           "recall": 0.6364,
-          "f1": 0.7119,
+          "f1": 0.7,
           "support": 33
         },
         "ONLINE_IDENTIFIER": {
@@ -323,20 +323,20 @@
         },
         "ORGANIZATION": {
           "tp": 9,
-          "fp": 51,
+          "fp": 50,
           "fn": 4,
-          "precision": 0.15,
+          "precision": 0.1525,
           "recall": 0.6923,
-          "f1": 0.2466,
+          "f1": 0.25,
           "support": 13
         },
         "PERSON": {
-          "tp": 78,
+          "tp": 80,
           "fp": 19,
-          "fn": 18,
-          "precision": 0.8041,
-          "recall": 0.8125,
-          "f1": 0.8083,
+          "fn": 16,
+          "precision": 0.8081,
+          "recall": 0.8333,
+          "f1": 0.8205,
           "support": 96
         },
         "PHONE_NUMBER": {
@@ -381,7 +381,7 @@
       "recall": 0.9297,
       "covered": 476,
       "total": 512,
-      "precision_any_type": 0.9198,
+      "precision_any_type": 0.9181,
       "by_type": {
         "AGE": {
           "covered": 12,
@@ -716,6 +716,6 @@
       "MEDICAL_CONDITION": 3,
       "RECORD_IDENTIFIER": 3
     },
-    "seconds": 1.4
+    "seconds": 2.6
   }
 }

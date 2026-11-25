@@ -42,6 +42,7 @@ class Settings(BaseSettings):
     # --- pipeline -------------------------------------------------------------
     max_remediation_rounds: int = 2
     pseudonym_secret: SecretStr | None = None
+    pseudonym_persist: bool = True               # keyed-hash mapping in protected_store/ (needs the secret)
     context_window_chars: int = 80
 
     # --- ingestion / API limits ---------------------------------------------

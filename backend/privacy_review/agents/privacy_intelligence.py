@@ -337,6 +337,7 @@ class PrivacyIntelligenceAgent:
             else:
                 groups.append((e.entity_type, set(toks), [e]))
 
+        groups = self._merge_name_variants(groups)
         clusters = []
         for i, (et, _, members) in enumerate(groups):
             cid = f"C{i + 1:04d}"
@@ -346,6 +347,37 @@ class PrivacyIntelligenceAgent:
                                           entity_ids=[m.entity_id for m in members],
                                           doc_ids=sorted({m.doc_id for m in members})))
         return clusters
+
+    def _merge_name_variants(self, groups):
+        """Second pass for people. 'A. Rao' joins 'Ananya Rao', and a bare 'Rao' joins a full name,
+        only when exactly one full name in the batch fits - two Raos means the short form stays
+        ambiguous and unmerged, because a wrong merge links two people's documents."""
+        def toks(members):
+            return [t for t in re.findall(r"[a-z]+", members[0].raw().lower()) if t not in _HONORIFICS]
+        people = [g for g in groups if g[0] == EntityType.PERSON]
+        full = [g for g in people if len([t for t in toks(g[2]) if len(t) > 1]) >= 2]
+        merged_into: dict[int, tuple] = {}
+        for g in people:
+            if g in full:
+                continue
+            t = toks(g[2])
+            if not t:
+                continue
+            surname = t[-1]
+            initial = t[0] if len(t) == 2 and len(t[0]) == 1 else None
+            if len(t) > 2 or (len(t) == 2 and initial is None):
+                continue
+            fits = [f for f in full if toks(f[2])[-1] == surname and (initial is None or toks(f[2])[0].startswith(initial))]
+            if len(fits) == 1:
+                merged_into[id(g)] = fits[0]
+        out = []
+        for g in groups:
+            target = merged_into.get(id(g))
+            if target is not None:
+                target[2].extend(g[2])
+            else:
+                out.append(g)
+        return out
 
     @staticmethod
     def link(entities: list[DetectedEntity], max_doc_entities: int = 60) -> list[EntityLink]:

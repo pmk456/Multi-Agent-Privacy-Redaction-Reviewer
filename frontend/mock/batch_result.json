@@ -756,7 +756,8 @@
           "LOCATION"
         ],
         "anonymity_set_size": 1,
-        "risk": "high"
+        "risk": "high",
+        "subject_entity_ids": []
       }
     ],
     "llm_probed": false

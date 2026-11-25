@@ -67,6 +67,7 @@ class LinkageComponent(BaseModel):
     visible_quasi_types: list[str]
     anonymity_set_size: int                         # k: how many people share this fingerprint
     risk: str
+    subject_entity_ids: list[str] = Field(default_factory=list)   # the person this is about, if any
 
 
 class AdversarialReport(BaseModel):

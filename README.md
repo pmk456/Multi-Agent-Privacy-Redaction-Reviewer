@@ -6,10 +6,10 @@ A multi-agent system that finds personal information in documents, judges how ri
 piece of it is, applies an appropriate redaction, and then independently verifies that
 what came out is actually safe to release.
 
-> **Status — building toward Review 2.** Done and tested: the Pydantic schemas, the privacy
-> knowledge base (JSON + SQLite + policy engine, 64 tests) and the dataset pipeline
-> (ai4privacy + PIIMB). In progress: detection and Agent 1. Next: Agents 2–5, LangGraph
-> orchestration, evaluation. See [`docs/HANDOFF.md`](docs/HANDOFF.md) for who is doing what.
+> **Status: Review 2 complete.** All five agents, LangGraph orchestration, ingestion, the API and
+> the frontend are built, merged and evaluated. Results: [`docs/review-2`](docs/review-2) and [`reports/`](reports).
+> Run the demo: `uvicorn --factory privacy_review.api:create_app --app-dir backend`, then open
+> http://127.0.0.1:8000/ui/.
 
 ## The one rule
 

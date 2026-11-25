@@ -1,0 +1,41 @@
+{
+  "without_llm": {
+    "seconds": 1.0,
+    "completeness": 0.7821,
+    "never_keep_completeness": 0.9787,
+    "release_rate": 1.0,
+    "utility": 0.7989,
+    "docs_where_llm_used": 0,
+    "usage": {
+      "calls": 0,
+      "succeeded": 0,
+      "failed": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "errors": []
+    },
+    "model": "claude-haiku-5-5"
+  },
+  "with_llm": {
+    "seconds": 112.1,
+    "completeness": 0.8974,
+    "never_keep_completeness": 0.9787,
+    "release_rate": 1.0,
+    "utility": 0.7492,
+    "docs_where_llm_used": 30,
+    "usage": {
+      "calls": 72,
+      "succeeded": 66,
+      "failed": 6,
+      "input_tokens": 51956,
+      "output_tokens": 6796,
+      "errors": [
+        "budget_exhausted"
+      ]
+    },
+    "model": "claude-haiku-5-5"
+  },
+  "estimated_cost_usd": 0.00859,
+  "documents": 30,
+  "kind": "LLM-based (qualitative effect, small sample)"
+}

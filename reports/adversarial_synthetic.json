@@ -1,0 +1,104 @@
+{
+  "documents": 28,
+  "planted_risks": 9,
+  "agent5": {
+    "confusion": {
+      "tp": 4,
+      "tn": 5
+    },
+    "reidentification_detection_rate": 1.0,
+    "false_positive_rate_on_controls": 0.0,
+    "per_risk": [
+      {
+        "risk_id": "R01",
+        "expected_flag": true,
+        "flagged": true,
+        "k": 1,
+        "k_after_first_pass": 1
+      },
+      {
+        "risk_id": "R02",
+        "expected_flag": true,
+        "flagged": true,
+        "k": 1,
+        "k_after_first_pass": 1
+      },
+      {
+        "risk_id": "R03",
+        "expected_flag": true,
+        "flagged": true,
+        "k": 1,
+        "k_after_first_pass": 1
+      },
+      {
+        "risk_id": "R04",
+        "expected_flag": true,
+        "flagged": true,
+        "k": 1,
+        "k_after_first_pass": 1
+      },
+      {
+        "risk_id": "R05",
+        "expected_flag": false,
+        "flagged": false,
+        "k": 1,
+        "k_after_first_pass": 40
+      },
+      {
+        "risk_id": "R06",
+        "expected_flag": false,
+        "flagged": false,
+        "k": 6,
+        "k_after_first_pass": 19
+      },
+      {
+        "risk_id": "R07",
+        "expected_flag": false,
+        "flagged": false,
+        "k": 4,
+        "k_after_first_pass": 14
+      },
+      {
+        "risk_id": "R08",
+        "expected_flag": false,
+        "flagged": false,
+        "k": 5,
+        "k_after_first_pass": 19
+      },
+      {
+        "risk_id": "R09",
+        "expected_flag": false,
+        "flagged": false,
+        "k": 4,
+        "k_after_first_pass": 14
+      }
+    ]
+  },
+  "agent2_strategy_agreement": {
+    "agree": 183,
+    "total": 208,
+    "rate": 0.8798,
+    "mentions_not_detected": 13,
+    "by_type": {
+      "AGE": "18/21",
+      "DATE": "7/7",
+      "DATE_OF_BIRTH": "1/1",
+      "DEMOGRAPHIC": "2/2",
+      "EMAIL_ADDRESS": "5/5",
+      "EVENT": "16/24",
+      "GOVERNMENT_ID": "1/1",
+      "LOCATION": "20/20",
+      "MEDICAL_CONDITION": "0/1",
+      "OCCUPATION": "15/21",
+      "ORGANIZATION": "38/43",
+      "PERSON": "53/54",
+      "PHONE_NUMBER": "3/3",
+      "POSTAL_CODE": "0/1",
+      "RECORD_IDENTIFIER": "4/4"
+    }
+  },
+  "agent1_name_variants": {
+    "targets_with_person_mentions": 25,
+    "all_mentions_in_one_cluster": 23
+  }
+}

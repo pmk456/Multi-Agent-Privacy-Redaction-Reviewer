@@ -87,6 +87,10 @@ class PrivacyRiskPolicyAgent:
         policy_id = f"POLICY:{et.value}:{risk.value}" if self.policy.is_supported(et) else "DEFAULT:unsupported"
         rationale = f"policy maps {et.value} at {risk.value} risk to {strategy.value}"
 
+        if e.ambiguous_person and strategy.strength < Strategy.MASK.strength and self.policy.is_compliant(et, Strategy.MASK):
+            strategy = Strategy.MASK
+            rationale += "; masked because a lone unverified name-like word may be a person's first name"
+
         floor = remediation.strategy_floor.get(e.entity_id)
         if floor is not None and floor.strength > strategy.strength:
             strategy = floor if self.policy.is_compliant(et, floor) else self.policy.escalate(et, strategy)

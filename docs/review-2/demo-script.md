@@ -12,7 +12,7 @@ document, and never screenshot anything that isn't fictional.
    uvicorn --factory privacy_review.api:create_app --app-dir backend
    ```
 3. Open `http://127.0.0.1:8000/ui/` in a fresh browser window, then zoom to 125% so the room can read it.
-4. Prepare a folder `demo-files/` **outside the repository** containing:
+4. Use the prepared folder `~/Desktop/ps247-demo-files/` (outside the repository), which contains:
    - `notes.txt`: a fictional sentence, for example *"Contact Alex Example at alex@example.com."*
    - `empty.txt`: an empty file
    - `slides.docx`: any file with a `.docx` extension
@@ -25,11 +25,11 @@ document, and never screenshot anything that isn't fictional.
 Point at the footer line on the page, which says the same thing.
 
 ## 2. Backend status (30 s)
-Point at the status line under the title, which shows **pipeline: stub (documents are withheld)**.
-> "Until the full pipeline lands, the backend withholds everything. A mock that echoed
-> its input would leak exactly what it stands in for, so it never does."
+Point at the status line under the title, which shows **pipeline: live**.
+> "Five agents run behind this page. Claude is optional and capped at three Haiku calls per
+> batch; every agent also works without it."
 
-If the live pipeline has landed by the review, the line reads **live**. Adapt this step.
+Each upload takes about 7-10 seconds (five agents plus Claude). Say so rather than waiting in silence.
 
 ## 3. Ingestion and safe errors (1.5 min)
 1. Click **Click to choose files** and select `notes.txt`, `empty.txt` and `slides.docx`. Then click **Review files**.
@@ -38,7 +38,18 @@ If the live pipeline has landed by the review, the line reads **live**. Adapt th
    > because a filename like *jane_doe_discharge.pdf* is itself identifying. The name you
    > see comes from the browser's own file picker."
 3. Mention without demoing: encrypted PDFs and scanned PDFs with no text layer are rejected with clear codes, and there is no OCR.
-4. Select only `notes.txt` and click **Review files**. The document comes back **blocked** with the stub's reason.
+4. Select only `notes.txt` and click **Review files**. It comes back **released** and redacted:
+   name → `PERSON_01`, email and phone masked, Pune → Maharashtra, 34 → 30-39, SSN → `[REDACTED]`,
+   and "Contact Rao directly" → "Contact PERSON_01 directly" (the surname linked to the full name).
+
+## 4a. Live cross-document linkage (1.5 min): the strongest moment
+Select `linked-1-hr.txt`, `linked-2-bio.txt` and `linked-3-board.txt` together and click **Review files**.
+> "Each document looks harmless. Together they describe one person: a lead architect at a named
+> company in Chennai, aged 41, the only woman on its board. Agent 5 links them, the system loops
+> twice to coarsen the details, and only then releases them."
+
+Point at: remediation rounds = 2, "Kestrel Analytics" gone from all three, age shown as a band.
+Then upload `crowd-nurse.txt`: "A nurse in Mumbai describes many people. Agent 5 leaves it alone."
 
 ## 4. Demo mode: a document that was released (2 min)
 Click **Demo mode** and open **hr-record-01**.
