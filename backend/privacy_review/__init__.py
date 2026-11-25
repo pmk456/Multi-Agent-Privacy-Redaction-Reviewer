@@ -1,3 +1,7 @@
 """PS 247 - Multi-Agent Privacy Redaction Review."""
 
-__version__ = "0.2.0"
+from privacy_review.logging_guard import silence_leaky_loggers
+
+silence_leaky_loggers()
+
+__version__ = "0.3.0"

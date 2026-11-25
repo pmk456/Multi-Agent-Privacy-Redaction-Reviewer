@@ -23,7 +23,7 @@ from privacy_review.schemas.entities import DetectedEntity, DetectionSource, Ent
 MERGE_ADJACENT = {EntityType.PERSON, EntityType.STREET_ADDRESS}
 _MONTH = re.compile(r"\b(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\b", re.I)
 _EVENT_WORDS = re.compile(r"\b(?:summit|conference|hackathon|festival|marathon|expo|symposium|workshop|championship|olympiad|"
-                          r"fair|meetup|convention|awards?|gala|congress|forum|tournament|cup|games|ceremony|seminar|webinar)\b", re.I)
+                          r"fair|meetup|convention|gala|congress|forum|tournament|cup|games|ceremony|seminar|webinar)\b", re.I)
 # Identifier keywords spaCy likes to tag as ORG: "SSN", "PAN", "IBAN" ...
 _KEYWORD_ACRONYMS = {"ssn", "pan", "mrn", "id", "dob", "vin", "imei", "iban", "pin", "cvv", "url", "ip", "api",
                      "otp", "upi", "ifsc", "swift", "bic", "itin", "tin", "nhs", "aadhaar", "aadhar", "uid"}
@@ -41,9 +41,17 @@ _NON_IDENTIFYING = {
 }
 _GREETING = re.compile(r"^(?:dear|hi|hello|hey|greetings|attn:?|attention:?)\s+", re.I)
 _TIME_ONLY = re.compile(r"^(?:\d{1,2}(?::\d{2}){1,2}\s*(?:[ap]\.?m\.?)?|\d{1,2}\s*(?:[ap]\.?m\.?)|\d{1,2}\s*o'?clock|noon|midnight)$", re.I)
+_ROLE_END = re.compile(r"\b(?:Architect|Engineer|Manager|Officer|Director|Scientist|Analyst|Consultant|Specialist|"
+                       r"Coordinator|Administrator|Developer|Designer|Supervisor|Technician|Executive|Lead|Head|"
+                       r"Nurse|Professor|Lecturer|Surgeon|Physician|Accountant|Warden|Strategist|Planner)$")
+_BARE_SMALL_NUMBER = re.compile(r"^\d{1,3}$")
 _AGE_EXPR = re.compile(r"^\d{1,3}(?:\s*|-)(?:years?|yrs?)(?:[\s-]+old)?(?:\s+of\s+age)?$", re.I)
 # A one-word "PERSON" whose part of speech cannot be a name: "Reach her at..." (imperative verb).
 _NOT_A_NAME_POS = {"VERB", "AUX", "ADV", "ADP", "DET", "PRON", "CCONJ", "SCONJ", "INTJ", "NUM", "PART"}
+# Verbs that open imperative sentences and, capitalised, get parsed into a name: "Contact Rao".
+_NAME_LEADING_NOISE = {"contact", "call", "email", "e-mail", "ask", "tell", "meet", "thank", "thanks", "welcome",
+                       "congratulate", "congratulations", "please", "reach", "inform", "notify", "message", "ping",
+                       "invite", "remind", "cc", "attn", "attention", "regards", "sincerely", "signed", "approved"}
 _DOB_CUE = re.compile(r"\b(?:born|birth ?day|birth ?date|date of birth|d\.?o\.?b\.?)\b", re.I)
 
 
@@ -69,7 +77,7 @@ class EntityExtractor:
         artifacts = self.presidio.process(text)
         doc = artifacts.tokens
         cands = self.presidio.candidates(text, artifacts, min(self.threshold, 0.3))
-        cands = [c for c in cands if not self._pos_rules_out_name(c, doc)]
+        cands = [self._trim_leading_verbs(c, doc) for c in cands if not self._pos_rules_out_name(c, doc)]
         cands += self.spacy.candidates(doc)
         cands += find_patterns(text)
         return cands, SpacyProcessor.sentence_starts(doc)
@@ -126,6 +134,21 @@ class EntityExtractor:
         return [self._promote_dob(c, text) for c in out]
 
     @staticmethod
+    def _trim_leading_verbs(c: Candidate, doc) -> Candidate:
+        """"Contact Rao" -> "Rao": NER sometimes pulls an imperative verb into a name."""
+        if c.entity_type != EntityType.PERSON or c.sources != {DetectionSource.SPACY}:
+            return c
+        span = doc.char_span(c.start, c.end, alignment_mode="expand")
+        if span is None or len(span) < 2:
+            return c
+        i = 0
+        while i < len(span) - 1 and (span[i].pos_ in _NOT_A_NAME_POS or span[i].text.lower() in _NAME_LEADING_NOISE):
+            i += 1
+        if i == 0:
+            return c
+        return Candidate(span[i].idx, c.end, c.entity_type, c.score, c.source, c.label, c.sources)
+
+    @staticmethod
     def _pos_rules_out_name(c: Candidate, doc) -> bool:
         if c.entity_type != EntityType.PERSON or c.sources != {DetectionSource.SPACY}:
             return False
@@ -155,6 +178,13 @@ class EntityExtractor:
             et = EntityType.EVENT
         if et == EntityType.DATE and _AGE_EXPR.match(text[s:e]):
             et = EntityType.AGE                # "92 years old" is an age, kept whole
+        elif et == EntityType.DATE and _BARE_SMALL_NUMBER.match(text[s:e]):
+            et = EntityType.AGE                # "Meera Iyer, 41," - a lone number is not a date
+        elif et == EntityType.DATE and re.fullmatch(r"\d{9,}", text[s:e]):
+            # A 16-digit "date" is a card number; 9-12 digits an account or record number.
+            et = EntityType.FINANCIAL_ACCOUNT if len(text[s:e]) >= 13 else EntityType.RECORD_IDENTIFIER
+        if et == EntityType.ORGANIZATION and _ROLE_END.search(text[s:e]):
+            et = EntityType.OCCUPATION         # "Lead Systems Architect" is a job, not an employer
         return Candidate(s, e, et, c.score, c.source, c.label, c.sources)
 
     @staticmethod

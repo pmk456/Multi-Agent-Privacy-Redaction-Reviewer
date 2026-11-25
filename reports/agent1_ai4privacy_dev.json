@@ -7,37 +7,37 @@
     "gold_spans": 512,
     "micro": {
       "strict": {
-        "tp": 380,
-        "fp": 150,
-        "fn": 132,
-        "precision": 0.717,
-        "recall": 0.7422,
-        "f1": 0.7294,
+        "tp": 385,
+        "fp": 145,
+        "fn": 127,
+        "precision": 0.7264,
+        "recall": 0.752,
+        "f1": 0.739,
         "support": 512
       },
       "relaxed": {
-        "tp": 402,
-        "fp": 128,
-        "fn": 110,
-        "precision": 0.7585,
-        "recall": 0.7852,
-        "f1": 0.7716,
+        "tp": 409,
+        "fp": 121,
+        "fn": 103,
+        "precision": 0.7717,
+        "recall": 0.7988,
+        "f1": 0.785,
         "support": 512
       }
     },
     "macro_f1": {
-      "strict": 0.7285,
-      "relaxed": 0.7722
+      "strict": 0.7373,
+      "relaxed": 0.7842
     },
     "per_type": {
       "strict": {
         "AGE": {
-          "tp": 7,
+          "tp": 8,
           "fp": 2,
-          "fn": 6,
-          "precision": 0.7778,
-          "recall": 0.5385,
-          "f1": 0.6364,
+          "fn": 5,
+          "precision": 0.8,
+          "recall": 0.6154,
+          "f1": 0.6957,
           "support": 13
         },
         "CREDENTIAL": {
@@ -51,11 +51,11 @@
         },
         "DATE": {
           "tp": 18,
-          "fp": 19,
+          "fp": 18,
           "fn": 2,
-          "precision": 0.4865,
+          "precision": 0.5,
           "recall": 0.9,
-          "f1": 0.6316,
+          "f1": 0.6429,
           "support": 20
         },
         "DATE_OF_BIRTH": {
@@ -131,12 +131,12 @@
           "support": 40
         },
         "OCCUPATION": {
-          "tp": 13,
-          "fp": 7,
-          "fn": 20,
-          "precision": 0.65,
-          "recall": 0.3939,
-          "f1": 0.4906,
+          "tp": 17,
+          "fp": 9,
+          "fn": 16,
+          "precision": 0.6538,
+          "recall": 0.5152,
+          "f1": 0.5763,
           "support": 33
         },
         "ONLINE_IDENTIFIER": {
@@ -150,11 +150,11 @@
         },
         "ORGANIZATION": {
           "tp": 5,
-          "fp": 61,
+          "fp": 55,
           "fn": 8,
-          "precision": 0.0758,
+          "precision": 0.0833,
           "recall": 0.3846,
-          "f1": 0.1266,
+          "f1": 0.137,
           "support": 13
         },
         "PERSON": {
@@ -205,12 +205,12 @@
       },
       "relaxed": {
         "AGE": {
-          "tp": 9,
+          "tp": 10,
           "fp": 0,
-          "fn": 4,
+          "fn": 3,
           "precision": 1.0,
-          "recall": 0.6923,
-          "f1": 0.8182,
+          "recall": 0.7692,
+          "f1": 0.8696,
           "support": 13
         },
         "CREDENTIAL": {
@@ -224,11 +224,11 @@
         },
         "DATE": {
           "tp": 18,
-          "fp": 19,
+          "fp": 18,
           "fn": 2,
-          "precision": 0.4865,
+          "precision": 0.5,
           "recall": 0.9,
-          "f1": 0.6316,
+          "f1": 0.6429,
           "support": 20
         },
         "DATE_OF_BIRTH": {
@@ -304,12 +304,12 @@
           "support": 40
         },
         "OCCUPATION": {
-          "tp": 15,
+          "tp": 21,
           "fp": 5,
-          "fn": 18,
-          "precision": 0.75,
-          "recall": 0.4545,
-          "f1": 0.566,
+          "fn": 12,
+          "precision": 0.8077,
+          "recall": 0.6364,
+          "f1": 0.7119,
           "support": 33
         },
         "ONLINE_IDENTIFIER": {
@@ -323,11 +323,11 @@
         },
         "ORGANIZATION": {
           "tp": 9,
-          "fp": 57,
+          "fp": 51,
           "fn": 4,
-          "precision": 0.1364,
+          "precision": 0.15,
           "recall": 0.6923,
-          "f1": 0.2278,
+          "f1": 0.2466,
           "support": 13
         },
         "PERSON": {
@@ -716,47 +716,6 @@
       "MEDICAL_CONDITION": 3,
       "RECORD_IDENTIFIER": 3
     },
-    "seconds": 1.6
-  },
-  "annotation_validation": {
-    "by_corruption": {
-      "none": {
-        "cases": 382,
-        "expected_status_rate": 0.7984,
-        "false_alarm_rate": 0.2016
-      },
-      "wrong_type": {
-        "cases": 20,
-        "expected_status_rate": 1.0,
-        "flagged_rate": 1.0
-      },
-      "spurious": {
-        "cases": 199,
-        "expected_status_rate": 0.9899,
-        "flagged_rate": 1.0
-      },
-      "out_of_bounds": {
-        "cases": 200,
-        "expected_status_rate": 1.0,
-        "flagged_rate": 1.0
-      },
-      "shifted": {
-        "cases": 59,
-        "expected_status_rate": 0.6949,
-        "flagged_rate": 0.9153
-      },
-      "dropped": {
-        "cases": 51,
-        "expected_status_rate": 0.9412,
-        "flagged_rate": 0.9412
-      }
-    },
-    "shifted_spans_repaired_to_cover_gold": 0.9831,
-    "span_level_accuracy_after_validation": {
-      "exact_match": 0.9512,
-      "gold_fully_covered": 0.9883,
-      "gold_spans": 512
-    },
-    "corruption_rate": 0.3
+    "seconds": 1.4
   }
 }

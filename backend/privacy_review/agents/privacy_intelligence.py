@@ -321,7 +321,11 @@ class PrivacyIntelligenceAgent:
                     continue
                 if e.entity_type == EntityType.PERSON:
                     small, big = sorted([toks, gtoks], key=len)
-                    if toks == gtoks or (len(small) >= 2 and small <= big):
+                    same_doc = any(m.doc_id == e.doc_id for m in members)
+                    # A lone surname joins a full name only inside the same document - across
+                    # documents a single shared surname is far too weak to merge two people.
+                    if toks == gtoks or (len(small) >= 2 and small <= big) or \
+                            (same_doc and len(small) == 1 and small <= big):
                         home = (et, gtoks, members)
                         break
                 elif self.normalise(members[0]) == key:

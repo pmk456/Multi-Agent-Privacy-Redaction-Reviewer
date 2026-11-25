@@ -181,6 +181,9 @@ SPECS: list[PatternSpec] = [
     # --- people
     PatternSpec("greeting_name", E.PERSON,
                 C(r"\b(?:Dear|Hi|Hello|Hey|Greetings|Attn:?|Attention:?)\s+([A-Z][\w'*-]+(?:[ _][A-Z][\w'-]+)?)"), 0.7, group=1),
+    PatternSpec("name_cue", E.PERSON,
+                C(r"\b(?:[Mm]y name is|[Ii] am|[Ii]'m|[Tt]his is|[Nn]ame:|[Rr]egards,|[Ss]incerely,|[Ss]igned:?|[Ff]rom:|[Pp]atient:|[Cc]lient:)\s+([A-Z][a-z'-]+(?:\s[A-Z][a-z'-]+){0,2})"),
+                0.9, group=1),
     PatternSpec("name_digits_username", E.ONLINE_IDENTIFIER, C(r"\b[A-Z][a-z]{2,}\d{2,4}\b"), 0.5),
 
     # --- people descriptors

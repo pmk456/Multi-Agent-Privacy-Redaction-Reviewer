@@ -288,6 +288,29 @@
           "rule": "CTX-06"
         }
       }
+    },
+    {
+      "case": "precise date (not a standalone dateline) in a document with a direct identifier",
+      "entities": [
+        [
+          "EMAIL_ADDRESS",
+          0
+        ],
+        [
+          "DATE",
+          1
+        ],
+        [
+          "LOCATION",
+          1
+        ]
+      ],
+      "expect": {
+        "DATE": {
+          "min_risk": "medium",
+          "rule": "CTX-07"
+        }
+      }
     }
   ],
   "no_escalation_cases": [

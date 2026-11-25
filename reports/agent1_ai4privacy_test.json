@@ -7,27 +7,27 @@
     "gold_spans": 264,
     "micro": {
       "strict": {
-        "tp": 181,
-        "fp": 108,
-        "fn": 83,
-        "precision": 0.6263,
-        "recall": 0.6856,
-        "f1": 0.6546,
+        "tp": 185,
+        "fp": 103,
+        "fn": 79,
+        "precision": 0.6424,
+        "recall": 0.7008,
+        "f1": 0.6703,
         "support": 264
       },
       "relaxed": {
-        "tp": 193,
-        "fp": 96,
-        "fn": 71,
-        "precision": 0.6678,
-        "recall": 0.7311,
-        "f1": 0.698,
+        "tp": 197,
+        "fp": 91,
+        "fn": 67,
+        "precision": 0.684,
+        "recall": 0.7462,
+        "f1": 0.7138,
         "support": 264
       }
     },
     "macro_f1": {
-      "strict": 0.6862,
-      "relaxed": 0.7071
+      "strict": 0.6999,
+      "relaxed": 0.7211
     },
     "per_type": {
       "strict": {
@@ -51,11 +51,11 @@
         },
         "DATE": {
           "tp": 10,
-          "fp": 14,
+          "fp": 13,
           "fn": 0,
-          "precision": 0.4167,
+          "precision": 0.4348,
           "recall": 1.0,
-          "f1": 0.5882,
+          "f1": 0.6061,
           "support": 10
         },
         "DATE_OF_BIRTH": {
@@ -131,12 +131,12 @@
           "support": 26
         },
         "OCCUPATION": {
-          "tp": 4,
+          "tp": 8,
           "fp": 3,
-          "fn": 13,
-          "precision": 0.5714,
-          "recall": 0.2353,
-          "f1": 0.3333,
+          "fn": 9,
+          "precision": 0.7273,
+          "recall": 0.4706,
+          "f1": 0.5714,
           "support": 17
         },
         "ONLINE_IDENTIFIER": {
@@ -150,11 +150,11 @@
         },
         "ORGANIZATION": {
           "tp": 1,
-          "fp": 35,
+          "fp": 31,
           "fn": 5,
-          "precision": 0.0278,
+          "precision": 0.0312,
           "recall": 0.1667,
-          "f1": 0.0476,
+          "f1": 0.0526,
           "support": 6
         },
         "PERSON": {
@@ -224,11 +224,11 @@
         },
         "DATE": {
           "tp": 10,
-          "fp": 14,
+          "fp": 13,
           "fn": 0,
-          "precision": 0.4167,
+          "precision": 0.4348,
           "recall": 1.0,
-          "f1": 0.5882,
+          "f1": 0.6061,
           "support": 10
         },
         "DATE_OF_BIRTH": {
@@ -304,12 +304,12 @@
           "support": 26
         },
         "OCCUPATION": {
-          "tp": 4,
+          "tp": 8,
           "fp": 3,
-          "fn": 13,
-          "precision": 0.5714,
-          "recall": 0.2353,
-          "f1": 0.3333,
+          "fn": 9,
+          "precision": 0.7273,
+          "recall": 0.4706,
+          "f1": 0.5714,
           "support": 17
         },
         "ONLINE_IDENTIFIER": {
@@ -323,11 +323,11 @@
         },
         "ORGANIZATION": {
           "tp": 2,
-          "fp": 34,
+          "fp": 30,
           "fn": 4,
-          "precision": 0.0556,
+          "precision": 0.0625,
           "recall": 0.3333,
-          "f1": 0.0952,
+          "f1": 0.1053,
           "support": 6
         },
         "PERSON": {
@@ -698,49 +698,9 @@
       }
     },
     "predictions_of_types_not_annotated_in_dataset": {
-      "MEDICAL_CONDITION": 1
+      "MEDICAL_CONDITION": 1,
+      "RECORD_IDENTIFIER": 1
     },
-    "seconds": 0.9
-  },
-  "annotation_validation": {
-    "by_corruption": {
-      "none": {
-        "cases": 201,
-        "expected_status_rate": 0.7512,
-        "false_alarm_rate": 0.2488
-      },
-      "spurious": {
-        "cases": 100,
-        "expected_status_rate": 0.98,
-        "flagged_rate": 1.0
-      },
-      "out_of_bounds": {
-        "cases": 100,
-        "expected_status_rate": 1.0,
-        "flagged_rate": 1.0
-      },
-      "shifted": {
-        "cases": 23,
-        "expected_status_rate": 0.7826,
-        "flagged_rate": 0.913
-      },
-      "dropped": {
-        "cases": 26,
-        "expected_status_rate": 0.9231,
-        "flagged_rate": 0.9231
-      },
-      "wrong_type": {
-        "cases": 14,
-        "expected_status_rate": 0.9286,
-        "flagged_rate": 0.9286
-      }
-    },
-    "shifted_spans_repaired_to_cover_gold": 0.9565,
-    "span_level_accuracy_after_validation": {
-      "exact_match": 0.9394,
-      "gold_fully_covered": 0.9811,
-      "gold_spans": 264
-    },
-    "corruption_rate": 0.3
+    "seconds": 1.0
   }
 }
