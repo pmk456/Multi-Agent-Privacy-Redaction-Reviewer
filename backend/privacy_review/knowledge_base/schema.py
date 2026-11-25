@@ -90,6 +90,8 @@ class LinkageRules(BaseModel):
     high_risk_threshold: float = Field(gt=0.0, le=1.0)
     medium_risk_threshold: float = Field(gt=0.0, le=1.0)
     min_anonymity_set: int = Field(ge=1)
+    uniqueness_cues: list[str] = Field(default_factory=list)
+    uniqueness_cue_weight: float = Field(default=0.5, ge=0.0, le=1.0)
     high_risk_combinations: list[list[EntityType]]
 
 

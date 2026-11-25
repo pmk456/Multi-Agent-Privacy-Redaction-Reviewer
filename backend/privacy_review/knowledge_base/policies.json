@@ -154,6 +154,11 @@
      "min_distinct_types": 1, "requires_all": ["MEDICAL_CONDITION"],
      "applies_to": ["MEDICAL_CONDITION"], "escalate_to": "critical"},
 
+    {"rule_id": "CTX-07", "name": "precise_date_in_personal_record",
+     "description": "A precise date in a document that also contains a direct identifier can be a date of birth, admission or joining date for that person; reduce it to month and year.",
+     "scope": "document", "trigger_types": ["PERSON", "EMAIL_ADDRESS", "PHONE_NUMBER", "GOVERNMENT_ID", "RECORD_IDENTIFIER", "FINANCIAL_ACCOUNT", "STREET_ADDRESS"],
+     "min_distinct_types": 1, "requires_all": ["DATE"], "applies_to": ["DATE"], "escalate_to": "medium"},
+
     {"rule_id": "CTX-06", "name": "sensitive_attribute_linked_to_person",
      "description": "Nationality, religion or political group stated about a named person is special-category data.",
      "scope": "sentence", "trigger_types": ["PERSON"], "min_distinct_types": 1, "requires_all": ["PERSON", "DEMOGRAPHIC"],
@@ -216,6 +221,9 @@
     "high_risk_threshold": 0.75,
     "medium_risk_threshold": 0.55,
     "min_anonymity_set": 2,
+    "uniqueness_cues": ["the only", "the sole", "only one", "the first", "the last", "the youngest", "the oldest",
+                        "the head of", "the chief", "the lone", "the single"],
+    "uniqueness_cue_weight": 0.5,
     "high_risk_combinations": [
       ["OCCUPATION", "ORGANIZATION", "LOCATION"],
       ["DATE_OF_BIRTH", "POSTAL_CODE", "DEMOGRAPHIC"],
@@ -280,6 +288,11 @@
       "accountant", "auditor", "lawyer", "advocate", "paralegal", "warden", "assistant warden", "receptionist",
       "chief executive officer", "chief technology officer", "chief financial officer", "head of research",
       "security guard", "driver", "electrician", "plumber", "chef", "pilot", "journalist", "photographer"
+    ],
+    "common_occupations": [
+      "nurse", "staff nurse", "teacher", "driver", "engineer", "software engineer", "doctor", "accountant", "clerk",
+      "student", "manager", "sales associate", "cashier", "receptionist", "security guard", "electrician", "plumber",
+      "chef", "developer", "analyst", "consultant", "technician", "assistant", "volunteer", "intern"
     ],
     "role_nouns": [
       "Specialist", "Coordinator", "Engineer", "Manager", "Officer", "Designer", "Consultant", "Analyst", "Strategist",

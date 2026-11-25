@@ -209,7 +209,7 @@ class TestPolicyChangesPropagate:
 # =============================================================== context rules & exceptions
 
 class TestContextRules:
-    @pytest.mark.parametrize("idx", range(5))
+    @pytest.mark.parametrize("idx", range(6))
     def test_combinations_trigger_expected_escalation(self, engine, kb_expected, entity_factory, idx):
         case = kb_expected["context_cases"][idx]
         ents = [entity_factory(et, s) for et, s in case["entities"]]

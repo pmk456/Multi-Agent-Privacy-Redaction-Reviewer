@@ -55,6 +55,8 @@ class DetectionSource(str, Enum):
     PATTERN = "pattern"
     GAZETTEER = "gazetteer"
     LLM = "llm"
+    VERIFICATION = "verification"       # added during remediation from an Agent 4 finding
+    ADVERSARIAL = "adversarial"         # added during remediation from an Agent 5 finding
 
 
 class Span(BaseModel):
