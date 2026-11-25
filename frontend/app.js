@@ -1,61 +1,63 @@
-// PS 247 frontend. No build step, no framework.
+// PS 247 frontend. No build step, no framework. Styles live in styles.css.
 //
 // Safety rules for this file:
 //  - Everything from the API is rendered with textContent / createElement, never innerHTML.
-//    The only markup set directly is the static SVG icon paths in ICONS below (constants
-//    written here, never data).
+//    The only markup set directly is the static SVG paths in ICONS (constants, never data).
 //  - Entity spans refer to the ORIGINAL text, not the redacted one, so they are never shown
 //    or used to index into redacted_text.
-//  - The API never sends filenames back. Errors come with a file_index; the local filename
-//    shown next to it is read from the browser's own file picker and goes nowhere.
+//  - The API never sends filenames back. Errors come with a file_index; the filename shown
+//    next to an error is read from the browser's own file picker and goes nowhere.
 "use strict";
 
 const API = location.protocol === "file:" ? "http://127.0.0.1:8000" : "";
-const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const MAX_FILES = 20;
+const LIMITS = { files: 20, bytes: 5 * 1024 * 1024, chars: 200000 };
+const ACCEPTED = ["txt", "pdf", "json"];
 
-const C = { navy: "#192339", steel: "#1E3A6B", cyan: "#27B2CC", maroon: "#781B17",
-            steelSoft: "#7F9BDB", maroonSoft: "#E58A82", grid: "rgba(148,163,184,.12)", text: "#CBD5E1" };
 const RISK_ORDER = ["low", "medium", "high", "critical"];
-const RISK_COLOR = { low: C.cyan, medium: C.steelSoft, high: C.maroonSoft, critical: C.maroon, unknown: "#64748B" };
 const STRATEGY_ORDER = ["keep", "generalize", "pseudonymize", "mask", "suppress"];
-const STRATEGY_COLOR = { keep: "#3E5170", generalize: C.steelSoft, pseudonymize: "#5C7CC4", mask: C.cyan, suppress: C.maroon };
 const STRATEGY_LABEL = { keep: "Kept", generalize: "Generalised", pseudonymize: "Pseudonymised", mask: "Masked", suppress: "Removed" };
+// Sequential palette: the more information an action removes, the darker it is.
+const VIZ = { 1: "#C9D1DD", 2: "#8FA1BF", 3: "#4F6A99", 4: "#1E3A6B", 5: "#781B17" };
+const RISK_COLOR = { low: VIZ[1], medium: VIZ[3], high: "#B5652A", critical: VIZ[5] };
+const STRATEGY_COLOR = { keep: VIZ[1], generalize: VIZ[2], pseudonymize: VIZ[3], mask: VIZ[4], suppress: VIZ[5] };
+const OK = "#155E75", DANGER = "#781B17";
 
 // [EMAIL_ADDRESS], [REDACTED], PERSON_01, PERSON_7F3A
 const PLACEHOLDER = /\[[A-Z][A-Z_]*\]|\b[A-Z]{2,}(?:_[A-Z]+)*_[0-9A-F]{2,}\b/g;
 
-const AGENTS = [
-  { name: "Privacy Intelligence", short: "Find", sub: "Finds personal data", icon: "search" },
-  { name: "Risk & Policy", short: "Judge", sub: "Weighs risk in context", icon: "scale" },
-  { name: "Adaptive Redaction", short: "Redact", sub: "Rewrites deterministically", icon: "pen" },
-  { name: "Verification", short: "Verify", sub: "Re-checks independently", icon: "shield" },
-  { name: "Adversarial", short: "Attack", sub: "Tries to re-identify", icon: "target" },
-];
-
-// Static icon paths (lucide-style). Constants only - never data.
-const ICONS = {
-  search: '<circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>',
-  scale: '<path d="M12 3v18"/><path d="M5 7h14"/><path d="m5 7-3 7a4 4 0 0 0 6 0z"/><path d="m19 7-3 7a4 4 0 0 0 6 0z"/><path d="M8 21h8"/>',
-  pen: '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
-  shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/>',
-  target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',
-  check: '<path d="M20 6 9 17l-5-5"/>',
-  x: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
-  minus: '<path d="M5 12h14"/>',
-  alert: '<path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>',
-  lock: '<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
-  copy: '<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/>',
-  file: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/>',
-  doc: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6"/><path d="M9 17h4"/>',
-  link: '<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>',
-  layers: '<path d="m12 2 10 5-10 5L2 7z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/>',
-  refresh: '<path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/>',
-  sparkle: '<path d="m12 3 1.9 5.8L20 10l-5 3.9L16.2 20 12 16.6 7.8 20 9 13.9 4 10l6.1-1.2z"/>',
-  info: '<circle cx="12" cy="12" r="9"/><path d="M12 16v-4"/><path d="M12 8h.01"/>',
+// Actionable wording for server error codes. Falls back to the server's own message,
+// which never quotes document content.
+const ERROR_HINT = {
+  empty_document: "The file is empty. Remove it, or add content and try again.",
+  file_too_large: "Larger than 5 MB. Split the document or remove the file.",
+  document_too_long: "Longer than 200,000 characters. Split it into smaller documents.",
+  unsupported_format: "Only .txt, .pdf and .json files are supported.",
+  corrupt_file: "The file looks damaged, or isn't the format its extension says.",
+  encrypted_pdf: "The PDF is password-protected. Remove the password and upload it again.",
+  scanned_pdf: "The PDF has no text layer (it looks scanned). Upload a text-based PDF or a .txt file.",
+  // The ones below follow the server's own message, so they only give the next step.
+  too_many_files: "Remove some files so the batch has 20 or fewer, then try again.",
+  too_many_documents: "Split the batch so it has 20 or fewer documents.",
+  request_too_large: "Send fewer or smaller files.",
+  length_required: "Try again. If it keeps happening, reload the page.",
+  pipeline_error: "Try again. If it keeps failing, check the server logs.",
+  internal_error: "Try again in a moment.",
 };
 
-const state = { result: null, selected: null, files: [], demo: false };
+const ICONS = {
+  check: '<path d="M20 6 9 17l-5-5"/>',
+  x: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
+  minus: '<path d="M6 12h12"/>',
+  alert: '<circle cx="12" cy="12" r="9"/><path d="M12 8v5"/><path d="M12 16.5h.01"/>',
+  info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 7.5h.01"/>',
+  copy: '<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/>',
+  file: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/>',
+  layers: '<path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/>',
+  chart: '<path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/>',
+  arrow: '<path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>',
+};
+
+const state = { result: null, demo: false, selected: null, files: [], mode: "files", busy: false };
 const $ = (id) => document.getElementById(id);
 
 // ================================================================== DOM helpers
@@ -76,611 +78,649 @@ function el(tag, attrs = {}, ...children) {
   return node;
 }
 
-function icon(name, size = 18, stroke = 2) {
+function icon(name, size = 16, stroke = 2) {
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  svg.setAttribute("width", size); svg.setAttribute("height", size);
-  svg.setAttribute("viewBox", "0 0 24 24"); svg.setAttribute("fill", "none");
-  svg.setAttribute("stroke", "currentColor"); svg.setAttribute("stroke-width", stroke);
-  svg.setAttribute("stroke-linecap", "round"); svg.setAttribute("stroke-linejoin", "round");
-  svg.setAttribute("aria-hidden", "true");
+  for (const [k, v] of Object.entries({ width: size, height: size, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor",
+    "stroke-width": stroke, "stroke-linecap": "round", "stroke-linejoin": "round", "aria-hidden": "true" })) svg.setAttribute(k, v);
   svg.innerHTML = ICONS[name] || "";            // static constant, see ICONS
   return svg;
 }
 
-const badge = (text, cls, ic) => el("span", { class: `badge ${cls}` }, ic ? icon(ic, 12, 2.5) : null, text);
-const riskCls = (r) => `r-${RISK_ORDER.includes(r) ? r : "unknown"}`;
+const plural = (n, one, many = `${one}s`) => `${n.toLocaleString()} ${n === 1 ? one : many}`;
+const humanType = (t) => String(t).replace(/_/g, " ").toLowerCase().replace(/^\w/, (c) => c.toUpperCase());
 const pretty = (s) => String(s).replace(/_/g, " ").toLowerCase();
-const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+const extOf = (name) => (name.includes(".") ? name.split(".").pop().toLowerCase() : "");
 
-function card(title, opts = {}, ...children) {
-  return el("section", { class: `glass p-5 sm:p-6 reveal ${opts.cls || ""}`, style: { "--d": `${opts.delay || 0}ms` } },
-    title ? el("div", { class: "flex items-center justify-between gap-3 mb-4" },
-      el("h3", { class: "font-bold flex items-center gap-2" },
-        opts.icon ? el("span", { class: "text-cyan" }, icon(opts.icon, 17)) : null, title),
-      opts.action || null) : null,
-    ...children);
-}
-
-function countUp(node, to, { duration = 900, suffix = "" } = {}) {
-  if (REDUCED || !to) { node.textContent = `${to}${suffix}`; return; }
-  const start = performance.now();
-  const tick = (now) => {
-    const p = Math.min(1, (now - start) / duration);
-    node.textContent = `${Math.round(to * (1 - Math.pow(1 - p, 3)))}${suffix}`;
-    if (p < 1) requestAnimationFrame(tick);
-  };
-  requestAnimationFrame(tick);
-}
-
-function stackBar(parts, height = 10) {
-  const total = parts.reduce((s, p) => s + p.value, 0);
-  const bar = el("div", { class: "stack", style: { height: `${height}px` } });
-  const spans = parts.filter((p) => p.value > 0).map((p) =>
-    el("span", { style: { background: p.color }, title: `${p.label}: ${p.value}` }));
-  bar.append(...spans);
-  const grow = () => spans.forEach((s, i) => { s.style.width = `${(parts.filter((p) => p.value > 0)[i].value / total) * 100}%`; });
-  if (REDUCED) grow(); else requestAnimationFrame(() => requestAnimationFrame(grow));
-  return bar;
+function formatBytes(n) {
+  if (n >= 1024 * 1024) return `${(n / 1024 / 1024).toFixed(1)} MB`;
+  if (n >= 1024) return `${Math.round(n / 1024)} KB`;
+  return `${n} B`;
 }
 
 // ================================================================== toasts
 
 function toast(kind, title, message) {
-  const colors = { success: C.cyan, error: C.maroonSoft, info: C.steelSoft };
-  const ic = { success: "check", error: "alert", info: "info" }[kind] || "info";
-  const node = el("div", { class: "toast", role: "status" },
-    el("span", { style: { color: colors[kind] || C.steelSoft, marginTop: "1px" } }, icon(ic, 18, 2.4)),
-    el("div", { class: "min-w-0" },
-      el("p", { class: "font-semibold" }, title),
-      message ? el("p", { class: "muted text-xs mt-0.5" }, message) : null));
+  const ic = { ok: "check", error: "alert", info: "info" }[kind] || "info";
+  const node = el("div", { class: `toast is-${kind}`, role: kind === "error" ? "alert" : "status" },
+    el("span", { class: "toast-icon" }, icon(ic, 17)),
+    el("div", {}, el("p", { class: "toast-title" }, title), message ? el("p", { class: "toast-msg" }, message) : null),
+    el("button", { class: "icon-btn", style: { width: "24px", height: "24px" }, "aria-label": "Dismiss", onclick: () => dismiss() }, icon("x", 14)));
+  const dismiss = () => { node.classList.add("is-leaving"); setTimeout(() => node.remove(), 160); };
   $("toasts").append(node);
-  setTimeout(() => { node.classList.add("leaving"); setTimeout(() => node.remove(), 320); }, 5200);
+  setTimeout(dismiss, kind === "error" ? 8000 : 4500);
 }
 
 // ================================================================== navigation
 
-function positionIndicators() {
-  for (const nav of document.querySelectorAll(".tabs")) {
-    const active = nav.querySelector('.tab[aria-selected="true"]');
-    const ind = nav.querySelector(".tab-indicator");
-    if (!active || !ind || !active.offsetWidth) continue;
-    ind.style.width = `${active.offsetWidth}px`;
-    ind.style.transform = `translateX(${active.offsetLeft - 4}px)`;
+const VIEWS = ["upload", "documents", "aggregate"];
+
+function showView(name, { focus = false } = {}) {
+  for (const v of VIEWS) $(`view-${v}`).hidden = v !== name;
+  for (const link of document.querySelectorAll("[data-view].nav-link")) {
+    if (link.dataset.view === name) link.setAttribute("aria-current", "page");
+    else link.removeAttribute("aria-current");
   }
+  if (name === "documents") renderDocuments();
+  if (name === "aggregate") renderInsights();
+  window.scrollTo({ top: 0 });
+  if (focus) $(`view-${name}`).querySelector("h1")?.focus({ preventScroll: true });
 }
 
-function showView(name) {
-  for (const tab of document.querySelectorAll(".tab")) {
-    tab.setAttribute("aria-selected", String(tab.dataset.view === name));
-  }
-  for (const v of ["upload", "documents", "aggregate"]) {
-    const section = $(`view-${v}`);
-    const show = v === name;
-    section.classList.toggle("hidden", !show);
-    if (show) { section.classList.remove("view-enter"); void section.offsetWidth; section.classList.add("view-enter"); }
-  }
-  positionIndicators();
-  window.scrollTo({ top: 0, behavior: REDUCED ? "auto" : "smooth" });
-  if (name === "aggregate" && state.result) requestAnimationFrame(() => renderAggregate(state.result));
+for (const link of document.querySelectorAll("[data-view]")) {
+  link.addEventListener("click", (e) => { e.preventDefault(); showView(link.dataset.view, { focus: true }); });
 }
 
-for (const tab of document.querySelectorAll(".tab")) {
-  tab.addEventListener("click", () => { if (!tab.disabled) showView(tab.dataset.view); });
-}
-window.addEventListener("resize", positionIndicators);
-
-// ================================================================== hero pipeline
-
-function renderPipeline(host) {
-  host.replaceChildren(...AGENTS.map((a, i) =>
-    el("div", { class: "agent", style: { "--i": i }, title: a.name },
-      el("div", { class: "agent-icon" }, icon(a.icon, 24)),
-      el("p", { class: "text-xs font-bold tracking-wide" }, `${i + 1}. ${a.short}`),
-      el("p", { class: "agent-sub text-[11px] muted mt-0.5 hidden sm:block" }, a.sub))));
+function updateNavCount() {
+  const n = state.result?.documents.length || 0;
+  for (const badge of document.querySelectorAll("[data-count]")) { badge.textContent = String(n); badge.hidden = !n; }
 }
 
-// ================================================================== health
+// ================================================================== backend status
 
 async function checkHealth() {
-  const pill = $("health");
-  const set = (cls, text) => pill.replaceChildren(el("span", { class: `dot ${cls}` }), el("span", {}, text));
+  const pipe = $("status-pipeline"), llm = $("status-llm");
+  const set = (cls, text, title) => {
+    pipe.replaceChildren(el("span", { class: `status-dot ${cls}` }), el("span", {}, text));
+    pipe.title = title;
+  };
   try {
     const r = await fetch(`${API}/health`);
     if (!r.ok) throw new Error(String(r.status));
     const h = await r.json();
-    if (h.pipeline === "live") set("live", `Live pipeline${h.llm ? " · LLM on" : ""}`);
-    else set("stub", "Stub pipeline · documents withheld");
+    if (h.pipeline === "live") set("is-live", "Pipeline live", "Backend online. Documents are processed by the five-agent pipeline.");
+    else set("is-stub", "Pipeline unavailable", "Backend online, but the redaction pipeline is not installed. Every document is withheld.");
+    llm.textContent = h.llm ? "LLM on" : "LLM off";
+    llm.title = h.llm ? "Optional LLM reasoning is enabled. It never receives raw identifiers." : "Deterministic mode. No LLM is used.";
   } catch {
-    set("off", location.protocol === "file:" ? "Open via http://127.0.0.1:8000/ui/" : "Backend offline · demo works");
+    set("is-off", "Backend offline", location.protocol === "file:"
+      ? "Opened from disk. Start the server and open http://127.0.0.1:8000/ui/."
+      : "The backend did not respond. The sample batch still works.");
+    llm.textContent = "LLM —";
   }
 }
 
-// ================================================================== upload view
+// ================================================================== composer: tabs
 
-const uploadErrors = el("div", { class: "hidden mt-4 rounded-2xl p-4", role: "alert",
-  style: { background: "rgba(120,27,23,.22)", border: "1px solid rgba(229,138,130,.4)" } });
-$("file-list").before(uploadErrors);
+function setMode(mode) {
+  state.mode = mode;
+  for (const [tab, panel, m] of [["tab-files", "panel-files", "files"], ["tab-text", "panel-text", "text"]]) {
+    const on = m === mode;
+    $(tab).setAttribute("aria-selected", String(on));
+    $(tab).tabIndex = on ? 0 : -1;
+    $(panel).hidden = !on;
+  }
+  hideRunError();
+  updateComposer();
+}
+
+$("tab-files").addEventListener("click", () => setMode("files"));
+$("tab-text").addEventListener("click", () => { setMode("text"); $("paste").focus(); });
+for (const id of ["tab-files", "tab-text"]) {
+  $(id).addEventListener("keydown", (e) => {
+    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+    const next = state.mode === "files" ? "text" : "files";
+    setMode(next);
+    $(next === "files" ? "tab-files" : "tab-text").focus();
+  });
+}
+
+// ================================================================== composer: files
+
+function localProblem(file) {
+  if (!ACCEPTED.includes(extOf(file.name))) return "Unsupported type. Use .txt, .pdf or .json.";
+  if (file.size === 0) return "The file is empty.";
+  if (file.size > LIMITS.bytes) return "Larger than 5 MB.";
+  return null;
+}
 
 function addFiles(list) {
-  const incoming = Array.from(list);
-  for (const f of incoming) {
-    if (!state.files.some((x) => x.name === f.name && x.size === f.size)) state.files.push(f);
+  let skipped = 0;
+  for (const file of Array.from(list)) {
+    if (state.files.some((f) => f.file.name === file.name && f.file.size === file.size)) continue;
+    if (state.files.length >= LIMITS.files) { skipped += 1; continue; }
+    state.files.push({ file, local: localProblem(file), server: null });
   }
-  if (state.files.length > MAX_FILES) {
-    state.files = state.files.slice(0, MAX_FILES);
-    toast("info", `Only ${MAX_FILES} files per batch`, "Extra files were left out.");
-  }
+  if (skipped) toast("info", `${plural(skipped, "file")} not added`, `A batch can hold at most ${LIMITS.files} files.`);
+  hideRunError();
   renderFiles();
 }
 
 function renderFiles() {
-  const ext = (n) => (n.includes(".") ? n.split(".").pop().toLowerCase() : "");
-  $("file-list").replaceChildren(...state.files.map((f, i) =>
-    el("li", { class: "file-chip reveal", style: { "--d": `${i * 40}ms` } },
-      el("span", { class: "w-8 h-8 rounded-lg grid place-items-center shrink-0 text-[10px] font-bold uppercase",
-                   style: { background: "rgba(39,178,204,.12)", color: "#8EE4F3" } }, ext(f.name) || icon("file", 14)),
-      el("div", { class: "min-w-0 flex-1" },
-        el("p", { class: "text-sm font-medium truncate" }, f.name),
-        el("p", { class: "text-[11px] muted" }, formatBytes(f.size))),
-      el("button", { class: "icon-btn", "aria-label": "Remove file", onclick: () => { state.files.splice(i, 1); renderFiles(); } },
-        icon("x", 15)))));
-  $("btn-upload").disabled = state.files.length === 0;
-  $("btn-clear").classList.toggle("hidden", state.files.length === 0);
+  const rows = state.files.map((entry, i) => {
+    const problem = entry.server ? (ERROR_HINT[entry.server.code] || entry.server.message) : entry.local;
+    const status = problem
+      ? el("span", { style: { color: "var(--danger)", fontSize: "12.5px" } }, problem)
+      : el("span", { class: "t-meta" }, "Ready");
+    return el("tr", { class: problem ? "file-row-error" : "" },
+      el("td", {}, el("div", { class: "file-name" },
+        el("span", { class: "file-type" }, extOf(entry.file.name) || "?"),
+        el("span", { title: entry.file.name }, entry.file.name))),
+      el("td", { class: "col-size num" }, formatBytes(entry.file.size)),
+      el("td", { class: "col-status" }, status),
+      el("td", { class: "col-action" },
+        el("button", { class: "icon-btn", type: "button", "aria-label": `Remove ${entry.file.name}`, disabled: state.busy || null,
+          onclick: () => { state.files.splice(i, 1); hideRunError(); renderFiles(); } }, icon("x", 15))));
+  });
+  $("file-rows").replaceChildren(...rows);
+  $("file-table").hidden = state.files.length === 0;
+  $("file-count").textContent = String(state.files.length);
+  $("file-count").hidden = state.files.length === 0;
+  updateComposer();
 }
 
+$("btn-browse").addEventListener("click", () => $("files").click());
 $("files").addEventListener("change", (e) => { addFiles(e.target.files); e.target.value = ""; });
-$("btn-clear").addEventListener("click", () => { state.files = []; renderFiles(); hideUploadErrors(); });
+$("btn-clear").addEventListener("click", () => {
+  if (state.mode === "files") { state.files = []; renderFiles(); } else { $("paste").value = ""; onPaste(); }
+  hideRunError();
+});
 
-const drop = $("drop");
-for (const evt of ["dragenter", "dragover"]) {
-  drop.addEventListener(evt, (e) => { e.preventDefault(); drop.classList.add("dragging"); });
-}
-for (const evt of ["dragleave", "drop"]) {
-  drop.addEventListener(evt, (e) => { e.preventDefault(); drop.classList.remove("dragging"); });
-}
-drop.addEventListener("drop", (e) => { if (e.dataTransfer?.files?.length) addFiles(e.dataTransfer.files); });
+// Drag and drop: the whole composer is the target, so a near-miss still works.
+const composer = $("composer");
+let dragDepth = 0;
+composer.addEventListener("dragenter", (e) => {
+  e.preventDefault();
+  if (++dragDepth === 1) { composer.classList.add("is-dragging"); $("drop-title").textContent = "Drop to add files"; if (state.mode !== "files") setMode("files"); }
+});
+composer.addEventListener("dragover", (e) => e.preventDefault());
+composer.addEventListener("dragleave", () => { if (--dragDepth <= 0) endDrag(); });
+composer.addEventListener("drop", (e) => {
+  e.preventDefault(); endDrag();
+  if (e.dataTransfer?.files?.length) addFiles(e.dataTransfer.files);
+});
+function endDrag() { dragDepth = 0; composer.classList.remove("is-dragging"); $("drop-title").textContent = "Drag files here to add them"; }
 window.addEventListener("dragover", (e) => e.preventDefault());
 window.addEventListener("drop", (e) => e.preventDefault());
 
-$("paste").addEventListener("input", () => {
+// ================================================================== composer: text
+
+function onPaste() {
   const n = $("paste").value.length;
-  $("paste-count").textContent = `${n.toLocaleString()} character${n === 1 ? "" : "s"}`;
-  $("btn-paste").disabled = $("paste").value.trim() === "";
+  const over = n > LIMITS.chars;
+  $("paste-count").textContent = `${n.toLocaleString()} / ${LIMITS.chars.toLocaleString()} characters`;
+  $("paste-count").style.color = over ? "var(--danger)" : "";
+  updateComposer();
+}
+$("paste").addEventListener("input", onPaste);
+$("paste").addEventListener("keydown", (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === "Enter" && !$("btn-run").disabled) $("btn-run").click();
 });
 
-$("btn-upload").addEventListener("click", () => {
-  const body = new FormData();
-  for (const f of state.files) body.append("files", f);
-  submit(`${API}/upload`, { method: "POST", body }, "file", state.files.length);
+// ================================================================== composer: summary + primary action
+
+function updateComposer() {
+  const run = $("btn-run");
+  const label = run.querySelector(".btn-label");
+  if (state.mode === "files") {
+    const n = state.files.length;
+    const bad = state.files.filter((f) => f.local || f.server).length;
+    const size = state.files.reduce((s, f) => s + f.file.size, 0);
+    $("composer-summary").textContent = !n ? "No files added yet"
+      : bad ? `${plural(bad, "file")} need${bad === 1 ? "s" : ""} attention`
+      : `${plural(n, "file")} · ${formatBytes(size)} · reviewed as one batch`;
+    $("composer-summary").style.color = bad ? "var(--danger)" : "";
+    if (!state.busy) label.textContent = n ? `Review ${plural(n, "file")}` : "Run review";
+    run.disabled = state.busy || !n || bad > 0;
+    $("btn-clear").hidden = !n || state.busy;
+  } else {
+    const text = $("paste").value;
+    const over = text.length > LIMITS.chars;
+    $("composer-summary").textContent = over ? "Text is over the 200,000-character limit"
+      : text.trim() ? "Ctrl + Enter to run" : "Paste text to review it";
+    $("composer-summary").style.color = over ? "var(--danger)" : "";
+    if (!state.busy) label.textContent = "Review text";
+    run.disabled = state.busy || !text.trim() || over;
+    $("btn-clear").hidden = !text || state.busy;
+  }
+}
+
+$("btn-run").addEventListener("click", () => {
+  if (state.mode === "files") {
+    const body = new FormData();
+    for (const f of state.files) body.append("files", f.file);
+    submit(`${API}/upload`, { method: "POST", body }, state.files.length);
+  } else {
+    submit(`${API}/review`, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ documents: [{ text: $("paste").value }] }),
+    }, 1);
+  }
 });
 
-$("btn-paste").addEventListener("click", () => {
-  submit(`${API}/review`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ documents: [{ text: $("paste").value }] }),
-  }, "document", 1);
-});
+let elapsedTimer = null;
+function setBusy(on, count = 0) {
+  state.busy = on;
+  const run = $("btn-run");
+  run.classList.toggle("is-loading", on);
+  run.querySelector(".spinner").hidden = !on;
+  if (on) run.querySelector(".btn-label").textContent = "Reviewing…";
+  $("run-status").hidden = !on;
+  for (const id of ["btn-browse", "btn-demo", "tab-files", "tab-text", "paste"]) $(id).disabled = on;
+  if (on) {
+    $("run-status-title").textContent = `Reviewing ${plural(count, "document")}`;
+    const t0 = performance.now();
+    $("run-elapsed").textContent = "0.0 s";
+    elapsedTimer = setInterval(() => { $("run-elapsed").textContent = `${((performance.now() - t0) / 1000).toFixed(1)} s`; }, 100);
+  } else {
+    clearInterval(elapsedTimer);
+  }
+  renderFiles();
+}
 
-$("btn-demo").addEventListener("click", async () => {
-  hideUploadErrors();
+async function submit(url, init, count) {
+  hideRunError();
+  for (const f of state.files) f.server = null;
+  setBusy(true, count);
+  try {
+    const r = await fetch(url, init);
+    const body = await r.json().catch(() => ({}));
+    setBusy(false);
+    if (r.ok) {
+      const a = body.aggregate || {};
+      toast("ok", "Review complete", `${a.documents_released ?? 0} released · ${a.documents_blocked ?? 0} blocked`);
+      loadResult(body, false);
+    } else {
+      handleApiError(r.status, body);
+    }
+  } catch {
+    setBusy(false);
+    showRunError("Couldn't reach the backend", ["Check that the server is running, then try again. The sample batch works offline."]);
+  }
+}
+
+function handleApiError(status, body) {
+  const errors = Array.isArray(body.errors) ? body.errors : [];
+  const fileErrors = errors.filter((e) => typeof e.file_index === "number");
+  for (const e of fileErrors) if (state.files[e.file_index]) state.files[e.file_index].server = { code: e.code, message: e.message };
+  renderFiles();
+
+  if (fileErrors.length) {
+    showRunError(`${plural(fileErrors.length, "file")} couldn't be reviewed`,
+      ["Nothing was processed. Fix or remove the highlighted files, then run the review again."]);
+    return;
+  }
+  const lines = errors.map((e) => {
+    if (Array.isArray(e.loc)) return `${e.loc.join(" › ")}: ${e.msg}`;
+    return ERROR_HINT[e.code] || e.message;
+  });
+  const next = ERROR_HINT[body.code] || "Try again. If it keeps failing, check the server logs.";
+  showRunError(body.detail || `Request failed (${status})`, lines.length ? lines : [next]);
+}
+
+function showRunError(title, lines) {
+  $("run-error").replaceChildren(
+    el("span", { class: "callout-icon" }, icon("alert", 16)),
+    el("div", {}, el("p", { style: { fontWeight: 500 } }, title),
+      ...lines.map((l) => el("p", { style: { marginTop: "2px" } }, l))));
+  $("run-error").hidden = false;
+}
+function hideRunError() { $("run-error").hidden = true; }
+
+$("btn-demo").addEventListener("click", loadDemo);
+async function loadDemo() {
   try {
     const r = await fetch("mock/batch_result.json");
     if (!r.ok) throw new Error(String(r.status));
     loadResult(await r.json(), true);
-    toast("info", "Demo batch loaded", "Fictional data. Nothing was sent to the pipeline.");
+    toast("info", "Sample batch opened", "Fictional data. Nothing was sent to the pipeline.");
   } catch {
-    toast("error", "Could not load the demo batch",
-      location.protocol === "file:" ? "Open the page through the backend." : "mock/batch_result.json is missing.");
-  }
-});
-
-let timer = null;
-function setProcessing(on, count = 0) {
-  const overlay = $("processing");
-  if (on) {
-    $("processing-title").textContent = `Agents are reviewing ${plural(count, "document", "documents")}`;
-    const t0 = performance.now();
-    $("processing-time").textContent = "0.0";
-    timer = setInterval(() => { $("processing-time").textContent = ((performance.now() - t0) / 1000).toFixed(1); }, 100);
-    overlay.classList.remove("hidden");
-  } else {
-    clearInterval(timer);
-    overlay.classList.add("hidden");
-  }
-  for (const id of ["btn-upload", "btn-paste", "btn-demo"]) $(id).disabled = on;
-  if (!on) {
-    $("btn-upload").disabled = state.files.length === 0;
-    $("btn-paste").disabled = $("paste").value.trim() === "";
+    toast("error", "Couldn't open the sample batch",
+      location.protocol === "file:" ? "Open the page through the server instead of from disk." : "mock/batch_result.json is missing.");
   }
 }
 
-async function submit(url, init, kind, count) {
-  hideUploadErrors();
-  setProcessing(true, count);
-  const minimum = new Promise((res) => setTimeout(res, REDUCED ? 0 : 700));   // avoid a flash
-  try {
-    const [r] = await Promise.all([fetch(url, init), minimum]);
-    const body = await r.json().catch(() => ({}));
-    setProcessing(false);
-    if (r.ok) {
-      const a = body.aggregate || {};
-      toast("success", `Reviewed ${plural(a.document_count ?? body.documents.length, "document", "documents")}`,
-        `${a.documents_released ?? 0} released · ${a.documents_blocked ?? 0} blocked`);
-      loadResult(body, false);
-    } else {
-      renderApiError(r.status, body, kind);
-    }
-  } catch {
-    setProcessing(false);
-    toast("error", "Could not reach the backend", "Check that uvicorn is running, or open the demo batch.");
-  }
-}
-
-function renderApiError(status, body, kind) {
-  const errors = Array.isArray(body.errors) ? body.errors : [];
-  const lines = errors.map((e) => {
-    if (typeof e.file_index === "number") {
-      const local = state.files[e.file_index]?.name;
-      return [`File ${e.file_index + 1}${local ? ` (${local})` : ""}`, e.code, e.message];
-    }
-    if (typeof e.document_index === "number") return [`Document ${e.document_index + 1}`, e.code, e.message];
-    if (Array.isArray(e.loc)) return [e.loc.join("."), e.type || "invalid", e.msg];
-    return ["Request", e.code || "error", e.message || ""];
-  });
-  const title = body.detail || `Request failed (${status})`;
-  toast("error", title, body.code || String(status));
-  uploadErrors.replaceChildren(
-    el("p", { class: "font-semibold flex items-center gap-2", style: { color: "#FFD3CD" } }, icon("alert", 16), title),
-    lines.length
-      ? el("ul", { class: "mt-3 space-y-2" }, lines.map(([who, code, msg]) =>
-          el("li", { class: "text-sm flex flex-wrap items-center gap-2" },
-            el("span", { class: "font-semibold" }, who),
-            el("span", { class: "badge s-blocking" }, code),
-            el("span", { class: "muted" }, msg))))
-      : el("p", { class: "text-sm muted mt-2" }, kind === "file" ? "No file was processed." : "Nothing was processed."));
-  uploadErrors.classList.remove("hidden");
-}
-
-function hideUploadErrors() { uploadErrors.classList.add("hidden"); }
-
-// ================================================================== results
+// ================================================================== results: shared
 
 function loadResult(result, demo) {
   state.result = result;
   state.demo = demo;
-  state.selected = result.documents.length ? result.documents[0].doc_id : null;
-  for (const tab of document.querySelectorAll(".tab")) tab.disabled = false;
-  renderSummary();
-  renderDocList();
-  renderDocDetail();
-  showView("documents");
+  state.selected = result.documents[0]?.doc_id ?? null;
+  updateNavCount();
+  showView("documents", { focus: true });
 }
 
 const advFor = (docId) => (state.result.adversarial?.findings || [])
   .filter((f) => f.doc_id === docId || (f.related_doc_ids || []).includes(docId));
-const findingsFor = (doc) => (doc.verification?.findings || []).length + advFor(doc.doc_id).length;
+const findingCount = (doc) => (doc.verification?.findings || []).length + advFor(doc.doc_id).length;
 const topRisk = (doc) => doc.risks.reduce((best, r) =>
   RISK_ORDER.indexOf(r.risk) > RISK_ORDER.indexOf(best) ? r.risk : best, doc.risks.length ? "low" : null);
 
-function renderSummary() {
+function emptyState(iconName, title, text) {
+  return el("div", { class: "empty" },
+    el("div", { class: "empty-icon" }, icon(iconName, 20, 1.8)),
+    el("h1", { class: "t-heading", tabindex: "-1" }, title),
+    el("p", { class: "t-lede" }, text),
+    el("div", { class: "empty-actions" },
+      el("button", { class: "btn btn-primary", type: "button", onclick: () => showView("upload", { focus: true }) }, "Start a review"),
+      el("button", { class: "btn btn-secondary", type: "button", onclick: loadDemo }, "Open sample batch")));
+}
+
+function metrics(items) {
+  return el("div", { class: "metrics", style: { "--cols": items.length } }, items.map(([label, value, color]) =>
+    el("div", { class: "metric" },
+      el("p", { class: "metric-label" }, label),
+      el("p", { class: "metric-value", style: color ? { color } : null }, value))));
+}
+
+function batchHead(title, lede, actions) {
   const { result, demo } = state;
+  return el("div", { class: "page-head" },
+    el("div", {},
+      el("p", { class: "t-overline" }, demo ? "Sample batch · fictional data" : "Batch"),
+      el("h1", { class: "t-title", tabindex: "-1" }, title),
+      lede ? el("p", { class: "t-lede" }, lede) : null,
+      el("p", { class: "t-meta", style: { marginTop: "8px" } }, "Batch ID ", el("span", { class: "t-mono" }, result.batch_id))),
+    actions || null);
+}
+
+const statusLabel = (doc) => el("span", { class: `status-label ${doc.released ? "is-ok" : "is-danger"}` }, doc.released ? "Released" : "Blocked");
+const riskTag = (r) => el("span", { class: `risk-tag risk-${RISK_ORDER.includes(r) ? r : "low"}` }, r || "—");
+
+function distBar(parts) {
+  const total = parts.reduce((s, p) => s + p.value, 0);
+  return el("div", { class: "dist", role: "img", "aria-label": parts.filter((p) => p.value).map((p) => `${p.label} ${p.value}`).join(", ") },
+    parts.filter((p) => p.value).map((p) => el("span", { style: { width: `${(p.value / total) * 100}%`, background: p.color }, title: `${p.label}: ${p.value}` })));
+}
+
+// ================================================================== documents view
+
+function renderDocuments() {
+  const root = $("documents-root");
+  if (!state.result) {
+    root.replaceChildren(emptyState("file", "No batch reviewed yet",
+      "Run a review from the Review page, or open the sample batch to see how results are presented."));
+    return;
+  }
+  const { result } = state;
   const a = result.aggregate;
   const entities = result.documents.reduce((s, d) => s + d.entities.length, 0);
-  const findings = result.documents.reduce((s, d) => s + findingsFor(d), 0);
-  const stat = (label, value, color) => {
-    const num = el("p", { class: "text-2xl font-extrabold", style: { color } }, "0");
-    countUp(num, value);
-    return el("div", { class: "text-center px-3" }, num, el("p", { class: "text-[11px] muted uppercase tracking-wider font-semibold" }, label));
-  };
-  $("batch-summary").replaceChildren(el("div", { class: "glass p-5 sm:p-6 reveal" },
-    el("div", { class: "flex flex-col md:flex-row md:items-center justify-between gap-5" },
-      el("div", { class: "min-w-0" },
-        el("p", { class: "eyebrow" }, demo ? "Demo batch · fictional data" : "Batch reviewed"),
-        el("h2", { class: "text-2xl sm:text-3xl font-extrabold tracking-tight mt-1" },
-          `${plural(a.document_count, "document", "documents")} reviewed`),
-        el("p", { class: "font-mono text-xs muted mt-1 truncate" }, result.batch_id)),
-      el("div", { class: "flex items-center divide-x divide-white/10" },
-        stat("Released", a.documents_released, "#8EE4F3"),
-        stat("Blocked", a.documents_blocked, a.documents_blocked ? "#F6BDB7" : "#E2E8F0"),
-        stat("Entities", entities, "#E2E8F0"),
-        stat("Findings", findings, "#C3D2F5"))),
-    el("div", { class: "mt-5" }, stackBar([
-      { label: "Released", value: a.documents_released, color: C.cyan },
-      { label: "Blocked", value: a.documents_blocked, color: C.maroon }], 8))));
+  const findings = result.documents.reduce((s, d) => s + findingCount(d), 0);
+
+  root.replaceChildren(
+    batchHead(`${plural(a.document_count, "document")} reviewed`, null,
+      el("button", { class: "btn btn-secondary", type: "button", onclick: () => showView("upload", { focus: true }) }, "New review")),
+    metrics([
+      ["Released", a.documents_released.toLocaleString(), a.documents_released ? OK : null],
+      ["Blocked", a.documents_blocked.toLocaleString(), a.documents_blocked ? DANGER : null],
+      ["Entities found", entities.toLocaleString()],
+      ["Findings", findings.toLocaleString()],
+      ["Remediation rounds", String(a.remediation_rounds)],
+    ]),
+    el("div", { class: "docs-layout" },
+      el("nav", { class: "doc-nav", "aria-label": "Documents in this batch" },
+        el("p", { class: "t-overline" }, "Documents"),
+        el("ul", { class: "doc-list", id: "doc-list" })),
+      el("article", { id: "doc-detail", "aria-live": "polite" })));
+  renderDocList();
+  renderDocDetail();
 }
 
 function renderDocList() {
-  const { result, selected } = state;
-  $("doc-list").replaceChildren(...result.documents.map((d, i) => {
-    const counts = RISK_ORDER.map((r) => ({ label: r, value: d.risks.filter((x) => x.risk === r).length, color: RISK_COLOR[r] }));
-    return el("li", { class: "reveal", style: { "--d": `${i * 50}ms` } },
-      el("button", {
-        class: "doc-card", "aria-current": String(d.doc_id === selected),
-        onclick: () => { state.selected = d.doc_id; renderDocList(); renderDocDetail(); },
-      },
-      el("div", { class: "flex items-center justify-between gap-2" },
-        el("span", { class: "flex items-center gap-2 min-w-0" },
-          el("span", { class: "muted" }, icon("doc", 15)),
-          el("span", { class: "truncate font-mono text-xs font-semibold" }, d.doc_id || `document ${i + 1}`)),
-        statusBadge(d)),
-      el("p", { class: "text-[11px] muted mt-2" },
-        `${plural(d.entities.length, "entity", "entities")} · ${plural(findingsFor(d), "finding", "findings")}`),
-      d.risks.length ? el("div", { class: "mt-2" }, stackBar(counts, 5)) : null));
-  }));
-}
-
-function statusBadge(doc) {
-  return doc.released ? badge("Released", "b-released", "check") : badge("Blocked", "b-blocked", "lock");
+  const list = $("doc-list");
+  if (!list) return;
+  list.replaceChildren(...state.result.documents.map((d, i) =>
+    el("li", {}, el("button", {
+      class: "doc-row", type: "button", "aria-current": String(d.doc_id === state.selected),
+      onclick: () => { state.selected = d.doc_id; renderDocList(); renderDocDetail(); },
+    },
+    el("span", { class: "doc-row-id" }, d.doc_id || `Document ${i + 1}`),
+    el("span", { class: "dot " + (d.released ? "dot-ok" : "dot-danger"), title: d.released ? "Released" : "Blocked", style: { alignSelf: "center" } }),
+    el("span", { class: "doc-row-meta" },
+      `${d.released ? "Released" : "Blocked"} · ${plural(d.entities.length, "entity", "entities")} · ${plural(findingCount(d), "finding")}`)))));
 }
 
 function renderDocDetail() {
-  const doc = state.result.documents.find((d) => d.doc_id === state.selected);
   const host = $("doc-detail");
+  const doc = state.result.documents.find((d) => d.doc_id === state.selected);
+  if (!host) return;
   if (!doc) { host.replaceChildren(); return; }
   const risks = new Map(doc.risks.map((r) => [r.entity_id, r]));
   const decisions = new Map(doc.decisions.map((d) => [d.entity_id, d]));
-  host.replaceChildren(
-    headerCard(doc),
-    redactedCard(doc),
-    el("div", { class: "grid md:grid-cols-2 gap-5" }, riskMixCard(doc), strategyMixCard(doc)),
-    entitiesCard(doc, risks, decisions),
-    strategyCard(doc, risks, decisions),
-    findingsCard(doc));
-}
-
-// ------------------------------------------------------------------ header + journey
-
-function headerCard(doc) {
   const r = doc.release;
-  return card(null, { delay: 0 },
-    el("div", { class: "flex flex-wrap items-start justify-between gap-3" },
-      el("div", { class: "min-w-0" },
-        el("p", { class: "eyebrow" }, "Document"),
-        el("h2", { class: "font-mono text-lg font-semibold mt-1 break-all" }, doc.doc_id)),
-      el("div", { class: "flex items-center gap-2" },
-        r.remediation_rounds ? badge(plural(r.remediation_rounds, "remediation round", "remediation rounds"), "r-medium", "refresh") : null,
-        statusBadge(doc))),
-    el("p", { class: "mt-3 text-sm", style: { color: doc.released ? "#CBD5E1" : "#F6BDB7" } }, r.reason),
-    el("div", { class: "journey mt-7" }, journey(doc).map((s, i) =>
-      el("div", { class: `step ${s.state} reveal`, style: { "--d": `${120 + i * 110}ms` } },
-        el("div", { class: "step-dot" }, icon(s.state === "warn" ? "x" : s.state === "skip" ? "minus" : "check", 15, 2.6)),
-        el("p", { class: "step-label" }, s.label),
-        el("p", { class: "step-sub" }, s.sub)))));
+
+  host.replaceChildren(
+    el("div", { class: "doc-head" },
+      el("div", { style: { minWidth: 0 } },
+        el("p", { class: "t-overline" }, "Document"),
+        el("h2", { class: "doc-title", style: { marginTop: "4px" } }, doc.doc_id)),
+      el("div", { style: { display: "flex", alignItems: "center", gap: "10px" } },
+        r.remediation_rounds ? el("span", { class: "badge badge-neutral" }, plural(r.remediation_rounds, "remediation round")) : null,
+        statusLabel(doc))),
+    el("p", { class: `doc-reason ${doc.released ? "" : "is-danger"}` }, r.reason),
+    trail(doc),
+    redactedSection(doc),
+    entitiesSection(doc, risks, decisions),
+    findingsSection(doc));
 }
 
-function journey(doc) {
+// ------------------------------------------------------------------ review trail
+
+function trail(doc) {
   const v = doc.verification;
   const n = doc.entities.length;
   const processed = n > 0 || !!v || doc.decisions.length > 0;
-  // Only findings ABOUT this document turn the step red; a finding that merely lists it as
-  // the linked document (related_doc_ids) blocks the other document, not this one.
   const advRan = !!state.result.adversarial;
-  const advBlocking = advFor(doc.doc_id).some((f) => f.doc_id === doc.doc_id && f.severity === "blocking");
+  // Only findings ABOUT this document fail its step; a finding that lists it as the linked
+  // document (related_doc_ids) blocks the other document, not this one.
+  const advFailed = advFor(doc.doc_id).some((f) => f.doc_id === doc.doc_id && f.severity === "blocking");
   const top = topRisk(doc);
-  const strategies = new Set(doc.decisions.map((d) => d.strategy)).size;
-  return [
-    { label: "Detected", sub: processed ? plural(n, "entity", "entities") : "not run", state: processed ? "done" : "skip" },
-    { label: "Assessed", sub: top ? `highest: ${top}` : processed ? "no risk" : "not run", state: processed ? "done" : "skip" },
-    { label: "Redacted", sub: doc.decisions.length ? plural(strategies, "strategy", "strategies") : processed ? "nothing to do" : "not run",
-      state: processed ? "done" : "skip" },
-    { label: "Verified", sub: v ? `${v.checks_run.length} checks · ${v.passed ? "passed" : "failed"}` : "not run",
-      state: v ? (v.passed ? "done" : "warn") : "skip" },
-    { label: "Attacked", sub: advRan ? (advBlocking ? "risk found" : "no re-identification") : "not run",
-      state: advRan ? (advBlocking ? "warn" : "done") : "skip" },
-    { label: doc.released ? "Released" : "Blocked", sub: doc.released ? "safe to share" : "withheld",
-      state: doc.released ? "done" : "warn" },
+  const actions = new Set(doc.decisions.map((d) => d.strategy)).size;
+  const steps = [
+    ["Detect", processed ? plural(n, "entity", "entities") : "Not run", processed ? "done" : "skip"],
+    ["Assess", top ? `Highest risk: ${top}` : processed ? "No risk" : "Not run", processed ? "done" : "skip"],
+    ["Redact", doc.decisions.length ? plural(actions, "action type") : processed ? "Nothing to change" : "Not run", processed ? "done" : "skip"],
+    ["Verify", v ? `${v.checks_run.length} checks · ${v.passed ? "passed" : "failed"}` : "Not run", v ? (v.passed ? "done" : "fail") : "skip"],
+    ["Attack", advRan ? (advFailed ? "Re-identification risk" : "No re-identification") : "Not run", advRan ? (advFailed ? "fail" : "done") : "skip"],
+    [doc.released ? "Released" : "Blocked", doc.released ? "Safe to share" : "Withheld", doc.released ? "done" : "fail"],
   ];
+  return el("ol", { class: "trail", "aria-label": "Review trail" }, steps.map(([label, sub, st]) =>
+    el("li", { class: `is-${st}` },
+      el("div", { class: "trail-head" },
+        el("span", { class: "trail-mark" }, icon(st === "fail" ? "x" : st === "skip" ? "minus" : "check", 11, 3)),
+        el("span", {}, label),
+        el("span", { class: "sr-only" }, st === "done" ? "(passed)" : st === "fail" ? "(failed)" : "(not run)")),
+      el("p", { class: "trail-sub" }, sub))));
 }
 
-// ------------------------------------------------------------------ redacted text
+// ------------------------------------------------------------------ redacted output
 
-function redactedCard(doc) {
-  if (!doc.released || doc.redacted_text === null || doc.redacted_text === undefined) {
-    return card("Redacted text", { delay: 80, icon: "lock" },
-      el("div", { class: "flex flex-col items-center text-center py-8" },
-        el("div", { class: "w-14 h-14 rounded-2xl grid place-items-center mb-4",
-                    style: { background: "rgba(120,27,23,.35)", color: "#FFD3CD", border: "1px solid rgba(229,138,130,.4)" } },
-          icon("lock", 24)),
-        el("p", { class: "font-semibold" }, "Withheld"),
-        el("p", { class: "text-sm muted mt-1 max-w-md" },
-          "A blocked document's text is never sent to the browser, so there is nothing here to leak.")));
-  }
-  const copy = el("button", { class: "icon-btn", "aria-label": "Copy redacted text", title: "Copy redacted text",
-    onclick: async () => {
-      try { await navigator.clipboard.writeText(doc.redacted_text); toast("success", "Copied redacted text"); }
-      catch { toast("error", "Copy failed", "Your browser blocked clipboard access."); }
-    } }, icon("copy", 16));
-  const legend = el("div", { class: "flex flex-wrap items-center gap-2 mt-5 text-xs muted" },
-    el("span", { class: "ph ph-mask", style: { opacity: 1, transform: "none", animation: "none" } }, "[MASKED]"),
-    el("span", { class: "ph ph-pseudo", style: { opacity: 1, transform: "none", animation: "none" } }, "PERSON_01"),
-    el("span", { class: "ph ph-suppress", style: { opacity: 1, transform: "none", animation: "none" } }, "[REDACTED]"),
-    el("span", {}, "Generalised values (e.g. an age band) appear as plain text, because entity positions refer to the original."));
-  return card("Redacted text", { delay: 80, icon: "shield", action: copy },
-    el("div", { class: "redacted rounded-2xl p-5", style: { background: "rgba(4,8,20,.45)", border: "1px solid var(--line)" } },
-      highlightPlaceholders(doc.redacted_text)),
-    legend);
+function redactedSection(doc) {
+  const released = doc.released && doc.redacted_text !== null && doc.redacted_text !== undefined;
+  const copy = released
+    ? el("button", { class: "btn btn-secondary btn-sm", type: "button", onclick: async () => {
+        try { await navigator.clipboard.writeText(doc.redacted_text); toast("ok", "Redacted text copied"); }
+        catch { toast("error", "Couldn't copy", "The browser blocked clipboard access."); }
+      } }, icon("copy", 14), "Copy")
+    : null;
+  return el("section", { class: "section", "aria-labelledby": "h-output" },
+    el("div", { class: "section-head" },
+      el("div", {}, el("h3", { class: "t-heading", id: "h-output" }, "Redacted output"),
+        el("p", { class: "t-meta" }, released ? "Personal data has been replaced. This is exactly what would be shared." : "Nothing from this document is shown.")),
+      copy),
+    released
+      ? el("div", { class: "paper" }, highlightPlaceholders(doc.redacted_text))
+      : el("div", { class: "empty-panel" },
+          el("p", { class: "t-subheading" }, "Text withheld"),
+          el("p", { class: "t-meta" }, "Blocked documents never send their text to the browser, so there is nothing here to leak.")),
+    released ? el("div", { class: "legend" },
+      el("span", { class: "legend-item" }, el("span", { class: "token token-mask" }, "[TYPE]"), "Masked"),
+      el("span", { class: "legend-item" }, el("span", { class: "token token-pseudo" }, "PERSON_01"), "Pseudonym, consistent across the batch"),
+      el("span", { class: "legend-item" }, el("span", { class: "token token-suppress" }, "[REDACTED]"), "Removed"),
+      el("span", { class: "legend-item" }, "Generalised values, such as an age band, appear as plain text")) : null);
 }
 
 function highlightPlaceholders(text) {
   const out = [];
   let last = 0;
-  let i = 0;
   for (const m of text.matchAll(PLACEHOLDER)) {
     if (m.index > last) out.push(text.slice(last, m.index));
     const token = m[0];
-    const kind = token === "[REDACTED]" ? "ph-suppress" : token.startsWith("[") ? "ph-mask" : "ph-pseudo";
-    out.push(el("mark", { class: `ph ${kind}`, style: { "--d": `${250 + i * 70}ms` } }, token));
+    const kind = token === "[REDACTED]" ? "token-suppress" : token.startsWith("[") ? "token-mask" : "token-pseudo";
+    out.push(el("mark", { class: `token ${kind}` }, token));
     last = m.index + token.length;
-    i += 1;
   }
   if (last < text.length) out.push(text.slice(last));
   return out;
 }
 
-// ------------------------------------------------------------------ mix cards
+// ------------------------------------------------------------------ entities
 
-function mixCard(title, iconName, delay, parts, empty) {
-  const total = parts.reduce((s, p) => s + p.value, 0);
-  if (!total) return card(title, { delay, icon: iconName }, el("p", { class: "text-sm muted" }, empty));
-  return card(title, { delay, icon: iconName },
-    stackBar(parts, 12),
-    el("ul", { class: "mt-4 grid grid-cols-2 gap-2" }, parts.filter((p) => p.value).map((p) =>
-      el("li", { class: "flex items-center justify-between gap-2 text-sm rounded-xl px-3 py-2",
-                 style: { background: "rgba(255,255,255,.03)" } },
-        el("span", { class: "flex items-center gap-2" }, el("span", { class: "legend-dot", style: { background: p.color } }), p.label),
-        el("span", { class: "font-bold" }, String(p.value))))));
-}
+function entitiesSection(doc, risks, decisions) {
+  const head = el("div", { class: "section-head" },
+    el("div", {}, el("h3", { class: "t-heading", id: "h-entities" }, "Entities"),
+      el("p", { class: "t-meta" }, doc.entities.length
+        ? `${plural(doc.entities.length, "item")} of personal data, with the action taken on each and why.`
+        : "No personal data was reported for this document.")));
+  if (!doc.entities.length) return el("section", { class: "section", "aria-labelledby": "h-entities" }, head);
 
-function riskMixCard(doc) {
-  return mixCard("Risk mix", "alert", 140,
-    RISK_ORDER.map((r) => ({ label: r[0].toUpperCase() + r.slice(1), value: doc.risks.filter((x) => x.risk === r).length, color: RISK_COLOR[r] })),
-    "No risks assessed for this document.");
-}
+  const riskParts = RISK_ORDER.map((r) => ({ label: r, value: doc.risks.filter((x) => x.risk === r).length, color: RISK_COLOR[r] }));
+  head.append(el("div", { style: { display: "grid", gap: "6px", justifyItems: "end" } },
+    distBar(riskParts),
+    el("div", { class: "legend", style: { marginTop: 0 } }, riskParts.filter((p) => p.value).map((p) =>
+      el("span", { class: "legend-item" }, el("span", { class: "swatch", style: { background: p.color } }), `${p.label} ${p.value}`)))));
 
-function strategyMixCard(doc) {
-  return mixCard("Actions taken", "pen", 180,
-    STRATEGY_ORDER.map((s) => ({ label: STRATEGY_LABEL[s], value: doc.decisions.filter((x) => x.strategy === s).length, color: STRATEGY_COLOR[s] })),
-    "No redaction decisions for this document.");
-}
+  const byType = {};
+  for (const e of doc.entities) byType[e.entity_type] = (byType[e.entity_type] || 0) + 1;
+  const summary = el("div", { class: "type-summary" }, Object.entries(byType).sort((x, y) => y[1] - x[1]).map(([t, n]) =>
+    el("span", { class: "badge badge-neutral" }, humanType(t), el("span", { class: "num", style: { color: "var(--text-3)" } }, String(n)))));
 
-// ------------------------------------------------------------------ entities + strategy table
-
-function entitiesCard(doc, risks, decisions) {
-  if (!doc.entities.length) {
-    return card("Entities", { delay: 220, icon: "search" }, el("p", { class: "text-sm muted" }, "No entities reported."));
-  }
-  const byType = new Map();
-  for (const e of doc.entities) {
-    if (!byType.has(e.entity_type)) byType.set(e.entity_type, []);
-    byType.get(e.entity_type).push(e);
-  }
-  let n = 0;
-  const groups = [...byType.entries()].sort((a, b) => b[1].length - a[1].length).map(([type, ents]) =>
-    el("div", { class: "flex flex-col sm:flex-row sm:items-center gap-2 py-2.5", style: { borderTop: "1px solid var(--line)" } },
-      el("span", { class: "text-xs font-bold tracking-wide sm:w-48 shrink-0" }, type.replace(/_/g, " "),
-        el("span", { class: "muted font-semibold" }, ` · ${ents.length}`)),
-      el("div", { class: "flex flex-wrap gap-1.5" }, ents.map((e) => {
-        const risk = risks.get(e.entity_id)?.risk || "unknown";
-        const strategy = decisions.get(e.entity_id)?.strategy;
-        n += 1;
-        return el("span", {
-          class: `badge ${riskCls(risk)} reveal`, style: { "--d": `${260 + n * 30}ms` },
-          title: `${e.entity_id} · risk ${risk} · confidence ${Math.round(e.confidence * 100)}%`,
-        }, risk, el("span", { style: { opacity: 0.55 } }, "·"), strategy ? STRATEGY_LABEL[strategy] || strategy : "no decision");
-      }))));
-  const legend = el("div", { class: "flex flex-wrap items-center gap-2 mt-4 text-xs muted" },
-    "Risk:", ...RISK_ORDER.map((r) => badge(r, riskCls(r))));
-  return card("Entities by type", { delay: 220, icon: "search" }, el("div", {}, groups), legend);
-}
-
-function strategyCard(doc, risks, decisions) {
-  if (!doc.entities.length) return null;
   const rows = doc.entities.map((e) => {
     const risk = risks.get(e.entity_id);
     const dec = decisions.get(e.entity_id);
-    const level = risk?.risk || "unknown";
     return el("tr", {},
-      el("td", { class: "font-mono text-[11px] muted" }, e.entity_id),
-      el("td", {}, el("span", { class: "font-semibold text-xs" }, e.entity_type.replace(/_/g, " ")),
-        el("div", { class: "text-[11px] muted" }, pretty(e.identifier_class))),
-      el("td", {}, badge(level, riskCls(level)),
-        risk && risk.base_risk !== risk.risk ? el("div", { class: "text-[11px] muted mt-1" }, `raised from ${risk.base_risk}`) : null),
-      el("td", {}, el("span", { class: "font-semibold" }, dec ? STRATEGY_LABEL[dec.strategy] || dec.strategy : "—"),
-        dec?.scope === "batch" ? el("div", { class: "text-[11px] muted" }, "same across batch") : null),
-      el("td", { class: "text-xs muted" }, dec?.policy_id || ""),
-      el("td", { class: "text-xs", style: { color: "#CBD5E1" } }, risk?.rationale || "",
-        risk?.fired_rules?.length ? el("div", { class: "text-[11px] muted mt-1" }, `rules: ${risk.fired_rules.join(", ")}`) : null));
+      el("td", { class: "t-mono", style: { color: "var(--text-3)", whiteSpace: "nowrap" } }, e.entity_id),
+      el("td", {}, humanType(e.entity_type), el("span", { class: "sub" }, pretty(e.identifier_class))),
+      el("td", { style: { whiteSpace: "nowrap" } }, riskTag(risk?.risk),
+        risk && risk.base_risk !== risk.risk ? el("span", { class: "sub" }, `raised from ${risk.base_risk}`) : null),
+      el("td", { style: { whiteSpace: "nowrap" } }, dec ? STRATEGY_LABEL[dec.strategy] || dec.strategy : "—",
+        dec?.scope === "batch" ? el("span", { class: "sub" }, "same across batch") : null),
+      el("td", { class: "t-mono", style: { color: "var(--text-3)", whiteSpace: "nowrap" } }, dec?.policy_id || "—"),
+      el("td", { class: "reason" }, risk?.rationale || "",
+        risk?.fired_rules?.length ? el("span", { class: "sub" }, `Rules: ${risk.fired_rules.join(", ")}`) : null));
   });
-  return card("Why each action was taken", { delay: 260, icon: "scale" },
-    el("div", { class: "overflow-x-auto -mx-1 px-1" },
-      el("table", { class: "tbl" },
-        el("thead", {}, el("tr", {}, ...["Entity", "Type", "Risk", "Action", "Policy", "Reason"].map((h) => el("th", {}, h)))),
-        el("tbody", {}, rows))));
+
+  return el("section", { class: "section", "aria-labelledby": "h-entities" }, head, summary,
+    el("div", { class: "table-wrap" }, el("table", { class: "table" },
+      el("caption", { class: "sr-only" }, "Entities, risk and action taken"),
+      el("thead", {}, el("tr", {}, ["Entity", "Type", "Risk", "Action", "Policy", "Reason"].map((h) => el("th", { scope: "col" }, h)))),
+      el("tbody", {}, rows))));
 }
 
 // ------------------------------------------------------------------ findings
 
-function findingsCard(doc) {
+function findingsSection(doc) {
   const v = doc.verification;
-  const summary = v
-    ? el("div", { class: "flex flex-wrap items-center gap-2 mb-4 text-sm" },
-        badge(v.passed ? "Verification passed" : "Verification failed", v.passed ? "b-released" : "b-blocked", v.passed ? "check" : "x"),
-        el("span", { class: "muted" }, `revision ${v.revision} · ${v.checks_run.length} checks`),
-        el("span", { class: "muted" }, "·"),
-        el("span", { class: "muted" }, "utility retained"),
-        utilityMeter(v.utility_retained))
-    : el("p", { class: "text-sm muted mb-4" }, "No verification report: the document was not processed.");
   const all = [...(v ? v.findings : []).map((f) => ({ f, src: "Verification" })),
-               ...advFor(doc.doc_id).map((f) => ({ f, src: "Adversarial" }))];
+               ...advFor(doc.doc_id).map((f) => ({ f, src: "Adversarial check" }))];
+  const pct = v ? Math.round(v.utility_retained * 100) : null;
+  const line = v
+    ? el("div", { class: "verify-line" },
+        el("span", { class: `badge ${v.passed ? "badge-ok" : "badge-danger"}` }, icon(v.passed ? "check" : "x", 12, 2.6), v.passed ? "Verification passed" : "Verification failed"),
+        el("span", {}, `${plural(v.checks_run.length, "check")} · revision ${v.revision}`),
+        el("span", { class: "meter", title: "Share of non-personal text kept" }, "Utility retained",
+          el("span", { class: "meter-track" }, el("span", { style: { width: `${pct}%` } })),
+          el("span", { class: "num", style: { color: "var(--text)", fontWeight: 500 } }, `${pct}%`)))
+    : el("p", { class: "t-meta", style: { marginBottom: "14px" } }, "No verification report. The document was not processed.");
+
+  const sev = { blocking: ["badge-solid-danger", "Blocking"], warning: ["badge-warn", "Warning"], info: ["badge-neutral", "Info"] };
   const list = all.length
-    ? el("ul", { class: "space-y-2.5" }, all.map(({ f, src }, i) => findingItem(f, src, doc.doc_id, i)))
-    : el("div", { class: "flex items-center gap-3 rounded-xl p-4", style: { background: "rgba(39,178,204,.07)", border: "1px solid rgba(39,178,204,.25)" } },
-        el("span", { class: "text-cyan" }, icon("check", 18, 2.5)), el("span", { class: "text-sm" }, "No findings: nothing left to fix."));
-  return card("Verification findings", { delay: 300, icon: "shield" }, summary, list);
-}
+    ? el("ul", { class: "findings" }, all.map(({ f, src }) => {
+        const related = (f.related_doc_ids || []).concat(f.doc_id !== doc.doc_id ? [f.doc_id] : []).filter((d) => d !== doc.doc_id);
+        const [cls, label] = sev[f.severity] || sev.info;
+        return el("li", { class: "finding" },
+          el("div", {}, el("span", { class: `badge ${cls}` }, label)),
+          el("div", {},
+            el("p", { class: "finding-title" }, pretty(f.finding_type)),
+            el("p", { class: "finding-desc" }, f.description),
+            el("div", { class: "finding-meta" },
+              el("span", { class: "t-meta" }, src),
+              f.entity_type ? el("span", { class: "badge badge-neutral" }, humanType(f.entity_type)) : null,
+              f.recommended_strategy ? el("span", { class: "badge badge-accent" }, `Suggested: ${STRATEGY_LABEL[f.recommended_strategy] || f.recommended_strategy}`) : null,
+              f.rule_id ? el("span", { class: "badge badge-neutral t-mono" }, f.rule_id) : null,
+              related.length ? el("span", { class: "badge badge-danger" }, `Linked to ${related.join(", ")}`) : null)));
+      }))
+    : el("div", { class: "empty-panel", style: { padding: "18px", textAlign: "left" } },
+        el("p", { class: "t-subheading" }, "No findings"),
+        el("p", { class: "t-meta" }, v ? "Nothing was left to fix." : "Findings appear once the document has been processed."));
 
-function utilityMeter(value) {
-  const pct = Math.round(value * 100);
-  const bar = el("span", { class: "inline-block align-middle w-24 h-1.5 rounded-full overflow-hidden", style: { background: "rgba(255,255,255,.08)" } },
-    el("span", { class: "block h-full", style: { width: `${pct}%`, background: `linear-gradient(90deg, ${C.steelSoft}, ${C.cyan})` } }));
-  return el("span", { class: "inline-flex items-center gap-2" }, bar, el("span", { class: "font-semibold" }, `${pct}%`));
-}
-
-function findingItem(f, src, docId, i) {
-  const related = (f.related_doc_ids || []).concat(f.doc_id !== docId ? [f.doc_id] : []).filter((d) => d !== docId);
-  const accent = { blocking: C.maroonSoft, warning: "#F2B45A", info: C.steelSoft }[f.severity] || C.steelSoft;
-  return el("li", { class: "reveal rounded-xl p-4 flex gap-3",
-                    style: { "--d": `${340 + i * 60}ms`, background: "rgba(255,255,255,.03)", borderLeft: `3px solid ${accent}` } },
-    el("div", { class: "min-w-0 flex-1" },
-      el("div", { class: "flex flex-wrap items-center gap-2" },
-        el("span", { class: `badge s-${f.severity}` }, f.severity),
-        el("span", { class: "text-sm font-semibold" }, pretty(f.finding_type)),
-        el("span", { class: "text-[11px] muted" }, src)),
-      el("p", { class: "text-sm mt-1.5", style: { color: "#CBD5E1" } }, f.description),
-      el("div", { class: "flex flex-wrap gap-1.5 mt-2" },
-        f.entity_type ? badge(f.entity_type.replace(/_/g, " "), "r-unknown") : null,
-        f.recommended_strategy ? badge(`fix: ${STRATEGY_LABEL[f.recommended_strategy] || f.recommended_strategy}`, "r-medium") : null,
-        f.rule_id ? badge(f.rule_id, "r-unknown") : null,
-        related.length ? badge(`linked to ${related.join(", ")}`, "r-high", "link") : null)));
+  return el("section", { class: "section", "aria-labelledby": "h-findings" },
+    el("div", { class: "section-head" }, el("div", {},
+      el("h3", { class: "t-heading", id: "h-findings" }, "Findings"),
+      el("p", { class: "t-meta" }, "Issues raised by independent verification and the adversarial check."))),
+    line, list);
 }
 
 // ================================================================== insights view
 
-function renderAggregate(result) {
+function renderInsights() {
+  const root = $("insights-root");
+  if (!state.result) {
+    root.replaceChildren(emptyState("chart", "No insights yet",
+      "Insights summarise a whole batch: how much personal data was found, how risky it was and what was done about it."));
+    return;
+  }
+  const { result } = state;
   const a = result.aggregate;
   const entities = Object.values(a.entities_by_type || {}).reduce((s, n) => s + n, 0);
-  const tile = (label, value, ic, color, i) => {
-    const num = el("p", { class: "text-3xl font-extrabold mt-2", style: { color } }, "0");
-    if (typeof value === "number") countUp(num, value); else num.textContent = value;
-    return el("div", { class: "glass lift p-4 reveal", style: { "--d": `${i * 60}ms` } },
-      el("div", { class: "flex items-center justify-between" },
-        el("p", { class: "text-[11px] muted uppercase tracking-wider font-semibold" }, label),
-        el("span", { style: { color } }, icon(ic, 16))),
-      num);
-  };
-  $("stat-tiles").replaceChildren(
-    tile("Documents", a.document_count, "layers", "#E2E8F0", 0),
-    tile("Released", a.documents_released, "check", "#8EE4F3", 1),
-    tile("Blocked", a.documents_blocked, "lock", a.documents_blocked ? "#F6BDB7" : "#E2E8F0", 2),
-    tile("Entities found", entities, "search", "#C3D2F5", 3),
-    tile("LLM used", a.llm_used ? "Yes" : "No", "sparkle", "#E2E8F0", 4));
+  const chart = (id, title, desc, cls = "") => el("section", { class: `chart ${cls}` },
+    el("div", { class: "chart-head" }, el("h3", { class: "t-subheading" }, title), el("p", { class: "t-meta" }, desc)),
+    el("div", { class: `chart-plot ${cls === "tall" ? "tall" : ""}`, id }));
 
+  root.replaceChildren(
+    batchHead("Batch overview", "Counts only. No value from any document appears on this page."),
+    metrics([
+      ["Documents", a.document_count.toLocaleString()],
+      ["Released", a.documents_released.toLocaleString(), a.documents_released ? OK : null],
+      ["Blocked", a.documents_blocked.toLocaleString(), a.documents_blocked ? DANGER : null],
+      ["Entities found", entities.toLocaleString()],
+      ["Remediation rounds", String(a.remediation_rounds)],
+      ["LLM used", a.llm_used ? "Yes" : "No"],
+    ]),
+    el("div", { class: "chart-grid" },
+      chart("chart-release", "Release outcome", "Documents released or blocked."),
+      chart("chart-risks", "Risk levels", "Risk after context rules were applied."),
+      chart("chart-entities", "Entities by type", "What kind of personal data was found.", "tall"),
+      chart("chart-strategies", "Actions taken", "Darker bars remove more information.", "tall"),
+      chart("chart-findings", "Findings", "Raised by verification and the adversarial check.", "wide")),
+    linkageSection(result.adversarial));
+  requestAnimationFrame(() => drawCharts(a));
+}
+
+function drawCharts(a) {
   const ids = ["chart-release", "chart-risks", "chart-entities", "chart-strategies", "chart-findings"];
   if (typeof Plotly === "undefined") {
-    for (const id of ids) $(id).replaceChildren(el("p", { class: "text-sm muted pt-10 text-center" }, "Charts need the Plotly CDN, which did not load."));
-  } else {
-    bar("chart-release", ["Released", "Blocked"], [a.documents_released, a.documents_blocked], [C.cyan, C.maroon]);
-    const risks = ordered(a.risks_by_level, RISK_ORDER);
-    bar("chart-risks", risks.keys, risks.values, risks.keys.map((k) => RISK_COLOR[k] || RISK_COLOR.unknown));
-    const ents = sortedDesc(a.entities_by_type);
-    bar("chart-entities", ents.keys.map((k) => k.replace(/_/g, " ")), ents.values, C.steelSoft, true);
-    const strat = ordered(a.strategies, STRATEGY_ORDER);
-    bar("chart-strategies", strat.keys.map((k) => STRATEGY_LABEL[k] || k), strat.values, strat.keys.map((k) => STRATEGY_COLOR[k] || C.steelSoft));
-    const finds = sortedDesc(a.findings_by_type);
-    bar("chart-findings", finds.keys.map(pretty), finds.values, C.cyan, true);
+    for (const id of ids) $(id).replaceChildren(el("div", { class: "chart-empty" }, "Charts couldn't load (the Plotly CDN is unreachable)."));
+    return;
   }
-  renderLinkage(result.adversarial);
+  bar("chart-release", ["Released", "Blocked"], [a.documents_released, a.documents_blocked], [OK, DANGER]);
+  const risks = ordered(a.risks_by_level, RISK_ORDER);
+  bar("chart-risks", risks.keys.map((k) => k[0].toUpperCase() + k.slice(1)), risks.values, risks.keys.map((k) => RISK_COLOR[k] || VIZ[2]));
+  const ents = sortedDesc(a.entities_by_type);
+  bar("chart-entities", ents.keys.map(humanType), ents.values, VIZ[4], true);
+  const strat = ordered(a.strategies, STRATEGY_ORDER);
+  bar("chart-strategies", strat.keys.map((k) => STRATEGY_LABEL[k] || k), strat.values, strat.keys.map((k) => STRATEGY_COLOR[k] || VIZ[2]));
+  const finds = sortedDesc(a.findings_by_type);
+  bar("chart-findings", finds.keys.map((k) => humanType(k)), finds.values, VIZ[3], true);
 }
 
 function ordered(obj, order) {
@@ -697,77 +737,61 @@ function bar(id, keys, values, color, horizontal = false) {
   const node = $(id);
   if (!keys.length || values.every((v) => !v)) {
     Plotly.purge(node);
-    node.replaceChildren(el("div", { class: "h-full grid place-items-center text-sm muted" }, "No data in this batch"));
+    node.replaceChildren(el("div", { class: "chart-empty" }, "No data in this batch"));
     return;
   }
   node.replaceChildren();
-  const marker = { color: Array.isArray(color) ? (horizontal ? [...color].reverse() : color) : color, cornerradius: 6 };
+  const colors = Array.isArray(color) ? (horizontal ? [...color].reverse() : color) : color;
   const trace = horizontal
-    ? { type: "bar", orientation: "h", y: [...keys].reverse(), x: [...values].reverse(), marker }
-    : { type: "bar", x: keys, y: values, marker };
+    ? { type: "bar", orientation: "h", y: [...keys].reverse(), x: [...values].reverse() }
+    : { type: "bar", x: keys, y: values };
+  trace.marker = { color: colors, cornerradius: 3 };
   trace.hovertemplate = horizontal ? "%{y}: %{x}<extra></extra>" : "%{x}: %{y}<extra></extra>";
-  const axis = { gridcolor: C.grid, zeroline: false, automargin: true, linecolor: "rgba(0,0,0,0)", tickfont: { color: C.text } };
+  trace.width = horizontal ? undefined : Math.min(0.55, 0.18 * keys.length + 0.2);
+  const axis = { gridcolor: "#ECECE8", zeroline: false, automargin: true, linecolor: "#D2D2CB", tickfont: { color: "#686D78", size: 11.5 } };
   Plotly.react(node, [trace], {
-    margin: { t: 10, r: 10, b: horizontal ? 30 : 40, l: horizontal ? 140 : 36 },
+    margin: { t: 8, r: 8, b: horizontal ? 28 : 36, l: horizontal ? 130 : 32 },
     paper_bgcolor: "rgba(0,0,0,0)", plot_bgcolor: "rgba(0,0,0,0)",
-    font: { family: "Inter, ui-sans-serif, system-ui, sans-serif", size: 12, color: C.text },
-    xaxis: { ...axis, ...(horizontal ? { dtick: 1 } : {}) },
-    yaxis: { ...axis, ...(horizontal ? {} : { dtick: 1 }) },
-    bargap: 0.38,
-    hoverlabel: { bgcolor: C.navy, bordercolor: C.cyan, font: { color: "#fff", family: "Inter" } },
-    transition: REDUCED ? undefined : { duration: 500, easing: "cubic-in-out" },
+    font: { family: "Inter, ui-sans-serif, system-ui, sans-serif", size: 12, color: "#444955" },
+    xaxis: { ...axis, showgrid: horizontal, showline: !horizontal, ...(horizontal ? { dtick: 1 } : {}) },
+    yaxis: { ...axis, showgrid: !horizontal, showline: horizontal, ...(horizontal ? {} : { dtick: 1 }) },
+    bargap: 0.45,
+    hoverlabel: { bgcolor: "#FFFFFF", bordercolor: "#D2D2CB", font: { color: "#15171C", family: "Inter", size: 12 } },
   }, { displayModeBar: false, responsive: true });
 }
 
-function renderLinkage(adv) {
-  const host = $("linkage");
-  const head = el("div", { class: "flex flex-wrap items-center justify-between gap-3 mb-4" },
-    el("div", {},
-      el("h3", { class: "font-bold flex items-center gap-2" }, el("span", { class: "text-cyan" }, icon("link", 17)), "Cross-document linkage"),
-      el("p", { class: "text-xs muted mt-1" },
-        "k = how many people share the combined clues. k = 1 means a single person can be picked out.")),
-    adv ? badge(adv.safe_to_release ? "Safe to release" : "Not safe to release", adv.safe_to_release ? "b-released" : "b-blocked",
-                adv.safe_to_release ? "check" : "alert") : null);
+function linkageSection(adv) {
+  const head = el("div", { class: "section-head" },
+    el("div", {}, el("h3", { class: "t-heading", id: "h-linkage" }, "Cross-document linkage"),
+      el("p", { class: "t-meta" }, "Groups of documents that can be joined, and k: how many people share the combined clues. k = 1 means one person can be singled out.")),
+    adv ? el("span", { class: `badge ${adv.safe_to_release ? "badge-ok" : "badge-danger"}` },
+      adv.safe_to_release ? "Safe to release" : "Not safe to release") : null);
+  const wrap = (body) => el("section", { class: "section", "aria-labelledby": "h-linkage", style: { marginTop: "56px" } }, head, body);
   if (!adv || !adv.components.length) {
-    host.replaceChildren(head, el("p", { class: "text-sm muted" },
-      adv ? "No linked document groups found." : "No adversarial report in this batch."));
-    return;
+    return wrap(el("div", { class: "empty-panel", style: { padding: "18px", textAlign: "left" } },
+      el("p", { class: "t-subheading" }, adv ? "No linked documents" : "No adversarial report"),
+      el("p", { class: "t-meta" }, adv ? "No group of documents could be joined to single someone out." : "The adversarial check did not run for this batch.")));
   }
-  host.replaceChildren(head, el("div", { class: "space-y-3" }, adv.components.map((c, i) => {
-    const identifiable = c.anonymity_set_size <= 1;
-    const docs = [];
-    c.doc_ids.forEach((d, j) => {
-      if (j) docs.push(el("span", { class: "link-line", "aria-hidden": "true" }));
-      docs.push(el("span", { class: "badge r-unknown font-mono" }, icon("doc", 12), d));
-    });
-    return el("div", { class: "reveal rounded-2xl p-4 flex flex-col lg:flex-row lg:items-center gap-4",
-                       style: { "--d": `${i * 80}ms`, background: "rgba(255,255,255,.03)", border: "1px solid var(--line)" } },
-      el("div", { class: "flex items-center gap-2 flex-1 min-w-0 flex-wrap" }, docs),
-      el("div", { class: "flex flex-wrap items-center gap-1.5" },
-        el("span", { class: "text-[11px] muted" }, "linked by"),
-        c.linked_by.map((t) => badge(t.replace(/_/g, " "), "r-medium")),
-        c.visible_quasi_types.length ? el("span", { class: "text-[11px] muted ml-1" }, "visible") : null,
-        c.visible_quasi_types.map((t) => badge(t.replace(/_/g, " "), "r-unknown"))),
-      el("div", { class: "text-center rounded-xl px-4 py-2 shrink-0",
-                  style: identifiable
-                    ? { background: "rgba(120,27,23,.55)", border: "1px solid rgba(229,138,130,.5)", boxShadow: "0 0 24px -6px rgba(229,138,130,.6)" }
-                    : { background: "rgba(39,178,204,.1)", border: "1px solid rgba(39,178,204,.35)" } },
-        el("p", { class: "text-xl font-extrabold" }, `k = ${c.anonymity_set_size}`),
-        el("p", { class: "text-[10px] uppercase tracking-wider font-bold", style: { color: identifiable ? "#FFD3CD" : "#8EE4F3" } },
-          identifiable ? "identifiable" : "hidden in crowd")));
-  })));
+  const rows = adv.components.map((c) => {
+    const unique = c.anonymity_set_size <= 1;
+    return el("tr", {},
+      el("td", { class: "t-mono", style: { color: "var(--text-3)" } }, c.component_id),
+      el("td", {}, el("div", { style: { display: "flex", flexWrap: "wrap", gap: "4px" } }, c.doc_ids.map((d) => el("span", { class: "badge badge-neutral t-mono" }, d)))),
+      el("td", {}, c.linked_by.map(humanType).join(", ")),
+      el("td", {}, c.visible_quasi_types.length ? c.visible_quasi_types.map(humanType).join(", ") : "—"),
+      el("td", { class: "num", style: { whiteSpace: "nowrap", fontWeight: 600, color: unique ? DANGER : "var(--text)" } },
+        String(c.anonymity_set_size), el("span", { class: "sub", style: { fontWeight: 400 } }, unique ? "identifiable" : "in a crowd")),
+      el("td", {}, riskTag(c.risk)));
+  });
+  return wrap(el("div", { class: "table-wrap" }, el("table", { class: "table" },
+    el("caption", { class: "sr-only" }, "Linked document groups"),
+    el("thead", {}, el("tr", {}, ["Group", "Documents", "Linked by", "Visible clues", "k", "Risk"].map((h) => el("th", { scope: "col" }, h)))),
+    el("tbody", {}, rows))));
 }
 
-// ================================================================== misc
+// ================================================================== start
 
-function formatBytes(n) {
-  if (n >= 1024 * 1024) return `${(n / 1024 / 1024).toFixed(1)} MB`;
-  if (n >= 1024) return `${Math.round(n / 1024)} KB`;
-  return `${n} B`;
-}
-
-renderPipeline($("hero-pipeline"));
-renderPipeline($("processing-agents"));
-positionIndicators();
-if (document.fonts?.ready) document.fonts.ready.then(positionIndicators);
+setMode("files");
+renderFiles();
+onPaste();
 checkHealth();

@@ -3,392 +3,179 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Privacy Redaction Review</title>
+<title>Privacy Redaction Review · PS 247</title>
+<meta name="description" content="Review documents for personal data. Five agents detect, assess, redact, verify and attack the output before anything is released.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com/3.4.17"></script>
-<script>
-  tailwind.config = {
-    theme: { extend: {
-      colors: { navy: "#192339", ink: "#0A1020", steel: "#1E3A6B", cyan: "#27B2CC", maroon: "#781B17" },
-      fontFamily: { sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
-                    mono: ["JetBrains Mono", "ui-monospace", "Consolas", "monospace"] },
-    }}
-  };
-</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
 <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" defer></script>
-<style>
-  :root {
-    --bg: #0A1020; --navy: #192339; --steel: #1E3A6B; --cyan: #27B2CC; --maroon: #781B17;
-    --maroon-soft: #E58A82; --steel-soft: #7F9BDB; --text: #E2E8F0; --muted: #94A3B8;
-    --glass: rgba(25, 35, 57, 0.58); --glass-strong: rgba(25, 35, 57, 0.82);
-    --line: rgba(148, 163, 184, 0.14); --line-strong: rgba(148, 163, 184, 0.24);
-    --ease: cubic-bezier(.2, .7, .2, 1);
-  }
-  html { scroll-behavior: smooth; }
-  body {
-    background:
-      radial-gradient(1100px 600px at 8% -12%, rgba(39,178,204,.13), transparent 60%),
-      radial-gradient(900px 520px at 105% -5%, rgba(30,58,107,.55), transparent 60%),
-      var(--bg);
-    color: var(--text); font-family: Inter, ui-sans-serif, system-ui, sans-serif;
-    min-height: 100vh; -webkit-font-smoothing: antialiased;
-  }
-  ::selection { background: rgba(39,178,204,.35); }
-
-  /* ---------- floating background orbs ---------- */
-  .orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
-  .orbs span { position: absolute; border-radius: 50%; filter: blur(90px); opacity: .28;
-               animation: drift 22s ease-in-out infinite; }
-  .orbs span:nth-child(1) { width: 420px; height: 420px; background: #27B2CC; top: 55%; left: -120px; }
-  .orbs span:nth-child(2) { width: 520px; height: 520px; background: #1E3A6B; top: -160px; right: -120px; animation-delay: -7s; opacity: .45; }
-  .orbs span:nth-child(3) { width: 260px; height: 260px; background: #781B17; bottom: -120px; right: 22%; animation-delay: -14s; opacity: .18; }
-  @keyframes drift { 0%,100% { transform: translate(0,0) scale(1); } 33% { transform: translate(40px,-30px) scale(1.08); } 66% { transform: translate(-30px,25px) scale(.95); } }
-
-  /* ---------- surfaces ---------- */
-  .glass { background: var(--glass); border: 1px solid var(--line); border-radius: 18px;
-           backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-           box-shadow: 0 1px 0 rgba(255,255,255,.04) inset, 0 20px 50px -30px rgba(0,0,0,.8); }
-  .lift { transition: transform .25s var(--ease), border-color .25s, box-shadow .25s; }
-  .lift:hover { transform: translateY(-2px); border-color: rgba(39,178,204,.35);
-                box-shadow: 0 20px 50px -28px rgba(39,178,204,.35); }
-  .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--cyan); }
-  .muted { color: var(--muted); }
-  .gradient-text { background: linear-gradient(92deg, #FFFFFF 0%, #A8ECF7 45%, #27B2CC 100%);
-                   -webkit-background-clip: text; background-clip: text; color: transparent; }
-
-  /* ---------- top bar & tabs ---------- */
-  .topbar { position: sticky; top: 0; z-index: 30; background: rgba(10,16,32,.72);
-            backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
-  .tabs { position: relative; display: inline-flex; padding: 4px; border-radius: 999px;
-          background: rgba(255,255,255,.04); border: 1px solid var(--line); }
-  .tab { position: relative; z-index: 1; padding: 7px 16px; font-size: 13px; font-weight: 600;
-         color: var(--muted); border-radius: 999px; transition: color .25s; }
-  .tab[aria-selected="true"] { color: #06202A; }
-  .tab:disabled { opacity: .35; cursor: not-allowed; }
-  .tab-indicator { position: absolute; top: 4px; bottom: 4px; left: 0; border-radius: 999px;
-                   background: linear-gradient(135deg, #3CC6DE, #27B2CC); box-shadow: 0 6px 18px -6px rgba(39,178,204,.6);
-                   transition: transform .4s var(--ease), width .4s var(--ease); }
-
-  .status-pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 999px;
-                 font-size: 12px; font-weight: 600; border: 1px solid var(--line); background: rgba(255,255,255,.04); }
-  .dot { width: 8px; height: 8px; border-radius: 50%; position: relative; flex: none; }
-  .dot.live { background: #3DDC97; } .dot.stub { background: #F2B45A; } .dot.off { background: #64748B; }
-  .dot.live::after, .dot.stub::after { content: ""; position: absolute; inset: -4px; border-radius: 50%;
-                   border: 2px solid currentColor; opacity: 0; animation: ripple 2s ease-out infinite; }
-  .dot.live::after { color: #3DDC97; } .dot.stub::after { color: #F2B45A; }
-  @keyframes ripple { 0% { transform: scale(.6); opacity: .8; } 100% { transform: scale(1.8); opacity: 0; } }
-
-  /* ---------- buttons ---------- */
-  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 12px;
-         padding: 11px 20px; font-weight: 700; font-size: 14px; transition: transform .15s, box-shadow .25s, opacity .2s, background .2s; }
-  .btn:active:not(:disabled) { transform: scale(.97); }
-  .btn:disabled { opacity: .4; cursor: not-allowed; }
-  .btn-primary { position: relative; overflow: hidden; color: #04202A;
-                 background: linear-gradient(135deg, #4FD3E8 0%, #27B2CC 55%, #1C93AE 100%);
-                 box-shadow: 0 10px 30px -12px rgba(39,178,204,.7); }
-  .btn-primary:hover:not(:disabled) { box-shadow: 0 14px 36px -10px rgba(39,178,204,.85); }
-  .btn-primary::after { content: ""; position: absolute; inset: 0; transform: translateX(-120%);
-                        background: linear-gradient(100deg, transparent 30%, rgba(255,255,255,.45) 50%, transparent 70%); }
-  .btn-primary:hover:not(:disabled)::after { animation: shimmer 1s var(--ease); }
-  @keyframes shimmer { to { transform: translateX(120%); } }
-  .btn-ghost { color: var(--text); background: rgba(255,255,255,.05); border: 1px solid var(--line-strong); }
-  .btn-ghost:hover:not(:disabled) { background: rgba(255,255,255,.09); border-color: rgba(39,178,204,.45); }
-  .icon-btn { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 9px;
-              color: var(--muted); transition: background .2s, color .2s; }
-  .icon-btn:hover { background: rgba(255,255,255,.08); color: #fff; }
-  :focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
-
-  /* ---------- hero pipeline ---------- */
-  .pipeline { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 10px; position: relative; }
-  .pipeline::before { content: ""; position: absolute; left: 8%; right: 8%; top: 27px; height: 2px;
-                      background: linear-gradient(90deg, transparent, rgba(39,178,204,.25), transparent); }
-  .pipeline::after { content: ""; position: absolute; left: 8%; right: 8%; top: 27px; height: 2px;
-                     background: linear-gradient(90deg, transparent 0%, #27B2CC 50%, transparent 100%);
-                     background-size: 30% 100%; background-repeat: no-repeat; animation: flow 3.2s linear infinite; }
-  @keyframes flow { from { background-position: -30% 0; } to { background-position: 130% 0; } }
-  .agent { position: relative; z-index: 1; text-align: center; }
-  .agent-icon { width: 56px; height: 56px; margin: 0 auto 10px; border-radius: 16px; display: grid; place-items: center;
-                background: linear-gradient(160deg, rgba(39,178,204,.22), rgba(30,58,107,.55));
-                border: 1px solid rgba(39,178,204,.35); color: #9BE7F4;
-                box-shadow: 0 10px 30px -14px rgba(39,178,204,.6); transition: transform .3s var(--ease); }
-  .agent:hover .agent-icon { transform: translateY(-4px) rotate(-3deg); }
-  .wave .agent-icon { animation: wave 1.8s ease-in-out infinite; animation-delay: calc(var(--i) * .22s); }
-  @keyframes wave { 0%,100% { transform: translateY(0); box-shadow: 0 10px 30px -14px rgba(39,178,204,.6); }
-                    35% { transform: translateY(-9px); box-shadow: 0 0 0 7px rgba(39,178,204,.14), 0 18px 34px -12px rgba(39,178,204,.9); } }
-
-  /* ---------- dropzone ---------- */
-  .drop { border: 1.5px dashed rgba(148,163,184,.35); border-radius: 16px; transition: all .25s var(--ease);
-          background: rgba(255,255,255,.02); }
-  .drop:hover, .drop.dragging { border-color: var(--cyan); background: rgba(39,178,204,.07);
-                                box-shadow: 0 0 0 6px rgba(39,178,204,.08), inset 0 0 40px rgba(39,178,204,.08); }
-  .drop.dragging .drop-icon { transform: translateY(-6px) scale(1.06); }
-  .drop-icon { transition: transform .3s var(--ease); }
-  .file-chip { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 12px;
-               background: rgba(255,255,255,.04); border: 1px solid var(--line); }
-  textarea.field { width: 100%; resize: vertical; border-radius: 14px; padding: 14px; font-size: 13px;
-                   background: rgba(4,8,20,.45); border: 1px solid var(--line-strong); color: var(--text);
-                   font-family: "JetBrains Mono", ui-monospace, monospace; transition: border-color .2s, box-shadow .2s; }
-  textarea.field:focus { outline: none; border-color: var(--cyan); box-shadow: 0 0 0 4px rgba(39,178,204,.12); }
-
-  /* ---------- badges, chips, pills ---------- */
-  .badge { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: .02em;
-           padding: 3px 10px; border-radius: 999px; border: 1px solid transparent; white-space: nowrap; }
-  .b-released { background: rgba(39,178,204,.14); color: #8EE4F3; border-color: rgba(39,178,204,.4); }
-  .b-blocked { background: rgba(120,27,23,.55); color: #FFD7D2; border-color: rgba(229,138,130,.45); }
-  .r-low { background: rgba(39,178,204,.13); color: #8EE4F3; border-color: rgba(39,178,204,.35); }
-  .r-medium { background: rgba(127,155,219,.14); color: #C3D2F5; border-color: rgba(127,155,219,.38); }
-  .r-high { background: rgba(229,138,130,.13); color: #F6BDB7; border-color: rgba(229,138,130,.4); }
-  .r-critical { background: #781B17; color: #FFE4E0; border-color: #A3332C; }
-  .r-unknown { background: rgba(148,163,184,.12); color: #CBD5E1; border-color: rgba(148,163,184,.3); }
-  .s-info { background: rgba(127,155,219,.16); color: #C3D2F5; }
-  .s-warning { background: rgba(242,180,90,.16); color: #F6CF94; }
-  .s-blocking { background: #781B17; color: #FFE4E0; }
-
-  .redacted { white-space: pre-wrap; word-break: break-word; line-height: 2; font-size: 15px; color: #DCE4EF; }
-  .ph { font-family: "JetBrains Mono", monospace; font-size: 12.5px; font-weight: 600; padding: 2px 9px;
-        border-radius: 999px; border: 1px solid; white-space: nowrap; display: inline-block; line-height: 1.6;
-        opacity: 0; transform: scale(.85); animation: pop .45s var(--ease) forwards; animation-delay: var(--d, 0ms); }
-  .ph-mask { background: rgba(39,178,204,.14); color: #8EE4F3; border-color: rgba(39,178,204,.42); }
-  .ph-pseudo { background: rgba(127,155,219,.17); color: #C9D7F7; border-color: rgba(127,155,219,.45); }
-  .ph-suppress { background: rgba(120,27,23,.5); color: #FFD3CD; border-color: rgba(229,138,130,.45); }
-  @keyframes pop { 60% { transform: scale(1.06); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
-
-  /* ---------- journey timeline ---------- */
-  .journey { display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 8px; }
-  .step { position: relative; padding-top: 2px; }
-  .step::before { content: ""; position: absolute; top: 15px; left: calc(50% + 18px); right: calc(-50% + 18px);
-                  height: 2px; background: var(--line-strong); }
-  .step:last-child::before { display: none; }
-  .step.done::before { background: linear-gradient(90deg, #27B2CC, rgba(39,178,204,.35)); }
-  .step-dot { width: 32px; height: 32px; margin: 0 auto 8px; border-radius: 50%; display: grid; place-items: center;
-              border: 1.5px solid var(--line-strong); background: rgba(255,255,255,.03); color: var(--muted); }
-  .step.done .step-dot { background: rgba(39,178,204,.16); border-color: #27B2CC; color: #8EE4F3;
-                         box-shadow: 0 0 18px -4px rgba(39,178,204,.7); }
-  .step.warn .step-dot { background: rgba(120,27,23,.6); border-color: #E58A82; color: #FFD3CD;
-                         box-shadow: 0 0 18px -4px rgba(229,138,130,.6); }
-  .step.skip .step-dot { opacity: .5; }
-  .step-label { font-size: 12px; font-weight: 700; text-align: center; }
-  .step-sub { font-size: 11px; text-align: center; color: var(--muted); margin-top: 2px; }
-
-  /* ---------- bars ---------- */
-  .stack { display: flex; height: 10px; border-radius: 999px; overflow: hidden; background: rgba(255,255,255,.06); }
-  .stack > span { height: 100%; width: 0; transition: width 1s var(--ease); }
-  .legend-dot { width: 9px; height: 9px; border-radius: 3px; display: inline-block; }
-  .link-line { flex: 0 1 48px; min-width: 24px; height: 2px;
-               background: repeating-linear-gradient(90deg, #E58A82 0 6px, transparent 6px 12px);
-               background-size: 24px 2px; animation: dash 1s linear infinite; }
-  @keyframes dash { to { background-position: 24px 0; } }
-
-  /* ---------- doc list ---------- */
-  .doc-card { width: 100%; text-align: left; padding: 12px 14px; border-radius: 14px; border: 1px solid var(--line);
-              background: rgba(255,255,255,.025); transition: all .2s var(--ease); }
-  .doc-card:hover { background: rgba(255,255,255,.05); border-color: var(--line-strong); }
-  .doc-card[aria-current="true"] { background: rgba(39,178,204,.09); border-color: rgba(39,178,204,.55);
-                                   box-shadow: 0 0 0 3px rgba(39,178,204,.08); }
-
-  /* ---------- tables ---------- */
-  .tbl { width: 100%; font-size: 13px; border-collapse: separate; border-spacing: 0; }
-  .tbl th { text-align: left; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
-            color: var(--muted); padding: 0 12px 10px 0; }
-  .tbl td { padding: 11px 12px 11px 0; border-top: 1px solid var(--line); vertical-align: top; }
-  .tbl tr { transition: background .15s; } .tbl tbody tr:hover { background: rgba(255,255,255,.025); }
-
-  /* ---------- motion helpers ---------- */
-  .reveal { opacity: 0; transform: translateY(14px); animation: rise .6s var(--ease) forwards; animation-delay: var(--d, 0ms); }
-  @keyframes rise { to { opacity: 1; transform: none; } }
-  .view-enter { animation: viewIn .45s var(--ease); }
-  @keyframes viewIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-
-  /* ---------- overlay & toasts ---------- */
-  .overlay { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 16px;
-             background: rgba(5,9,20,.72); backdrop-filter: blur(6px); animation: viewIn .3s var(--ease); }
-  .overlay.hidden { display: none; }
-  .toast { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: 14px; min-width: 260px; max-width: 380px;
-           background: var(--glass-strong); border: 1px solid var(--line-strong); backdrop-filter: blur(14px);
-           box-shadow: 0 20px 40px -20px rgba(0,0,0,.8); animation: toastIn .4s var(--ease); font-size: 13px; }
-  .toast.leaving { animation: toastOut .3s var(--ease) forwards; }
-  @keyframes toastIn { from { opacity: 0; transform: translateY(12px) scale(.97); } to { opacity: 1; transform: none; } }
-  @keyframes toastOut { to { opacity: 0; transform: translateY(8px) scale(.97); } }
-
-  ::-webkit-scrollbar { width: 10px; height: 10px; }
-  ::-webkit-scrollbar-thumb { background: rgba(148,163,184,.22); border-radius: 999px; border: 2px solid transparent; background-clip: padding-box; }
-
-  @media (max-width: 640px) {
-    .pipeline { grid-template-columns: repeat(5, minmax(0,1fr)); gap: 4px; }
-    .agent-icon { width: 44px; height: 44px; border-radius: 13px; }
-    .pipeline::before, .pipeline::after { top: 21px; }
-    .agent-sub { display: none; }
-    .journey { grid-template-columns: repeat(3, minmax(0,1fr)); row-gap: 18px; }
-    .step:nth-child(3)::before { display: none; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important;
-                             transition-duration: .001ms !important; }
-    .reveal, .ph { opacity: 1; transform: none; }
-  }
-</style>
 </head>
 <body>
-  <div class="orbs" aria-hidden="true"><span></span><span></span><span></span></div>
+  <a href="#main" class="sr-only">Skip to content</a>
 
-  <!-- ============================================================ top bar -->
-  <header class="topbar">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
-      <div class="flex items-center gap-3 min-w-0">
-        <div class="w-9 h-9 rounded-xl grid place-items-center shrink-0"
-             style="background:linear-gradient(140deg,#27B2CC,#1E3A6B);box-shadow:0 8px 20px -8px rgba(39,178,204,.8)">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
-        </div>
-        <div class="min-w-0">
-          <p class="eyebrow leading-none">PS 247</p>
-          <p class="font-bold text-sm sm:text-base truncate">Privacy Redaction Review</p>
-        </div>
-      </div>
+  <!-- ================================================================ app bar -->
+  <header class="appbar">
+    <div class="container appbar-inner">
+      <a class="brand" href="#review" data-view="upload" aria-label="Privacy Redaction Review, home">
+        <span class="brand-mark" aria-hidden="true">
+          <!-- document with a redaction bar -->
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8.5 7.5h7"/><rect x="8.5" y="10.6" width="7" height="2.8" rx=".6" fill="currentColor" stroke="none"/><path d="M8.5 16.5h4.5"/></svg>
+        </span>
+        <span class="brand-name">Privacy Redaction Review</span>
+        <span class="brand-tag">PS 247</span>
+      </a>
 
-      <nav class="tabs hidden md:inline-flex" role="tablist" aria-label="Views">
-        <span class="tab-indicator" aria-hidden="true"></span>
-        <button class="tab" data-view="upload" role="tab" aria-selected="true">Review</button>
-        <button class="tab" data-view="documents" role="tab" aria-selected="false" disabled>Documents</button>
-        <button class="tab" data-view="aggregate" role="tab" aria-selected="false" disabled>Insights</button>
+      <nav class="nav" aria-label="Primary">
+        <button class="nav-link" data-view="upload" aria-current="page">Review</button>
+        <button class="nav-link" data-view="documents">Documents <span class="nav-count num" data-count hidden></span></button>
+        <button class="nav-link" data-view="aggregate">Insights</button>
       </nav>
 
-      <div class="flex items-center gap-3 shrink-0">
-        <span id="health" class="status-pill hidden sm:inline-flex" aria-live="polite">
-          <span class="dot off"></span><span>Connecting…</span>
-        </span>
-        <img src="assets/alliance-university-logo.png" alt="Alliance University"
-             class="h-10 w-10 bg-white rounded-full p-0.5 ring-2 ring-white/10">
+      <div class="appbar-right">
+        <div class="status" id="status" role="status" aria-live="polite">
+          <span class="status-item" id="status-pipeline" title="Checking the backend…">
+            <span class="status-dot"></span><span>Connecting</span>
+          </span>
+          <span class="status-sep" aria-hidden="true"></span>
+          <span class="status-item optional" id="status-llm">LLM —</span>
+        </div>
+        <img src="assets/alliance-university-logo.png" alt="Alliance University" class="appbar-logo">
       </div>
     </div>
-    <nav class="tabs md:hidden mx-4 mb-3 flex" role="tablist" aria-label="Views (mobile)">
-      <span class="tab-indicator" aria-hidden="true"></span>
-      <button class="tab flex-1" data-view="upload" role="tab" aria-selected="true">Review</button>
-      <button class="tab flex-1" data-view="documents" role="tab" aria-selected="false" disabled>Documents</button>
-      <button class="tab flex-1" data-view="aggregate" role="tab" aria-selected="false" disabled>Insights</button>
-    </nav>
+    <div class="nav-mobile">
+      <nav class="container nav" aria-label="Primary (compact)">
+        <button class="nav-link" data-view="upload" aria-current="page">Review</button>
+        <button class="nav-link" data-view="documents">Documents <span class="nav-count num" data-count hidden></span></button>
+        <button class="nav-link" data-view="aggregate">Insights</button>
+      </nav>
+    </div>
   </header>
 
-  <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
-
-    <!-- ========================================================== review -->
-    <section id="view-upload" class="view">
-      <div class="text-center max-w-3xl mx-auto">
-        <span class="badge r-low reveal" style="--d:0ms">Five cooperating agents · nothing raw leaves the backend</span>
-        <h1 class="reveal mt-5 text-4xl sm:text-5xl font-extrabold tracking-tight leading-[1.08]" style="--d:80ms">
-          <span class="gradient-text">Redact personal data</span><br>before anyone else sees it.
-        </h1>
-        <p class="reveal mt-5 text-base sm:text-lg muted" style="--d:160ms">
-          Upload documents and watch five agents find, judge, redact, verify and attack the result,
-          so only text that is provably safe gets released.
-        </p>
-      </div>
-
-      <div id="hero-pipeline" class="pipeline mt-12 max-w-4xl mx-auto reveal" style="--d:240ms"></div>
-
-      <div class="grid lg:grid-cols-5 gap-5 mt-14">
-        <div class="glass p-6 lg:col-span-3 reveal" style="--d:320ms">
-          <div class="flex items-center justify-between mb-4">
-            <div>
-              <h2 class="font-bold text-lg">Upload documents</h2>
-              <p class="text-sm muted">.txt, .pdf or annotated .json · up to 20 files, 5 MB each</p>
-            </div>
-            <span class="badge r-medium hidden sm:inline-flex">One batch = linkage checked</span>
-          </div>
-          <label id="drop" for="files" class="drop flex flex-col items-center justify-center text-center px-6 py-10 cursor-pointer">
-            <div class="drop-icon w-14 h-14 rounded-2xl grid place-items-center mb-4"
-                 style="background:rgba(39,178,204,.12);border:1px solid rgba(39,178,204,.35);color:#8EE4F3">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="m6 10 6-6 6 6"/><path d="M20 16v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3"/></svg>
-            </div>
-            <p class="font-semibold">Drop files here or <span class="text-cyan">browse</span></p>
-            <p class="text-xs muted mt-1">Files sent together are reviewed as one batch</p>
-            <input id="files" type="file" multiple accept=".txt,.pdf,.json" class="sr-only">
-          </label>
-          <ul id="file-list" class="mt-4 grid sm:grid-cols-2 gap-2"></ul>
-          <div class="mt-5 flex flex-wrap items-center gap-3">
-            <button id="btn-upload" class="btn btn-primary" disabled>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
-              Run privacy review
-            </button>
-            <button id="btn-clear" class="btn btn-ghost hidden">Clear</button>
-          </div>
-        </div>
-
-        <div class="glass p-6 lg:col-span-2 flex flex-col reveal" style="--d:400ms">
-          <h2 class="font-bold text-lg">Or paste text</h2>
-          <p class="text-sm muted mb-4">Reviewed as a single document</p>
-          <textarea id="paste" rows="8" class="field flex-1" placeholder="Paste a document here…"></textarea>
-          <div class="mt-4 flex items-center justify-between gap-3">
-            <span id="paste-count" class="text-xs muted">0 characters</span>
-            <button id="btn-paste" class="btn btn-primary" disabled>Review text</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="glass mt-5 p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 reveal" style="--d:480ms">
-        <div class="flex items-center gap-4">
-          <div class="w-11 h-11 rounded-xl grid place-items-center shrink-0" style="background:rgba(127,155,219,.14);color:#C3D2F5;border:1px solid rgba(127,155,219,.35)">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 1.9 5.8L20 10l-5 3.9L16.2 20 12 16.6 7.8 20 9 13.9 4 10l6.1-1.2z"/></svg>
-          </div>
+  <main id="main">
+    <!-- ============================================================== review -->
+    <section id="view-upload" class="view page" aria-labelledby="review-title">
+      <div class="container">
+        <div class="page-head">
           <div>
-            <p class="font-semibold">Explore a sample batch</p>
-            <p class="text-sm muted">Fictional data, including a blocked document and a cross-document link.</p>
+            <p class="t-overline">New review</p>
+            <h1 class="t-title" id="review-title" tabindex="-1">Review documents for personal data</h1>
+            <p class="t-lede">Documents submitted together are reviewed as one batch, so the system checks what each one
+              reveals on its own and what they reveal when combined.</p>
           </div>
         </div>
-        <button id="btn-demo" class="btn btn-ghost">Open demo batch</button>
+
+        <div class="review-grid">
+          <!-- composer: the one primary surface on this page -->
+          <div class="composer" id="composer">
+            <div class="seg" role="tablist" aria-label="Input method">
+              <button class="seg-tab" role="tab" id="tab-files" aria-controls="panel-files" aria-selected="true">
+                Files <span class="nav-count num" id="file-count" hidden></span>
+              </button>
+              <button class="seg-tab" role="tab" id="tab-text" aria-controls="panel-text" aria-selected="false" tabindex="-1">
+                Paste text
+              </button>
+            </div>
+
+            <div class="panel" id="panel-files" role="tabpanel" aria-labelledby="tab-files">
+              <div class="dropzone" id="drop">
+                <span class="dropzone-icon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4"/><path d="m7.5 8.5 4.5-4.5 4.5 4.5"/><path d="M4 15v3.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V15"/></svg>
+                </span>
+                <div class="dropzone-copy">
+                  <p class="dropzone-title" id="drop-title">Drag files here to add them</p>
+                  <p class="t-meta">.txt, .pdf or annotated .json · up to 20 files, 5 MB each</p>
+                </div>
+                <button class="btn btn-secondary" id="btn-browse" type="button">Browse files</button>
+                <input id="files" type="file" multiple accept=".txt,.pdf,.json" class="sr-only" tabindex="-1" aria-hidden="true">
+              </div>
+              <table class="file-table" id="file-table" hidden>
+                <caption class="sr-only">Selected files</caption>
+                <thead><tr><th scope="col">File</th><th scope="col" class="col-size">Size</th><th scope="col" class="col-status">Status</th><th scope="col" class="col-action"><span class="sr-only">Remove</span></th></tr></thead>
+                <tbody id="file-rows"></tbody>
+              </table>
+            </div>
+
+            <div class="panel" id="panel-text" role="tabpanel" aria-labelledby="tab-text" hidden>
+              <label class="field-label" for="paste">Document text</label>
+              <textarea id="paste" class="textarea" placeholder="Paste the full text of one document…" spellcheck="false"></textarea>
+              <div class="field-meta">
+                <span class="t-meta">Reviewed as a single document. Line breaks are kept.</span>
+                <span class="t-meta num" id="paste-count">0 characters</span>
+              </div>
+            </div>
+
+            <div class="callout callout-error" id="run-error" role="alert" hidden style="margin:0 20px 16px"></div>
+
+            <div class="run-status" id="run-status" hidden aria-live="polite">
+              <span class="spinner" aria-hidden="true"></span>
+              <div style="flex:1">
+                <p class="t-subheading" id="run-status-title">Reviewing</p>
+                <p class="t-meta">Detection, risk assessment, redaction, verification and the adversarial check run on the server.
+                  <span class="num" id="run-elapsed">0.0 s</span></p>
+                <div class="progress" aria-hidden="true"><span></span></div>
+              </div>
+            </div>
+
+            <div class="composer-foot">
+              <p class="t-meta" id="composer-summary">No files added yet</p>
+              <div class="actions">
+                <button class="btn btn-ghost" id="btn-clear" type="button" hidden>Clear</button>
+                <button class="btn btn-primary" id="btn-run" type="button" disabled>
+                  <span class="spinner" hidden aria-hidden="true"></span><span class="btn-label">Run review</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- supporting information: plain structure, no container -->
+          <aside aria-label="About reviews">
+            <div class="aside-block">
+              <h2 class="t-subheading">How a review works</h2>
+              <ol class="stages">
+                <li><span class="stage-num">1</span><div><p class="stage-name">Detect</p><p class="stage-desc">Finds names, contact details, identifiers, and indirect clues such as job title or city.</p></div></li>
+                <li><span class="stage-num">2</span><div><p class="stage-name">Assess risk</p><p class="stage-desc">Weighs each item in context against the privacy policy.</p></div></li>
+                <li><span class="stage-num">3</span><div><p class="stage-name">Redact</p><p class="stage-desc">Masks, generalises or pseudonymises each item with deterministic rules.</p></div></li>
+                <li><span class="stage-num">4</span><div><p class="stage-name">Verify</p><p class="stage-desc">Re-scans the output independently and confirms the originals are gone.</p></div></li>
+                <li><span class="stage-num">5</span><div><p class="stage-name">Attack</p><p class="stage-desc">Tries to re-identify people, within and across documents.</p></div></li>
+              </ol>
+              <p class="t-meta" style="margin-top:10px">Only documents that pass every stage are released.</p>
+            </div>
+            <div class="aside-block">
+              <h2 class="t-subheading">Sample batch</h2>
+              <p class="t-meta" style="margin-top:4px">Three fictional documents, including one that is blocked and a link between two of them.</p>
+              <button class="link-btn" id="btn-demo" type="button" style="margin-top:10px">
+                Open sample batch
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+              </button>
+            </div>
+          </aside>
+        </div>
       </div>
     </section>
 
-    <!-- ========================================================== documents -->
-    <section id="view-documents" class="view hidden">
-      <div id="batch-summary" class="mb-6"></div>
-      <div class="grid lg:grid-cols-[18rem_1fr] gap-6">
-        <aside class="lg:sticky lg:top-24 self-start">
-          <p class="eyebrow mb-3">Documents</p>
-          <ul id="doc-list" class="space-y-2"></ul>
-        </aside>
-        <article id="doc-detail" class="space-y-5 min-w-0"></article>
-      </div>
+    <!-- ============================================================== documents -->
+    <section id="view-documents" class="view page" hidden aria-label="Documents">
+      <div class="container" id="documents-root"></div>
     </section>
 
-    <!-- ========================================================== insights -->
-    <section id="view-aggregate" class="view hidden space-y-5">
-      <div>
-        <p class="eyebrow">Batch insights</p>
-        <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight mt-1">What happened across the batch</h2>
-        <p class="muted text-sm mt-1">Counts only. No value from any document appears here.</p>
-      </div>
-      <div id="stat-tiles" class="grid grid-cols-2 md:grid-cols-5 gap-3"></div>
-      <div class="grid md:grid-cols-2 gap-5">
-        <div class="glass p-5"><h3 class="font-semibold text-sm mb-1">Released vs blocked</h3><div id="chart-release" class="h-64"></div></div>
-        <div class="glass p-5"><h3 class="font-semibold text-sm mb-1">Risk levels</h3><div id="chart-risks" class="h-64"></div></div>
-        <div class="glass p-5"><h3 class="font-semibold text-sm mb-1">Entities by type</h3><div id="chart-entities" class="h-72"></div></div>
-        <div class="glass p-5"><h3 class="font-semibold text-sm mb-1">Strategies applied</h3><div id="chart-strategies" class="h-72"></div></div>
-        <div class="glass p-5 md:col-span-2"><h3 class="font-semibold text-sm mb-1">Verification and adversarial findings</h3><div id="chart-findings" class="h-64"></div></div>
-      </div>
-      <div id="linkage" class="glass p-5"></div>
+    <!-- ============================================================== insights -->
+    <section id="view-aggregate" class="view page" hidden aria-label="Insights">
+      <div class="container" id="insights-root"></div>
     </section>
   </main>
 
-  <footer class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pb-10 text-xs muted flex flex-wrap gap-2 justify-between">
-    <span>Original documents never leave the backend. This page shows redacted text, categories, risks, strategies and findings only.</span>
-    <span>Alliance University · Generative AI Hackathon</span>
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span class="footer-privacy">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+        Original documents never leave the backend. This page shows redacted text, categories, risks, strategies and findings only.
+      </span>
+      <span>Alliance University · Generative AI Hackathon</span>
+    </div>
   </footer>
 
-  <!-- ============================================================ processing overlay -->
-  <div id="processing" class="overlay hidden" role="status" aria-live="polite">
-    <div class="glass p-8 w-full max-w-2xl text-center" style="background:var(--glass-strong)">
-      <p class="eyebrow">Reviewing</p>
-      <h3 id="processing-title" class="text-2xl font-extrabold mt-2">Agents are working on your batch</h3>
-      <p class="muted text-sm mt-2">Detection, risk, redaction, verification and an adversarial check run on the backend.</p>
-      <div id="processing-agents" class="pipeline wave mt-10"></div>
-      <p class="mt-8 text-sm muted"><span id="processing-time">0.0</span> s elapsed</p>
-    </div>
-  </div>
-
-  <div id="toasts" class="fixed bottom-5 right-5 z-[60] flex flex-col gap-2 items-end" aria-live="polite"></div>
-
+  <div class="toasts" id="toasts" aria-live="polite"></div>
   <script src="app.js"></script>
 </body>
 </html>
