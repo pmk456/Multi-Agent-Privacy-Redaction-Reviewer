@@ -152,3 +152,28 @@ class TestPseudonymRegistry:
         reg = PseudonymRegistry(b"k" * 32)
         reg.pseudonym(E.PERSON, "ananya", PseudonymScope.BATCH, "B", "d")
         assert "ananya" not in repr(reg)
+
+
+def test_persistent_registry_is_thread_safe(tmp_path):
+    """The API serves requests from a thread pool; the SQLite-backed registry must survive that."""
+    import threading
+    reg = PseudonymRegistry(b"k" * 32, {"PERSON": "PERSON"}, store_path=tmp_path / "p.sqlite")
+    errors, out = [], []
+
+    def go(i):
+        try:
+            out.append((i % 5, reg.pseudonym(E.PERSON, f"C{i % 5}", PseudonymScope.BATCH, "B", "d")))
+        except Exception as e:          # noqa: BLE001
+            errors.append(e)
+
+    threads = [threading.Thread(target=go, args=(i,)) for i in range(40)]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+    assert errors == []
+    by_person = {}
+    for person, p in out:
+        by_person.setdefault(person, set()).add(p)
+    assert all(len(ps) == 1 for ps in by_person.values())          # consistent under concurrency
+    assert len({next(iter(ps)) for ps in by_person.values()}) == 5  # and never shared

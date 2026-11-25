@@ -14,6 +14,7 @@ import hashlib
 import hmac
 import os
 import sqlite3
+import threading
 from pathlib import Path
 
 from privacy_review.schemas.entities import EntityType
@@ -29,10 +30,11 @@ class PseudonymRegistry:
         self._map: dict[str, str] = {}
         self._counters: dict[tuple[str, str], int] = {}
         self._db = None
+        self._lock = threading.Lock()                 # the API serves requests from a thread pool
         if store_path is not None:
             store_path.parent.mkdir(parents=True, exist_ok=True)
             new = not store_path.exists()
-            self._db = sqlite3.connect(str(store_path))
+            self._db = sqlite3.connect(str(store_path), check_same_thread=False)
             if new:
                 os.chmod(store_path, 0o600)
             self._db.execute("CREATE TABLE IF NOT EXISTS pseudonyms (digest TEXT PRIMARY KEY, scope TEXT NOT NULL, "
@@ -54,6 +56,10 @@ class PseudonymRegistry:
         mentions 'the same entity'. It is hashed, never stored."""
         scope_key = batch_id if scope == PseudonymScope.BATCH else f"{batch_id}/{doc_id}"
         d = self._digest(scope_key, et, identity)
+        with self._lock:
+            return self._assign(d, scope_key, et)
+
+    def _assign(self, d: str, scope_key: str, et: EntityType) -> str:
         if d not in self._map:
             k = (scope_key, et.value)
             self._counters[k] = self._counters.get(k, 0) + 1
