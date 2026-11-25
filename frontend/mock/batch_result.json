@@ -1,0 +1,803 @@
+{
+  "batch_id": "demo-batch-0001",
+  "documents": [
+    {
+      "doc_id": "hr-record-01",
+      "released": true,
+      "redacted_text": "HR record. Employee PERSON_01 (age 30-39) joined as a staff nurse at [ORGANIZATION] in Karnataka. Contact: [EMAIL_ADDRESS], [PHONE_NUMBER]. Employee ID [REDACTED].",
+      "entities": [
+        {
+          "entity_id": "hr-record-01:e01",
+          "doc_id": "hr-record-01",
+          "entity_type": "PERSON",
+          "span": {
+            "start": 20,
+            "end": 34
+          },
+          "confidence": 0.97,
+          "identifier_class": "direct_identifier",
+          "annotation_status": null,
+          "cluster_id": "c-person-01"
+        },
+        {
+          "entity_id": "hr-record-01:e02",
+          "doc_id": "hr-record-01",
+          "entity_type": "AGE",
+          "span": {
+            "start": 40,
+            "end": 42
+          },
+          "confidence": 0.86,
+          "identifier_class": "indirect_identifier",
+          "annotation_status": null,
+          "cluster_id": null
+        },
+        {
+          "entity_id": "hr-record-01:e03",
+          "doc_id": "hr-record-01",
+          "entity_type": "OCCUPATION",
+          "span": {
+            "start": 56,
+            "end": 67
+          },
+          "confidence": 0.86,
+          "identifier_class": "indirect_identifier",
+          "annotation_status": null,
+          "cluster_id": null
+        },
+        {
+          "entity_id": "hr-record-01:e04",
+          "doc_id": "hr-record-01",
+          "entity_type": "ORGANIZATION",
+          "span": {
+            "start": 71,
+            "end": 93
+          },
+          "confidence": 0.86,
+          "identifier_class": "indirect_identifier",
+          "annotation_status": null,
+          "cluster_id": "c-org-01"
+        },
+        {
+          "entity_id": "hr-record-01:e05",
+          "doc_id": "hr-record-01",
+          "entity_type": "LOCATION",
+          "span": {
+            "start": 97,
+            "end": 106
+          },
+          "confidence": 0.86,
+          "identifier_class": "indirect_identifier",
+          "annotation_status": null,
+          "cluster_id": null
+        },
+        {
+          "entity_id": "hr-record-01:e06",
+          "doc_id": "hr-record-01",
+          "entity_type": "EMAIL_ADDRESS",
+          "span": {
+            "start": 117,
+            "end": 143
+          },
+          "confidence": 0.97,
+          "identifier_class": "direct_identifier",
+          "annotation_status": null,
+          "cluster_id": null
+        },
+        {
+          "entity_id": "hr-record-01:e07",
+          "doc_id": "hr-record-01",
+          "entity_type": "PHONE_NUMBER",
+          "span": {
+            "start": 145,
+            "end": 153
+          },
+          "confidence": 0.97,
+          "identifier_class": "direct_identifier",
+          "annotation_status": null,
+          "cluster_id": null
+        },
+        {
+          "entity_id": "hr-record-01:e08",
+          "doc_id": "hr-record-01",
+          "entity_type": "RECORD_IDENTIFIER",
+          "span": {
+            "start": 167,
+            "end": 178
+          },
+          "confidence": 0.97,
+          "identifier_class": "direct_identifier",
+          "annotation_status": null,
+          "cluster_id": null
+        }
+      ],
+      "risks": [
+        {
+          "entity_id": "hr-record-01:e01",
+          "entity_type": "PERSON",
+          "base_risk": "high",
+          "risk": "high",
+          "fired_rules": [],
+          "rationale": "Full name is a direct identifier.",
+          "llm_escalated": false
+        },
+        {
+          "entity_id": "hr-record-01:e02",
+          "entity_type": "AGE",
+          "base_risk": "low",
+          "risk": "medium",
+          "fired_rules": [
+            "QI-AGE-OCC"
+          ],
+          "rationale": "Exact age narrows the population.",
+          "llm_escalated": false
+        },
+        {
+          "entity_id": "hr-record-01:e03",
+          "entity_type": "OCCUPATION",
+          "base_risk": "low",
+          "risk": "low",
+          "fired_rules": [],
+          "rationale": "Common occupation; kept for utility.",
+          "llm_escalated": false
+        },
+        {
+          "entity_id": "hr-record-01:e04",
+          "entity_type": "ORGANIZATION",
+          "base_risk": "low",
+          "risk": "medium",
+          "fired_rules": [
+            "QI-ORG-OCC"
+          ],
+          "rationale": "Employer combined with occupation is quasi-identifying.",
+          "llm_escalated": false
+        },
+        {
+          "entity_id": "hr-record-01:e05",
+          "entity_type": "LOCATION",
+          "base_risk": "medium",
+          "risk": "medium",
+          "fired_rules": [],
+          "rationale": "City generalised to state.",
+          "llm_escalated": false
+        },
+        {
+          "entity_id": "hr-record-01:e06",
+          "entity_type": "EMAIL_ADDRESS",
+          "base_risk": "high",
+          "risk": "high",
+          "fired_rules": [],
+          "rationale": "Email is a direct identifier.",
+          "llm_escalated": false
+        },
+        {
+          "entity_id": "hr-record-01:e07",
+          "entity_type": "PHONE_NUMBER",
+          "base_risk": "high",
+          "risk": "high",
+          "fired_rules": [],
+          "rationale": "Phone number is a direct identifier.",
+          "llm_escalated": false
+        },
+        {
+          "entity_id": "hr-record-01:e08",
+          "entity_type": "RECORD_IDENTIFIER",
+          "base_risk": "critical",
+          "risk": "critical",
+          "fired_rules": [],
+          "rationale": "Record numbers link back to source systems.",
+          "llm_escalated": false
+        }
+      ],
+      "decisions": [
+        {
+          "entity_id": "hr-record-01:e01",
+          "entity_type": "PERSON",
+          "strategy": "pseudonymize",
+          "risk": "high",
+          "policy_id": "POL-PERSON",
+          "scope": "batch",
+          "generalization_level": 1,
+          "rationale": "pseudonymize per POL-PERSON at high risk",
+          "remediation_round": 0
+        },
+        {
+          "entity_id": "hr-record-01:e02",
+          "entity_type": "AGE",
+          "strategy": "generalize",
+          "risk": "medium",
+          "policy_id": "POL-AGE",
+          "scope": "document",
+          "generalization_level": 1,
+          "rationale": "generalize per POL-AGE at medium risk",
+          "remediation_round": 0
+        },
+        {
+          "entity_id": "hr-record-01:e03",
+          "entity_type": "OCCUPATION",
+          "strategy": "keep",
+          "risk": "low",
+          "policy_id": "POL-OCCUPATION",
+          "scope": "document",
+          "generalization_level": 1,
+          "rationale": "keep per POL-OCCUPATION at low risk",
+          "remediation_round": 0
+        },
+        {
+          "entity_id": "hr-record-01:e04",
+          "entity_type": "ORGANIZATION",
+          "strategy": "mask",
+          "risk": "medium",
+          "policy_id": "POL-ORG",
+          "scope": "document",
+          "generalization_level": 1,
+          "rationale": "mask per POL-ORG at medium risk",
+          "remediation_round": 0
+        },
+        {
+          "entity_id": "hr-record-01:e05",
+          "entity_type": "LOCATION",
+          "strategy": "generalize",
+          "risk": "medium",
+          "policy_id": "POL-LOCATION",
+          "scope": "document",
+          "generalization_level": 1,
+          "rationale": "generalize per POL-LOCATION at medium risk",
+          "remediation_round": 0
+        },
+        {
+          "entity_id": "hr-record-01:e06",
+          "entity_type": "EMAIL_ADDRESS",
+          "strategy": "mask",
+          "risk": "high",
+          "policy_id": "POL-EMAIL",
+          "scope": "document",
+          "generalization_level": 1,
+          "rationale": "mask per POL-EMAIL at high risk",
+          "remediation_round": 0
+        },
+        {
+          "entity_id": "hr-record-01:e07",
+          "entity_type": "PHONE_NUMBER",
+          "strategy": "mask",
+          "risk": "high",
+          "policy_id": "POL-PHONE",
+          "scope": "document",
+          "generalization_level": 1,
+          "rationale": "mask per POL-PHONE at high risk",
+          "remediation_round": 0
+        },
+        {
+          "entity_id": "hr-record-01:e08",
+          "entity_type": "RECORD_IDENTIFIER",
+          "strategy": "suppress",
+          "risk": "critical",
+          "policy_id": "POL-RECORD-ID",
+          "scope": "document",
+          "generalization_level": 1,
+          "rationale": "suppress per POL-RECORD-ID at critical risk",
+          "remediation_round": 0
+        }
+      ],
+      "verification": {
+        "doc_id": "hr-record-01",
+        "revision": 1,
+        "passed": true,
+        "findings": [
+          {
+            "finding_type": "residual_pii",
+            "severity": "warning",
+            "doc_id": "hr-record-01",
+            "description": "Possible residual age reference found in round 0; generalised in round 1.",
+            "entity_ids": [
+              "hr-record-01:e02"
+            ],
+            "entity_type": "AGE",
+            "span": null,
+            "original_span": null,
+            "recommended_strategy": "generalize",
+            "rule_id": "V-RESIDUAL",
+            "related_doc_ids": []
+          }
+        ],
+        "checks_run": [
+          "residual_pii",
+          "original_value_present",
+          "span_validity",
+          "transformation",
+          "policy"
+        ],
+        "utility_retained": 0.71,
+        "llm_reviewed": false
+      },
+      "release": {
+        "doc_id": "hr-record-01",
+        "status": "released",
+        "reason": "All verification checks passed after 1 remediation round.",
+        "remediation_rounds": 1
+      }
+    },
+    {
+      "doc_id": "award-news-02",
+      "released": true,
+      "redacted_text": "PERSON_01 received the [EVENT] for outstanding patient care. The ceremony was held in Karnataka on March 2026.",
+      "entities": [
+        {
+          "entity_id": "award-news-02:e01",
+          "doc_id": "award-news-02",
+          "entity_type": "PERSON",
+          "span": {
+            "start": 0,
+            "end": 14
+          },
+          "confidence": 0.97,
+          "identifier_class": "direct_identifier",
+          "annotation_status": null,
+          "cluster_id": "c-person-01"
+        },
+        {
+          "entity_id": "award-news-02:e02",
+          "doc_id": "award-news-02",
+          "entity_type": "EVENT",
+          "span": {
+            "start": 28,
+            "end": 50
+          },
+          "confidence": 0.86,
+          "identifier_class": "indirect_identifier",
+          "annotation_status": null,
+          "cluster_id": null
+        },
+        {
+          "entity_id": "award-news-02:e03",
+          "doc_id": "award-news-02",
+          "entity_type": "LOCATION",
+          "span": {
+            "start": 106,
+            "end": 115
+          },
+          "confidence": 0.86,
+          "identifier_class": "indirect_identifier",
+          "annotation_status": null,
+          "cluster_id": null
+        },
+        {
+          "entity_id": "award-news-02:e04",
+          "doc_id": "award-news-02",
+          "entity_type": "DATE",
+          "span": {
+            "start": 119,
+            "end": 132
+          },
+          "confidence": 0.86,
+          "identifier_class": "indirect_identifier",
+          "annotation_status": null,
+          "cluster_id": null
+        }
+      ],
+      "risks": [
+        {
+          "entity_id": "award-news-02:e01",
+          "entity_type": "PERSON",
+          "base_risk": "high",
+          "risk": "high",
+          "fired_rules": [],
+          "rationale": "Full name is a direct identifier.",
+          "llm_escalated": false
+        },
+        {
+          "entity_id": "award-news-02:e02",
+          "entity_type": "EVENT",
+          "base_risk": "medium",
+          "risk": "medium",
+          "fired_rules": [],
+          "rationale": "Named award narrows to few recipients.",
+          "llm_escalated": false
+        },
+        {
+          "entity_id": "award-news-02:e03",
+          "entity_type": "LOCATION",
+          "base_risk": "low",
+          "risk": "low",
+          "fired_rules": [],
+          "rationale": "City generalised to state.",
+          "llm_escalated": false
+        },
+        {
+          "entity_id": "award-news-02:e04",
+          "entity_type": "DATE",
+          "base_risk": "low",
+          "risk": "low",
+          "fired_rules": [],
+          "rationale": "Day removed; month kept for context.",
+          "llm_escalated": false
+        }
+      ],
+      "decisions": [
+        {
+          "entity_id": "award-news-02:e01",
+          "entity_type": "PERSON",
+          "strategy": "pseudonymize",
+          "risk": "high",
+          "policy_id": "POL-PERSON",
+          "scope": "batch",
+          "generalization_level": 1,
+          "rationale": "pseudonymize per POL-PERSON at high risk",
+          "remediation_round": 0
+        },
+        {
+          "entity_id": "award-news-02:e02",
+          "entity_type": "EVENT",
+          "strategy": "mask",
+          "risk": "medium",
+          "policy_id": "POL-EVENT",
+          "scope": "document",
+          "generalization_level": 1,
+          "rationale": "mask per POL-EVENT at medium risk",
+          "remediation_round": 0
+        },
+        {
+          "entity_id": "award-news-02:e03",
+          "entity_type": "LOCATION",
+          "strategy": "generalize",
+          "risk": "low",
+          "policy_id": "POL-LOCATION",
+          "scope": "document",
+          "generalization_level": 1,
+          "rationale": "generalize per POL-LOCATION at low risk",
+          "remediation_round": 0
+        },
+        {
+          "entity_id": "award-news-02:e04",
+          "entity_type": "DATE",
+          "strategy": "generalize",
+          "risk": "low",
+          "policy_id": "POL-DATE",
+          "scope": "document",
+          "generalization_level": 1,
+          "rationale": "generalize per POL-DATE at low risk",
+          "remediation_round": 0
+        }
+      ],
+      "verification": {
+        "doc_id": "award-news-02",
+        "revision": 0,
+        "passed": true,
+        "findings": [
+          {
+            "finding_type": "over_redaction",
+            "severity": "info",
+            "doc_id": "award-news-02",
+            "description": "Event name masked; a generalised category would retain more utility.",
+            "entity_ids": [
+              "award-news-02:e02"
+            ],
+            "entity_type": "EVENT",
+            "span": null,
+            "original_span": null,
+            "recommended_strategy": "generalize",
+            "rule_id": "V-UTILITY",
+            "related_doc_ids": []
+          }
+        ],
+        "checks_run": [
+          "residual_pii",
+          "original_value_present",
+          "span_validity",
+          "transformation",
+          "policy"
+        ],
+        "utility_retained": 0.84,
+        "llm_reviewed": false
+      },
+      "release": {
+        "doc_id": "award-news-02",
+        "status": "released",
+        "reason": "All verification checks passed.",
+        "remediation_rounds": 0
+      }
+    },
+    {
+      "doc_id": "support-ticket-03",
+      "released": false,
+      "redacted_text": null,
+      "entities": [
+        {
+          "entity_id": "support-ticket-03:e01",
+          "doc_id": "support-ticket-03",
+          "entity_type": "OCCUPATION",
+          "span": {
+            "start": 21,
+            "end": 45
+          },
+          "confidence": 0.86,
+          "identifier_class": "indirect_identifier",
+          "annotation_status": null,
+          "cluster_id": null
+        },
+        {
+          "entity_id": "support-ticket-03:e02",
+          "doc_id": "support-ticket-03",
+          "entity_type": "ORGANIZATION",
+          "span": {
+            "start": 49,
+            "end": 71
+          },
+          "confidence": 0.86,
+          "identifier_class": "indirect_identifier",
+          "annotation_status": null,
+          "cluster_id": "c-org-01"
+        },
+        {
+          "entity_id": "support-ticket-03:e03",
+          "doc_id": "support-ticket-03",
+          "entity_type": "AGE",
+          "span": {
+            "start": 78,
+            "end": 80
+          },
+          "confidence": 0.86,
+          "identifier_class": "indirect_identifier",
+          "annotation_status": null,
+          "cluster_id": null
+        },
+        {
+          "entity_id": "support-ticket-03:e04",
+          "doc_id": "support-ticket-03",
+          "entity_type": "MEDICAL_CONDITION",
+          "span": {
+            "start": 94,
+            "end": 112
+          },
+          "confidence": 0.86,
+          "identifier_class": "sensitive_attribute",
+          "annotation_status": null,
+          "cluster_id": null
+        },
+        {
+          "entity_id": "support-ticket-03:e05",
+          "doc_id": "support-ticket-03",
+          "entity_type": "EMAIL_ADDRESS",
+          "span": {
+            "start": 123,
+            "end": 147
+          },
+          "confidence": 0.97,
+          "identifier_class": "direct_identifier",
+          "annotation_status": null,
+          "cluster_id": null
+        }
+      ],
+      "risks": [
+        {
+          "entity_id": "support-ticket-03:e01",
+          "entity_type": "OCCUPATION",
+          "base_risk": "low",
+          "risk": "high",
+          "fired_rules": [
+            "QI-AGE-OCC",
+            "QI-ORG-OCC"
+          ],
+          "rationale": "Rare role combined with employer and age is unique.",
+          "llm_escalated": false
+        },
+        {
+          "entity_id": "support-ticket-03:e02",
+          "entity_type": "ORGANIZATION",
+          "base_risk": "low",
+          "risk": "high",
+          "fired_rules": [
+            "QI-ORG-OCC"
+          ],
+          "rationale": "Employer links this ticket to the HR record.",
+          "llm_escalated": false
+        },
+        {
+          "entity_id": "support-ticket-03:e03",
+          "entity_type": "AGE",
+          "base_risk": "low",
+          "risk": "high",
+          "fired_rules": [
+            "QI-AGE-OCC"
+          ],
+          "rationale": "Age band still narrows to one person here.",
+          "llm_escalated": false
+        },
+        {
+          "entity_id": "support-ticket-03:e04",
+          "entity_type": "MEDICAL_CONDITION",
+          "base_risk": "critical",
+          "risk": "critical",
+          "fired_rules": [],
+          "rationale": "Health information is a sensitive attribute.",
+          "llm_escalated": false
+        },
+        {
+          "entity_id": "support-ticket-03:e05",
+          "entity_type": "EMAIL_ADDRESS",
+          "base_risk": "high",
+          "risk": "high",
+          "fired_rules": [],
+          "rationale": "Email is a direct identifier.",
+          "llm_escalated": false
+        }
+      ],
+      "decisions": [
+        {
+          "entity_id": "support-ticket-03:e01",
+          "entity_type": "OCCUPATION",
+          "strategy": "mask",
+          "risk": "high",
+          "policy_id": "POL-OCCUPATION",
+          "scope": "document",
+          "generalization_level": 1,
+          "rationale": "mask per POL-OCCUPATION at high risk",
+          "remediation_round": 0
+        },
+        {
+          "entity_id": "support-ticket-03:e02",
+          "entity_type": "ORGANIZATION",
+          "strategy": "mask",
+          "risk": "high",
+          "policy_id": "POL-ORG",
+          "scope": "document",
+          "generalization_level": 1,
+          "rationale": "mask per POL-ORG at high risk",
+          "remediation_round": 0
+        },
+        {
+          "entity_id": "support-ticket-03:e03",
+          "entity_type": "AGE",
+          "strategy": "generalize",
+          "risk": "high",
+          "policy_id": "POL-AGE",
+          "scope": "document",
+          "generalization_level": 1,
+          "rationale": "generalize per POL-AGE at high risk",
+          "remediation_round": 0
+        },
+        {
+          "entity_id": "support-ticket-03:e04",
+          "entity_type": "MEDICAL_CONDITION",
+          "strategy": "mask",
+          "risk": "critical",
+          "policy_id": "POL-MEDICAL",
+          "scope": "document",
+          "generalization_level": 1,
+          "rationale": "mask per POL-MEDICAL at critical risk",
+          "remediation_round": 0
+        },
+        {
+          "entity_id": "support-ticket-03:e05",
+          "entity_type": "EMAIL_ADDRESS",
+          "strategy": "mask",
+          "risk": "high",
+          "policy_id": "POL-EMAIL",
+          "scope": "document",
+          "generalization_level": 1,
+          "rationale": "mask per POL-EMAIL at high risk",
+          "remediation_round": 0
+        }
+      ],
+      "verification": {
+        "doc_id": "support-ticket-03",
+        "revision": 2,
+        "passed": false,
+        "findings": [
+          {
+            "finding_type": "quasi_identifier_combination",
+            "severity": "blocking",
+            "doc_id": "support-ticket-03",
+            "description": "Occupation, employer and age band together match a single person (k=1).",
+            "entity_ids": [
+              "support-ticket-03:e01",
+              "support-ticket-03:e02",
+              "support-ticket-03:e03"
+            ],
+            "entity_type": null,
+            "span": null,
+            "original_span": null,
+            "recommended_strategy": "suppress",
+            "rule_id": "V-QI-K",
+            "related_doc_ids": []
+          }
+        ],
+        "checks_run": [
+          "residual_pii",
+          "original_value_present",
+          "span_validity",
+          "transformation",
+          "policy"
+        ],
+        "utility_retained": 0.52,
+        "llm_reviewed": false
+      },
+      "release": {
+        "doc_id": "support-ticket-03",
+        "status": "blocked",
+        "reason": "Blocked: a quasi-identifier combination stayed unique after 2 remediation rounds.",
+        "remediation_rounds": 2
+      }
+    }
+  ],
+  "adversarial": {
+    "revision": 2,
+    "safe_to_release": false,
+    "findings": [
+      {
+        "finding_type": "cross_document_linkage",
+        "severity": "blocking",
+        "doc_id": "support-ticket-03",
+        "description": "The same employer and occupation link this ticket to the HR record.",
+        "entity_ids": [],
+        "entity_type": "ORGANIZATION",
+        "span": null,
+        "original_span": null,
+        "recommended_strategy": null,
+        "rule_id": "A-LINKAGE",
+        "related_doc_ids": [
+          "hr-record-01"
+        ]
+      }
+    ],
+    "components": [
+      {
+        "component_id": "lc-01",
+        "doc_ids": [
+          "hr-record-01",
+          "support-ticket-03"
+        ],
+        "linked_by": [
+          "ORGANIZATION",
+          "OCCUPATION"
+        ],
+        "visible_quasi_types": [
+          "AGE",
+          "LOCATION"
+        ],
+        "anonymity_set_size": 1,
+        "risk": "high"
+      }
+    ],
+    "llm_probed": false
+  },
+  "aggregate": {
+    "document_count": 3,
+    "documents_released": 2,
+    "documents_blocked": 1,
+    "entities_by_type": {
+      "PERSON": 2,
+      "AGE": 2,
+      "OCCUPATION": 2,
+      "ORGANIZATION": 2,
+      "LOCATION": 2,
+      "EMAIL_ADDRESS": 2,
+      "PHONE_NUMBER": 1,
+      "RECORD_IDENTIFIER": 1,
+      "EVENT": 1,
+      "DATE": 1,
+      "MEDICAL_CONDITION": 1
+    },
+    "risks_by_level": {
+      "high": 8,
+      "medium": 4,
+      "low": 3,
+      "critical": 2
+    },
+    "strategies": {
+      "pseudonymize": 2,
+      "generalize": 5,
+      "keep": 1,
+      "mask": 8,
+      "suppress": 1
+    },
+    "findings_by_type": {
+      "residual_pii": 1,
+      "over_redaction": 1,
+      "quasi_identifier_combination": 1,
+      "cross_document_linkage": 1
+    },
+    "remediation_rounds": 2,
+    "llm_used": false
+  }
+}

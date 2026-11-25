@@ -39,6 +39,11 @@ class Settings(BaseSettings):
     pseudonym_secret: SecretStr | None = None
     context_window_chars: int = 80
 
+    # --- ingestion / API limits ---------------------------------------------
+    max_upload_bytes: int = Field(default=5 * 1024 * 1024, ge=1)
+    max_document_chars: int = Field(default=200_000, ge=1)
+    max_files_per_batch: int = Field(default=20, ge=1)
+
     # --- paths ----------------------------------------------------------------
     knowledge_base_json: Path = BACKEND_DIR / "privacy_review" / "knowledge_base" / "policies.json"
     data_dir: Path = REPO_DIR / "data"
