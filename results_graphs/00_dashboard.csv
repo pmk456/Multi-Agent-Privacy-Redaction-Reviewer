@@ -1,0 +1,9 @@
+metric,value
+never-keep protected (ai4privacy test),92.8%
+"never-keep protected (PIIMB, independent)",87.5%
+injected faults caught by verification,361/361
+re-identifiable people flagged by Agent 5,4/4
+controls wrongly flagged,0/5
+covered with supplied annotations (test),98.1%
+knowledge-base checks passed,55/55
+tests passing,362

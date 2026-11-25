@@ -1,0 +1,7 @@
+case,ai4privacy_test,piimb
+out-of-bounds rejected,1.0,1.0
+spurious flagged,1.0,0.9871
+wrong type flagged,0.9286,1.0
+shifted span flagged,0.913,0.8769
+dropped recovered,0.9231,0.7328
+correct but flagged (false alarm),0.2289,0.2893

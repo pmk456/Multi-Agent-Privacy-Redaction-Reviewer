@@ -1,0 +1,5 @@
+split,strict_f1,relaxed_f1
+ai4privacy dev (tuned on),0.7459,0.7919
+ai4privacy validation,0.7143,0.7556
+ai4privacy test,0.6703,0.7138
+PIIMB (independent),0.4826,0.5353

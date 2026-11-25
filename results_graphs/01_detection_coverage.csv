@@ -1,0 +1,5 @@
+split,coverage
+ai4privacy dev (tuned on),0.9297
+ai4privacy validation,0.9119
+ai4privacy test,0.9242
+PIIMB (independent),0.781

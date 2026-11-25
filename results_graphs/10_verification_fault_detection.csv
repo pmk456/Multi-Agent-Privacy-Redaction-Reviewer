@@ -1,0 +1,6 @@
+fault,caught,injected
+skip_entity,90,90
+keep_direct,90,90
+tamper_mask,72,72
+reproduce_generalisation,10,10
+drop_decision,99,99

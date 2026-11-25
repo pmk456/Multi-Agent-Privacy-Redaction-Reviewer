@@ -1,0 +1,5 @@
+metric,value
+policy_coverage,1.0
+rule_checks_correct,55
+rule_checks_total,55
+validation_issues,0

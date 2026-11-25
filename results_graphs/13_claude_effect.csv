@@ -1,0 +1,4 @@
+metric,without_llm,with_llm
+all gold spans protected,0.7821,0.8974
+never-keep protected,0.9787,0.9787
+text still readable,0.7989,0.7492
