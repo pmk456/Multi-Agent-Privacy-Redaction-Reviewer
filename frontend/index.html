@@ -3,134 +3,179 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Privacy Redaction Review</title>
-<script src="https://cdn.tailwindcss.com/3.4.17"></script>
-<script>
-  tailwind.config = {
-    theme: { extend: {
-      colors: { navy: "#192339", ink: "#0E1626", steel: "#1E3A6B", cyan: "#27B2CC", maroon: "#781B17" },
-      fontFamily: { mono: ["ui-monospace", "SFMono-Regular", "Menlo", "Consolas", "monospace"] },
-    }}
-  };
-</script>
+<title>Privacy Redaction Review · PS 247</title>
+<meta name="description" content="Review documents for personal data. Five agents detect, assess, redact, verify and attack the output before anything is released.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
 <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" defer></script>
-<style>
-  .ph { background: #E3F6FA; color: #0B5566; border-radius: 3px; padding: 0 3px; font-weight: 600; }
-  .tab[aria-selected="true"] { color: #fff; border-color: #27B2CC; }
-  .redacted { white-space: pre-wrap; word-break: break-word; }
-</style>
 </head>
-<body class="bg-slate-50 text-ink min-h-screen">
+<body>
+  <a href="#main" class="sr-only">Skip to content</a>
 
-  <header class="bg-navy text-white">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 pt-5 flex items-start justify-between gap-4">
-      <div>
-        <p class="text-cyan text-xs font-semibold tracking-widest">PS 247</p>
-        <h1 class="text-lg sm:text-xl font-bold">Multi-Agent Privacy Redaction Review</h1>
-        <p id="health" class="mt-1 text-xs text-slate-300">Checking backend…</p>
+  <!-- ================================================================ app bar -->
+  <header class="appbar">
+    <div class="container appbar-inner">
+      <a class="brand" href="#review" data-view="upload" aria-label="Privacy Redaction Review, home">
+        <span class="brand-mark" aria-hidden="true">
+          <!-- document with a redaction bar -->
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8.5 7.5h7"/><rect x="8.5" y="10.6" width="7" height="2.8" rx=".6" fill="currentColor" stroke="none"/><path d="M8.5 16.5h4.5"/></svg>
+        </span>
+        <span class="brand-name">Privacy Redaction Review</span>
+        <span class="brand-tag">PS 247</span>
+      </a>
+
+      <nav class="nav" aria-label="Primary">
+        <button class="nav-link" data-view="upload" aria-current="page">Review</button>
+        <button class="nav-link" data-view="documents">Documents <span class="nav-count num" data-count hidden></span></button>
+        <button class="nav-link" data-view="aggregate">Insights</button>
+      </nav>
+
+      <div class="appbar-right">
+        <div class="status" id="status" role="status" aria-live="polite">
+          <span class="status-item" id="status-pipeline" title="Checking the backend…">
+            <span class="status-dot"></span><span>Connecting</span>
+          </span>
+          <span class="status-sep" aria-hidden="true"></span>
+          <span class="status-item optional" id="status-llm">LLM —</span>
+        </div>
+        <img src="assets/alliance-university-logo.png" alt="Alliance University" class="appbar-logo">
       </div>
-      <img src="assets/alliance-university-logo.png" alt="Alliance University"
-           class="h-12 w-12 shrink-0 bg-white rounded-full p-0.5">
     </div>
-    <nav class="max-w-6xl mx-auto px-4 sm:px-6 mt-4 flex gap-6 text-sm" role="tablist">
-      <button class="tab pb-3 border-b-2 border-transparent text-slate-300 hover:text-white"
-              data-view="upload" role="tab" aria-selected="true">Upload</button>
-      <button class="tab pb-3 border-b-2 border-transparent text-slate-300 hover:text-white disabled:opacity-40"
-              data-view="documents" role="tab" aria-selected="false" disabled>Documents</button>
-      <button class="tab pb-3 border-b-2 border-transparent text-slate-300 hover:text-white disabled:opacity-40"
-              data-view="aggregate" role="tab" aria-selected="false" disabled>Aggregate</button>
-    </nav>
+    <div class="nav-mobile">
+      <nav class="container nav" aria-label="Primary (compact)">
+        <button class="nav-link" data-view="upload" aria-current="page">Review</button>
+        <button class="nav-link" data-view="documents">Documents <span class="nav-count num" data-count hidden></span></button>
+        <button class="nav-link" data-view="aggregate">Insights</button>
+      </nav>
+    </div>
   </header>
 
-  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8">
-
-    <!-- ====================================================== upload -->
-    <section id="view-upload" class="space-y-6">
-      <div id="error-panel" class="hidden bg-white border-l-4 border-maroon rounded-lg p-5" role="alert">
-        <h2 id="error-title" class="font-bold text-maroon"></h2>
-        <ul id="error-list" class="mt-2 text-sm space-y-1"></ul>
-      </div>
-
-      <div class="grid md:grid-cols-2 gap-6">
-        <div class="bg-white rounded-lg border border-slate-200 p-6 flex flex-col">
-          <h2 class="font-bold text-lg">Upload documents</h2>
-          <p class="text-sm text-slate-600 mt-1 mb-4">
-            .txt, .pdf or annotated .json. Up to 20 files, 5&nbsp;MB each. Files sent
-            together are reviewed as one batch, so cross-document linkage can be checked.
-          </p>
-          <label for="files" class="block border-2 border-dashed border-slate-300 rounded-lg p-6 text-center
-                 cursor-pointer hover:border-cyan">
-            <span class="text-sm text-slate-600">Click to choose files</span>
-            <input id="files" type="file" multiple accept=".txt,.pdf,.json" class="sr-only">
-          </label>
-          <ol id="file-list" class="mt-3 text-sm text-slate-700 space-y-1 list-decimal list-inside"></ol>
-          <button id="btn-upload" disabled
-                  class="mt-4 self-start bg-cyan text-navy font-semibold px-5 py-2 rounded
-                         hover:opacity-90 disabled:opacity-40">Review files</button>
+  <main id="main">
+    <!-- ============================================================== review -->
+    <section id="view-upload" class="view page" aria-labelledby="review-title">
+      <div class="container">
+        <div class="page-head">
+          <div>
+            <p class="t-overline">New review</p>
+            <h1 class="t-title" id="review-title" tabindex="-1">Review documents for personal data</h1>
+            <p class="t-lede">Documents submitted together are reviewed as one batch, so the system checks what each one
+              reveals on its own and what they reveal when combined.</p>
+          </div>
         </div>
 
-        <div class="bg-white rounded-lg border border-slate-200 p-6 flex flex-col">
-          <h2 class="font-bold text-lg">Or paste text</h2>
-          <p class="text-sm text-slate-600 mt-1 mb-4">Reviewed as a single document.</p>
-          <textarea id="paste" rows="7" placeholder="Paste a document here…"
-                    class="w-full border border-slate-300 rounded p-3 text-sm font-mono
-                           focus:outline-none focus:border-cyan"></textarea>
-          <button id="btn-paste" disabled
-                  class="mt-4 self-start bg-cyan text-navy font-semibold px-5 py-2 rounded
-                         hover:opacity-90 disabled:opacity-40">Review text</button>
+        <div class="review-grid">
+          <!-- composer: the one primary surface on this page -->
+          <div class="composer" id="composer">
+            <div class="seg" role="tablist" aria-label="Input method">
+              <button class="seg-tab" role="tab" id="tab-files" aria-controls="panel-files" aria-selected="true">
+                Files <span class="nav-count num" id="file-count" hidden></span>
+              </button>
+              <button class="seg-tab" role="tab" id="tab-text" aria-controls="panel-text" aria-selected="false" tabindex="-1">
+                Paste text
+              </button>
+            </div>
+
+            <div class="panel" id="panel-files" role="tabpanel" aria-labelledby="tab-files">
+              <div class="dropzone" id="drop">
+                <span class="dropzone-icon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4"/><path d="m7.5 8.5 4.5-4.5 4.5 4.5"/><path d="M4 15v3.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V15"/></svg>
+                </span>
+                <div class="dropzone-copy">
+                  <p class="dropzone-title" id="drop-title">Drag files here to add them</p>
+                  <p class="t-meta">.txt, .pdf or annotated .json · up to 20 files, 5 MB each</p>
+                </div>
+                <button class="btn btn-secondary" id="btn-browse" type="button">Browse files</button>
+                <input id="files" type="file" multiple accept=".txt,.pdf,.json" class="sr-only" tabindex="-1" aria-hidden="true">
+              </div>
+              <table class="file-table" id="file-table" hidden>
+                <caption class="sr-only">Selected files</caption>
+                <thead><tr><th scope="col">File</th><th scope="col" class="col-size">Size</th><th scope="col" class="col-status">Status</th><th scope="col" class="col-action"><span class="sr-only">Remove</span></th></tr></thead>
+                <tbody id="file-rows"></tbody>
+              </table>
+            </div>
+
+            <div class="panel" id="panel-text" role="tabpanel" aria-labelledby="tab-text" hidden>
+              <label class="field-label" for="paste">Document text</label>
+              <textarea id="paste" class="textarea" placeholder="Paste the full text of one document…" spellcheck="false"></textarea>
+              <div class="field-meta">
+                <span class="t-meta">Reviewed as a single document. Line breaks are kept.</span>
+                <span class="t-meta num" id="paste-count">0 characters</span>
+              </div>
+            </div>
+
+            <div class="callout callout-error" id="run-error" role="alert" hidden style="margin:0 20px 16px"></div>
+
+            <div class="run-status" id="run-status" hidden aria-live="polite">
+              <span class="spinner" aria-hidden="true"></span>
+              <div style="flex:1">
+                <p class="t-subheading" id="run-status-title">Reviewing</p>
+                <p class="t-meta">Detection, risk assessment, redaction, verification and the adversarial check run on the server.
+                  <span class="num" id="run-elapsed">0.0 s</span></p>
+                <div class="progress" aria-hidden="true"><span></span></div>
+              </div>
+            </div>
+
+            <div class="composer-foot">
+              <p class="t-meta" id="composer-summary">No files added yet</p>
+              <div class="actions">
+                <button class="btn btn-ghost" id="btn-clear" type="button" hidden>Clear</button>
+                <button class="btn btn-primary" id="btn-run" type="button" disabled>
+                  <span class="spinner" hidden aria-hidden="true"></span><span class="btn-label">Run review</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- supporting information: plain structure, no container -->
+          <aside aria-label="About reviews">
+            <div class="aside-block">
+              <h2 class="t-subheading">How a review works</h2>
+              <ol class="stages">
+                <li><span class="stage-num">1</span><div><p class="stage-name">Detect</p><p class="stage-desc">Finds names, contact details, identifiers, and indirect clues such as job title or city.</p></div></li>
+                <li><span class="stage-num">2</span><div><p class="stage-name">Assess risk</p><p class="stage-desc">Weighs each item in context against the privacy policy.</p></div></li>
+                <li><span class="stage-num">3</span><div><p class="stage-name">Redact</p><p class="stage-desc">Masks, generalises or pseudonymises each item with deterministic rules.</p></div></li>
+                <li><span class="stage-num">4</span><div><p class="stage-name">Verify</p><p class="stage-desc">Re-scans the output independently and confirms the originals are gone.</p></div></li>
+                <li><span class="stage-num">5</span><div><p class="stage-name">Attack</p><p class="stage-desc">Tries to re-identify people, within and across documents.</p></div></li>
+              </ol>
+              <p class="t-meta" style="margin-top:10px">Only documents that pass every stage are released.</p>
+            </div>
+            <div class="aside-block">
+              <h2 class="t-subheading">Sample batch</h2>
+              <p class="t-meta" style="margin-top:4px">Three fictional documents, including one that is blocked and a link between two of them.</p>
+              <button class="link-btn" id="btn-demo" type="button" style="margin-top:10px">
+                Open sample batch
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+              </button>
+            </div>
+          </aside>
         </div>
       </div>
-
-      <div class="flex flex-wrap items-center gap-3 text-sm text-slate-600">
-        <button id="btn-demo" class="border border-steel text-steel font-semibold px-4 py-2 rounded
-                hover:bg-steel hover:text-white">Demo mode</button>
-        <span>Loads a fictional sample batch, so you can explore the views without the backend.</span>
-      </div>
-      <p id="busy" class="hidden text-sm text-steel font-semibold">Running privacy review…</p>
     </section>
 
-    <!-- ====================================================== documents -->
-    <section id="view-documents" class="hidden">
-      <p id="batch-label" class="text-xs text-slate-500 mb-4"></p>
-      <div class="grid lg:grid-cols-[16rem_1fr] gap-6">
-        <aside>
-          <h2 class="text-xs font-semibold tracking-wider text-slate-500 mb-2">DOCUMENTS</h2>
-          <ul id="doc-list" class="space-y-1"></ul>
-        </aside>
-        <article id="doc-detail" class="space-y-6 min-w-0"></article>
-      </div>
+    <!-- ============================================================== documents -->
+    <section id="view-documents" class="view page" hidden aria-label="Documents">
+      <div class="container" id="documents-root"></div>
     </section>
 
-    <!-- ====================================================== aggregate -->
-    <section id="view-aggregate" class="hidden space-y-6">
-      <div id="stat-tiles" class="grid grid-cols-2 sm:grid-cols-5 gap-3"></div>
-      <div class="grid md:grid-cols-2 gap-6">
-        <div class="bg-white rounded-lg border border-slate-200 p-4">
-          <h3 class="font-semibold text-sm mb-2">Released vs blocked</h3><div id="chart-release" class="h-64"></div>
-        </div>
-        <div class="bg-white rounded-lg border border-slate-200 p-4">
-          <h3 class="font-semibold text-sm mb-2">Risk levels</h3><div id="chart-risks" class="h-64"></div>
-        </div>
-        <div class="bg-white rounded-lg border border-slate-200 p-4">
-          <h3 class="font-semibold text-sm mb-2">Entities by type</h3><div id="chart-entities" class="h-72"></div>
-        </div>
-        <div class="bg-white rounded-lg border border-slate-200 p-4">
-          <h3 class="font-semibold text-sm mb-2">Strategies applied</h3><div id="chart-strategies" class="h-72"></div>
-        </div>
-        <div class="bg-white rounded-lg border border-slate-200 p-4 md:col-span-2">
-          <h3 class="font-semibold text-sm mb-2">Verification and adversarial findings</h3>
-          <div id="chart-findings" class="h-64"></div>
-        </div>
-      </div>
-      <div id="linkage" class="bg-white rounded-lg border border-slate-200 p-4"></div>
+    <!-- ============================================================== insights -->
+    <section id="view-aggregate" class="view page" hidden aria-label="Insights">
+      <div class="container" id="insights-root"></div>
     </section>
   </main>
 
-  <footer class="max-w-6xl mx-auto px-4 sm:px-6 pb-8 text-xs text-slate-500">
-    Original documents never leave the backend. This page shows redacted text, entity
-    categories, risks, strategies and findings only.
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span class="footer-privacy">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+        Original documents never leave the backend. This page shows redacted text, categories, risks, strategies and findings only.
+      </span>
+      <span>Alliance University · Generative AI Hackathon</span>
+    </div>
   </footer>
 
+  <div class="toasts" id="toasts" aria-live="polite"></div>
   <script src="app.js"></script>
 </body>
 </html>
