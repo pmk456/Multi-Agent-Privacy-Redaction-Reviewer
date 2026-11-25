@@ -54,3 +54,54 @@ def make_entity(entity_type, sentence=0, *, value="x", doc_id="d1", start=None,
 @pytest.fixture
 def entity_factory(engine):
     return lambda et, sentence=0, **kw: make_entity(et, sentence, engine=engine, **kw)
+
+
+# ---------------------------------------------------------------- heavy shared fixtures
+
+@pytest.fixture(scope="session")
+def extractor(engine):
+    import warnings
+    warnings.filterwarnings("ignore")
+    from privacy_review.detection import EntityExtractor
+    return EntityExtractor(engine)
+
+
+@pytest.fixture(scope="session")
+def agent1(engine, extractor):
+    from privacy_review.agents.privacy_intelligence import PrivacyIntelligenceAgent
+    return PrivacyIntelligenceAgent(engine, extractor=extractor)
+
+
+class FakeReasoner:
+    """Stands in for ClaudeReasoner. Returns whatever `responses` maps a purpose to."""
+
+    def __init__(self, responses=None, available=True):
+        from privacy_review.llm import UsageLedger
+        self.responses = responses or {}
+        self._available = available
+        self.ledger = UsageLedger()
+        self.prompts: list[str] = []
+
+    @property
+    def available(self):
+        return self._available
+
+    def structured(self, *, purpose, system, prompt, output_format, max_tokens=None):
+        from privacy_review.llm import CallRecord
+        self.prompts.append(prompt)
+        r = self.responses.get(purpose)
+        self.ledger.calls.append(CallRecord(purpose, r is not None, None if r is not None else "fake_none"))
+        return r
+
+
+@pytest.fixture
+def fake_reasoner():
+    return FakeReasoner
+
+
+def processed(name: str):
+    from privacy_review.datasets import prepare_dataset
+    path = get_settings().data_dir / "processed" / f"{name}.jsonl"
+    if not path.exists():
+        pytest.skip(f"{path.name} not prepared - run scripts/prepare_data.py")
+    return prepare_dataset.load(path)

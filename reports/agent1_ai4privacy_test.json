@@ -1,0 +1,746 @@
+{
+  "dataset": "ai4privacy",
+  "split": "test",
+  "mode": "raw_text",
+  "detection": {
+    "examples": 100,
+    "gold_spans": 264,
+    "micro": {
+      "strict": {
+        "tp": 181,
+        "fp": 108,
+        "fn": 83,
+        "precision": 0.6263,
+        "recall": 0.6856,
+        "f1": 0.6546,
+        "support": 264
+      },
+      "relaxed": {
+        "tp": 193,
+        "fp": 96,
+        "fn": 71,
+        "precision": 0.6678,
+        "recall": 0.7311,
+        "f1": 0.698,
+        "support": 264
+      }
+    },
+    "macro_f1": {
+      "strict": 0.6862,
+      "relaxed": 0.7071
+    },
+    "per_type": {
+      "strict": {
+        "AGE": {
+          "tp": 2,
+          "fp": 0,
+          "fn": 2,
+          "precision": 1.0,
+          "recall": 0.5,
+          "f1": 0.6667,
+          "support": 4
+        },
+        "CREDENTIAL": {
+          "tp": 5,
+          "fp": 8,
+          "fn": 2,
+          "precision": 0.3846,
+          "recall": 0.7143,
+          "f1": 0.5,
+          "support": 7
+        },
+        "DATE": {
+          "tp": 10,
+          "fp": 14,
+          "fn": 0,
+          "precision": 0.4167,
+          "recall": 1.0,
+          "f1": 0.5882,
+          "support": 10
+        },
+        "DATE_OF_BIRTH": {
+          "tp": 3,
+          "fp": 0,
+          "fn": 7,
+          "precision": 1.0,
+          "recall": 0.3,
+          "f1": 0.4615,
+          "support": 10
+        },
+        "DEMOGRAPHIC": {
+          "tp": 14,
+          "fp": 13,
+          "fn": 12,
+          "precision": 0.5185,
+          "recall": 0.5385,
+          "f1": 0.5283,
+          "support": 26
+        },
+        "DEVICE_IDENTIFIER": {
+          "tp": 7,
+          "fp": 0,
+          "fn": 2,
+          "precision": 1.0,
+          "recall": 0.7778,
+          "f1": 0.875,
+          "support": 9
+        },
+        "EMAIL_ADDRESS": {
+          "tp": 7,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 7
+        },
+        "FINANCIAL_ACCOUNT": {
+          "tp": 24,
+          "fp": 0,
+          "fn": 4,
+          "precision": 1.0,
+          "recall": 0.8571,
+          "f1": 0.9231,
+          "support": 28
+        },
+        "GOVERNMENT_ID": {
+          "tp": 4,
+          "fp": 0,
+          "fn": 2,
+          "precision": 1.0,
+          "recall": 0.6667,
+          "f1": 0.8,
+          "support": 6
+        },
+        "GPS_COORDINATE": {
+          "tp": 3,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 3
+        },
+        "LOCATION": {
+          "tp": 19,
+          "fp": 4,
+          "fn": 7,
+          "precision": 0.8261,
+          "recall": 0.7308,
+          "f1": 0.7755,
+          "support": 26
+        },
+        "OCCUPATION": {
+          "tp": 4,
+          "fp": 3,
+          "fn": 13,
+          "precision": 0.5714,
+          "recall": 0.2353,
+          "f1": 0.3333,
+          "support": 17
+        },
+        "ONLINE_IDENTIFIER": {
+          "tp": 21,
+          "fp": 7,
+          "fn": 9,
+          "precision": 0.75,
+          "recall": 0.7,
+          "f1": 0.7241,
+          "support": 30
+        },
+        "ORGANIZATION": {
+          "tp": 1,
+          "fp": 35,
+          "fn": 5,
+          "precision": 0.0278,
+          "recall": 0.1667,
+          "f1": 0.0476,
+          "support": 6
+        },
+        "PERSON": {
+          "tp": 36,
+          "fp": 22,
+          "fn": 8,
+          "precision": 0.6207,
+          "recall": 0.8182,
+          "f1": 0.7059,
+          "support": 44
+        },
+        "PHONE_NUMBER": {
+          "tp": 4,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.8,
+          "recall": 1.0,
+          "f1": 0.8889,
+          "support": 4
+        },
+        "POSTAL_CODE": {
+          "tp": 2,
+          "fp": 0,
+          "fn": 3,
+          "precision": 1.0,
+          "recall": 0.4,
+          "f1": 0.5714,
+          "support": 5
+        },
+        "STREET_ADDRESS": {
+          "tp": 11,
+          "fp": 0,
+          "fn": 7,
+          "precision": 1.0,
+          "recall": 0.6111,
+          "f1": 0.7586,
+          "support": 18
+        },
+        "URL": {
+          "tp": 4,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.8,
+          "recall": 1.0,
+          "f1": 0.8889,
+          "support": 4
+        }
+      },
+      "relaxed": {
+        "AGE": {
+          "tp": 2,
+          "fp": 0,
+          "fn": 2,
+          "precision": 1.0,
+          "recall": 0.5,
+          "f1": 0.6667,
+          "support": 4
+        },
+        "CREDENTIAL": {
+          "tp": 5,
+          "fp": 8,
+          "fn": 2,
+          "precision": 0.3846,
+          "recall": 0.7143,
+          "f1": 0.5,
+          "support": 7
+        },
+        "DATE": {
+          "tp": 10,
+          "fp": 14,
+          "fn": 0,
+          "precision": 0.4167,
+          "recall": 1.0,
+          "f1": 0.5882,
+          "support": 10
+        },
+        "DATE_OF_BIRTH": {
+          "tp": 3,
+          "fp": 0,
+          "fn": 7,
+          "precision": 1.0,
+          "recall": 0.3,
+          "f1": 0.4615,
+          "support": 10
+        },
+        "DEMOGRAPHIC": {
+          "tp": 19,
+          "fp": 8,
+          "fn": 7,
+          "precision": 0.7037,
+          "recall": 0.7308,
+          "f1": 0.717,
+          "support": 26
+        },
+        "DEVICE_IDENTIFIER": {
+          "tp": 7,
+          "fp": 0,
+          "fn": 2,
+          "precision": 1.0,
+          "recall": 0.7778,
+          "f1": 0.875,
+          "support": 9
+        },
+        "EMAIL_ADDRESS": {
+          "tp": 7,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 7
+        },
+        "FINANCIAL_ACCOUNT": {
+          "tp": 24,
+          "fp": 0,
+          "fn": 4,
+          "precision": 1.0,
+          "recall": 0.8571,
+          "f1": 0.9231,
+          "support": 28
+        },
+        "GOVERNMENT_ID": {
+          "tp": 4,
+          "fp": 0,
+          "fn": 2,
+          "precision": 1.0,
+          "recall": 0.6667,
+          "f1": 0.8,
+          "support": 6
+        },
+        "GPS_COORDINATE": {
+          "tp": 3,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 3
+        },
+        "LOCATION": {
+          "tp": 19,
+          "fp": 4,
+          "fn": 7,
+          "precision": 0.8261,
+          "recall": 0.7308,
+          "f1": 0.7755,
+          "support": 26
+        },
+        "OCCUPATION": {
+          "tp": 4,
+          "fp": 3,
+          "fn": 13,
+          "precision": 0.5714,
+          "recall": 0.2353,
+          "f1": 0.3333,
+          "support": 17
+        },
+        "ONLINE_IDENTIFIER": {
+          "tp": 24,
+          "fp": 4,
+          "fn": 6,
+          "precision": 0.8571,
+          "recall": 0.8,
+          "f1": 0.8276,
+          "support": 30
+        },
+        "ORGANIZATION": {
+          "tp": 2,
+          "fp": 34,
+          "fn": 4,
+          "precision": 0.0556,
+          "recall": 0.3333,
+          "f1": 0.0952,
+          "support": 6
+        },
+        "PERSON": {
+          "tp": 39,
+          "fp": 19,
+          "fn": 5,
+          "precision": 0.6724,
+          "recall": 0.8864,
+          "f1": 0.7647,
+          "support": 44
+        },
+        "PHONE_NUMBER": {
+          "tp": 4,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.8,
+          "recall": 1.0,
+          "f1": 0.8889,
+          "support": 4
+        },
+        "POSTAL_CODE": {
+          "tp": 2,
+          "fp": 0,
+          "fn": 3,
+          "precision": 1.0,
+          "recall": 0.4,
+          "f1": 0.5714,
+          "support": 5
+        },
+        "STREET_ADDRESS": {
+          "tp": 11,
+          "fp": 0,
+          "fn": 7,
+          "precision": 1.0,
+          "recall": 0.6111,
+          "f1": 0.7586,
+          "support": 18
+        },
+        "URL": {
+          "tp": 4,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.8,
+          "recall": 1.0,
+          "f1": 0.8889,
+          "support": 4
+        }
+      }
+    },
+    "privacy_coverage": {
+      "recall": 0.9242,
+      "covered": 244,
+      "total": 264,
+      "precision_any_type": 0.8759,
+      "by_type": {
+        "AGE": {
+          "covered": 3,
+          "total": 4,
+          "recall": 0.75
+        },
+        "CREDENTIAL": {
+          "covered": 7,
+          "total": 7,
+          "recall": 1.0
+        },
+        "DATE": {
+          "covered": 10,
+          "total": 10,
+          "recall": 1.0
+        },
+        "DATE_OF_BIRTH": {
+          "covered": 9,
+          "total": 10,
+          "recall": 0.9
+        },
+        "DEMOGRAPHIC": {
+          "covered": 24,
+          "total": 26,
+          "recall": 0.9231
+        },
+        "DEVICE_IDENTIFIER": {
+          "covered": 9,
+          "total": 9,
+          "recall": 1.0
+        },
+        "EMAIL_ADDRESS": {
+          "covered": 7,
+          "total": 7,
+          "recall": 1.0
+        },
+        "FINANCIAL_ACCOUNT": {
+          "covered": 26,
+          "total": 28,
+          "recall": 0.9286
+        },
+        "GOVERNMENT_ID": {
+          "covered": 5,
+          "total": 6,
+          "recall": 0.8333
+        },
+        "GPS_COORDINATE": {
+          "covered": 3,
+          "total": 3,
+          "recall": 1.0
+        },
+        "LOCATION": {
+          "covered": 24,
+          "total": 26,
+          "recall": 0.9231
+        },
+        "OCCUPATION": {
+          "covered": 14,
+          "total": 17,
+          "recall": 0.8235
+        },
+        "ONLINE_IDENTIFIER": {
+          "covered": 30,
+          "total": 30,
+          "recall": 1.0
+        },
+        "ORGANIZATION": {
+          "covered": 6,
+          "total": 6,
+          "recall": 1.0
+        },
+        "PERSON": {
+          "covered": 41,
+          "total": 44,
+          "recall": 0.9318
+        },
+        "PHONE_NUMBER": {
+          "covered": 4,
+          "total": 4,
+          "recall": 1.0
+        },
+        "POSTAL_CODE": {
+          "covered": 3,
+          "total": 5,
+          "recall": 0.6
+        },
+        "STREET_ADDRESS": {
+          "covered": 15,
+          "total": 18,
+          "recall": 0.8333
+        },
+        "URL": {
+          "covered": 4,
+          "total": 4,
+          "recall": 1.0
+        }
+      },
+      "by_original_label": {
+        "CREDITCARDCVV": {
+          "covered": 0,
+          "total": 1,
+          "recall": 0.0
+        },
+        "JOBTYPE": {
+          "covered": 0,
+          "total": 1,
+          "recall": 0.0
+        },
+        "ZIPCODE": {
+          "covered": 3,
+          "total": 5,
+          "recall": 0.6
+        },
+        "HEIGHT": {
+          "covered": 2,
+          "total": 3,
+          "recall": 0.6667
+        },
+        "BUILDINGNUMBER": {
+          "covered": 7,
+          "total": 10,
+          "recall": 0.7
+        },
+        "JOBAREA": {
+          "covered": 6,
+          "total": 8,
+          "recall": 0.75
+        },
+        "AGE": {
+          "covered": 3,
+          "total": 4,
+          "recall": 0.75
+        },
+        "SSN": {
+          "covered": 5,
+          "total": 6,
+          "recall": 0.8333
+        },
+        "ACCOUNTNUMBER": {
+          "covered": 8,
+          "total": 9,
+          "recall": 0.8889
+        },
+        "STATE": {
+          "covered": 8,
+          "total": 9,
+          "recall": 0.8889
+        },
+        "GENDER": {
+          "covered": 9,
+          "total": 10,
+          "recall": 0.9
+        },
+        "DOB": {
+          "covered": 9,
+          "total": 10,
+          "recall": 0.9
+        },
+        "CITY": {
+          "covered": 9,
+          "total": 10,
+          "recall": 0.9
+        },
+        "LASTNAME": {
+          "covered": 12,
+          "total": 13,
+          "recall": 0.9231
+        },
+        "FIRSTNAME": {
+          "covered": 28,
+          "total": 30,
+          "recall": 0.9333
+        },
+        "SEX": {
+          "covered": 11,
+          "total": 11,
+          "recall": 1.0
+        },
+        "MASKEDNUMBER": {
+          "covered": 6,
+          "total": 6,
+          "recall": 1.0
+        },
+        "MAC": {
+          "covered": 5,
+          "total": 5,
+          "recall": 1.0
+        },
+        "EMAIL": {
+          "covered": 7,
+          "total": 7,
+          "recall": 1.0
+        },
+        "PASSWORD": {
+          "covered": 6,
+          "total": 6,
+          "recall": 1.0
+        },
+        "IPV4": {
+          "covered": 6,
+          "total": 6,
+          "recall": 1.0
+        },
+        "JOBTITLE": {
+          "covered": 8,
+          "total": 8,
+          "recall": 1.0
+        },
+        "USERNAME": {
+          "covered": 6,
+          "total": 6,
+          "recall": 1.0
+        },
+        "SECONDARYADDRESS": {
+          "covered": 8,
+          "total": 8,
+          "recall": 1.0
+        },
+        "USERAGENT": {
+          "covered": 7,
+          "total": 7,
+          "recall": 1.0
+        },
+        "CREDITCARDNUMBER": {
+          "covered": 5,
+          "total": 5,
+          "recall": 1.0
+        },
+        "MIDDLENAME": {
+          "covered": 10,
+          "total": 10,
+          "recall": 1.0
+        },
+        "PHONENUMBER": {
+          "covered": 4,
+          "total": 4,
+          "recall": 1.0
+        },
+        "PHONEIMEI": {
+          "covered": 6,
+          "total": 6,
+          "recall": 1.0
+        },
+        "COUNTY": {
+          "covered": 7,
+          "total": 7,
+          "recall": 1.0
+        },
+        "IBAN": {
+          "covered": 3,
+          "total": 3,
+          "recall": 1.0
+        },
+        "VEHICLEVRM": {
+          "covered": 3,
+          "total": 3,
+          "recall": 1.0
+        },
+        "NEARBYGPSCOORDINATE": {
+          "covered": 3,
+          "total": 3,
+          "recall": 1.0
+        },
+        "COMPANYNAME": {
+          "covered": 6,
+          "total": 6,
+          "recall": 1.0
+        },
+        "DATE": {
+          "covered": 10,
+          "total": 10,
+          "recall": 1.0
+        },
+        "LITECOINADDRESS": {
+          "covered": 1,
+          "total": 1,
+          "recall": 1.0
+        },
+        "IPV6": {
+          "covered": 5,
+          "total": 5,
+          "recall": 1.0
+        },
+        "URL": {
+          "covered": 4,
+          "total": 4,
+          "recall": 1.0
+        },
+        "STREET": {
+          "covered": 5,
+          "total": 5,
+          "recall": 1.0
+        },
+        "EYECOLOR": {
+          "covered": 2,
+          "total": 2,
+          "recall": 1.0
+        },
+        "IP": {
+          "covered": 1,
+          "total": 1,
+          "recall": 1.0
+        },
+        "BITCOINADDRESS": {
+          "covered": 3,
+          "total": 3,
+          "recall": 1.0
+        },
+        "PIN": {
+          "covered": 1,
+          "total": 1,
+          "recall": 1.0
+        }
+      }
+    },
+    "predictions_of_types_not_annotated_in_dataset": {
+      "MEDICAL_CONDITION": 1
+    },
+    "seconds": 0.9
+  },
+  "annotation_validation": {
+    "by_corruption": {
+      "none": {
+        "cases": 201,
+        "expected_status_rate": 0.7512,
+        "false_alarm_rate": 0.2488
+      },
+      "spurious": {
+        "cases": 100,
+        "expected_status_rate": 0.98,
+        "flagged_rate": 1.0
+      },
+      "out_of_bounds": {
+        "cases": 100,
+        "expected_status_rate": 1.0,
+        "flagged_rate": 1.0
+      },
+      "shifted": {
+        "cases": 23,
+        "expected_status_rate": 0.7826,
+        "flagged_rate": 0.913
+      },
+      "dropped": {
+        "cases": 26,
+        "expected_status_rate": 0.9231,
+        "flagged_rate": 0.9231
+      },
+      "wrong_type": {
+        "cases": 14,
+        "expected_status_rate": 0.9286,
+        "flagged_rate": 0.9286
+      }
+    },
+    "shifted_spans_repaired_to_cover_gold": 0.9565,
+    "span_level_accuracy_after_validation": {
+      "exact_match": 0.9394,
+      "gold_fully_covered": 0.9811,
+      "gold_spans": 264
+    },
+    "corruption_rate": 0.3
+  }
+}
