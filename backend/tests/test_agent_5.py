@@ -77,7 +77,10 @@ def test_llm_probe_can_raise_but_not_lower(engine, agents, fake_reasoner):
     up = AdversarialPrivacyAgent(engine, extractor=agents[4].extractor,
                                  reasoner=fake_reasoner({"agent5_probe": LLMAttackerProbe(risk=RiskLevel.HIGH, reason="x")}))
     rep = up.run(CROWD, red, intel.entities, decisions)
-    assert rep.llm_probed and not rep.safe_to_release
+    assert rep.llm_probed
+    # one level at most: a crowd the deterministic score calls low becomes medium (a warning),
+    # never a block on the LLM's word alone
+    assert rep.safe_to_release and all(c.risk in ("low", "medium") for c in rep.components)
     intel2, _, d2, red2 = run_through(agents, RISKY, "P2")
     down = AdversarialPrivacyAgent(engine, extractor=agents[4].extractor,
                                    reasoner=fake_reasoner({"agent5_probe": LLMAttackerProbe(risk=RiskLevel.LOW, reason="x")}))

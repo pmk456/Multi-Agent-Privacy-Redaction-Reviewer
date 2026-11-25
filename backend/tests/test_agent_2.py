@@ -118,7 +118,7 @@ class TestLLMEscalation:
         res = a2.run(intel.entities, PROFILE_DOCS_TEXT)
         eid = by_value[("news", "3 February 2025")]
         a = next(x for x in res.assessments if x.entity_id == eid)
-        assert a.llm_escalated and a.risk == RiskLevel.HIGH and res.llm_used
+        assert a.llm_escalated and a.risk == RiskLevel.MEDIUM and res.llm_used   # low -> medium, not high
 
     def test_llm_cannot_lower_risk(self, profile, engine, fake_reasoner):
         intel, _, by_value = profile
@@ -156,3 +156,11 @@ def test_unsupported_type_is_suppressed(engine, entity_factory):
     e = entity_factory("UNKNOWN", 0, value="mystery")
     res = PrivacyRiskPolicyAgent(engine).run([e])
     assert res.decisions[0].strategy == Strategy.SUPPRESS
+
+
+@pytest.mark.parametrize("current,proposed,expected", [
+    ("low", "critical", "medium"), ("medium", "critical", "high"), ("high", "critical", "critical"),
+    ("high", "low", "high"), ("medium", "medium", "medium"),
+])
+def test_llm_raise_is_bounded_to_one_level(current, proposed, expected):
+    assert RiskLevel(current).llm_raise(RiskLevel(proposed)) == RiskLevel(expected)

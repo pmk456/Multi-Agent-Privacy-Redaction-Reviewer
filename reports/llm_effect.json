@@ -1,6 +1,6 @@
 {
   "without_llm": {
-    "seconds": 1.0,
+    "seconds": 1.1,
     "completeness": 0.7821,
     "never_keep_completeness": 0.9787,
     "release_rate": 1.0,
@@ -17,25 +17,25 @@
     "model": "claude-haiku-5-5"
   },
   "with_llm": {
-    "seconds": 112.1,
+    "seconds": 108.6,
     "completeness": 0.8974,
     "never_keep_completeness": 0.9787,
     "release_rate": 1.0,
-    "utility": 0.7492,
+    "utility": 0.7532,
     "docs_where_llm_used": 30,
     "usage": {
-      "calls": 72,
-      "succeeded": 66,
+      "calls": 71,
+      "succeeded": 65,
       "failed": 6,
-      "input_tokens": 51956,
-      "output_tokens": 6796,
+      "input_tokens": 51447,
+      "output_tokens": 6598,
       "errors": [
         "budget_exhausted"
       ]
     },
     "model": "claude-haiku-5-5"
   },
-  "estimated_cost_usd": 0.00859,
+  "estimated_cost_usd": 0.00844,
   "documents": 30,
   "kind": "LLM-based (qualitative effect, small sample)"
 }

@@ -70,7 +70,7 @@ class PrivacyRiskPolicyAgent:
                 base, final, rules = self.policy.assess(e, ents, esc)
                 llm_escalated = False
                 if llm and e.entity_id in llm and llm[e.entity_id].rank > final.rank:
-                    final, llm_escalated = llm[e.entity_id], True
+                    final, llm_escalated = final.llm_raise(llm[e.entity_id]), True
                     rules = rules + ["LLM-ESCALATION"]
                 assessments.append(RiskAssessment(
                     entity_id=e.entity_id, entity_type=e.entity_type, base_risk=base, risk=final,

@@ -24,6 +24,14 @@ class RiskLevel(str, Enum):
     def max(cls, *levels: "RiskLevel") -> "RiskLevel":
         return max(levels, key=lambda l: l.rank)
 
+    def llm_raise(self, proposed: "RiskLevel") -> "RiskLevel":
+        """An LLM opinion may raise a risk by at most ONE level and never lower it. A small model
+        must not be able to block a document on its own when every deterministic check says low."""
+        order = ["low", "medium", "high", "critical"]
+        if proposed.rank <= self.rank:
+            return self
+        return RiskLevel(order[min(self.rank + 1, proposed.rank)])
+
 
 class Strategy(str, Enum):
     KEEP = "keep"

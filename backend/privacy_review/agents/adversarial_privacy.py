@@ -157,7 +157,7 @@ class AdversarialPrivacyAgent:
                 if probe is not None:
                     llm_probed = True
                     if probe.risk.rank > risk.rank:
-                        risk = probe.risk
+                        risk = risk.llm_raise(probe.risk)        # one level at most
             components.append(LinkageComponent(
                 component_id=f"L{ci + 1:03d}", doc_ids=comp, linked_by=sub["linked_by"],
                 visible_quasi_types=sorted({t.value for t, _ in fp}), anonymity_set_size=k, risk=risk.value,
