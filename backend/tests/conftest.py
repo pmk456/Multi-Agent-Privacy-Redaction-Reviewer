@@ -2,6 +2,12 @@
 
 from __future__ import annotations
 
+import os
+
+# Tests must never spend API calls, whatever .env holds. Environment beats .env in
+# pydantic-settings, and this runs before any Settings object is created.
+os.environ["LLM_ENABLED"] = "false"
+
 import itertools
 import json
 from pathlib import Path

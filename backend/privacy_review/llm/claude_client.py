@@ -73,6 +73,11 @@ class ClaudeReasoner:
         self.settings = settings or get_settings()
         self.ledger = UsageLedger()
         self._client = client
+        self._batch_calls = 0
+
+    def reset_budget(self) -> None:
+        """Called at the start of every batch: the call cap is per batch, not per process."""
+        self._batch_calls = 0
 
     @property
     def available(self) -> bool:
@@ -93,19 +98,23 @@ class ClaudeReasoner:
         if not self.available:
             self.ledger.calls.append(CallRecord(purpose, False, "llm_unavailable"))
             return None
+        if self._batch_calls >= self.settings.llm_max_calls_per_batch:
+            self.ledger.calls.append(CallRecord(purpose, False, "budget_exhausted"))
+            return None
+        self._batch_calls += 1
         import anthropic
 
         t0 = time.monotonic()
         rec = CallRecord(purpose, False)
         try:
             resp = self._get_client().messages.parse(
-                model=self.settings.claude_model,
+                model=self.settings.llm_model,
                 max_tokens=max_tokens or self.settings.llm_max_tokens,
                 system=system,
                 messages=[{"role": "user", "content": prompt}],
                 output_format=output_format,
-                thinking={"type": "adaptive"},
-                output_config={"effort": self.settings.claude_effort},
+                thinking={"type": self.settings.llm_thinking},
+                output_config={"effort": self.settings.llm_effort},
             )
             usage = getattr(resp, "usage", None)
             rec.input_tokens = getattr(usage, "input_tokens", 0) or 0

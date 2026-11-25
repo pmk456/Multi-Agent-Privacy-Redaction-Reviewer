@@ -6,6 +6,7 @@ import secrets
 import warnings
 from functools import lru_cache
 from pathlib import Path
+from typing import Literal
 
 from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -21,13 +22,17 @@ class Settings(BaseSettings):
 
     # --- Claude ---------------------------------------------------------------
     anthropic_api_key: SecretStr | None = None
-    claude_model: str = "claude-opus-5-5"
-    claude_effort: str = "medium"
+    # Minimal-usage defaults: the cheapest current model, low effort, no extended thinking,
+    # short outputs, and a hard cap on calls per batch. Every LLM step is optional anyway.
+    llm_model: str = "claude-haiku-5-5"
+    llm_effort: Literal["low", "medium", "high", "xhigh", "max"] = "low"
+    llm_thinking: Literal["disabled", "adaptive"] = "disabled"
     llm_enabled: bool = True                     # still requires a key to take effect
     llm_raw_text_detection: bool = False         # send RAW text to the LLM in Agent 1? off by default
-    llm_timeout_seconds: float = 60.0
-    llm_max_retries: int = 2
-    llm_max_tokens: int = 4096
+    llm_timeout_seconds: float = 30.0
+    llm_max_retries: int = 1
+    llm_max_tokens: int = 1024
+    llm_max_calls_per_batch: int = Field(default=3, ge=0)
 
     # --- detection ------------------------------------------------------------
     spacy_model: str = "en_core_web_lg"

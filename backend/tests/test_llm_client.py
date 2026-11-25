@@ -36,9 +36,9 @@ class FakeMessages:
         return self.behaviour
 
 
-def reasoner(behaviour):
+def reasoner(behaviour, **settings):
     msgs = FakeMessages(behaviour)
-    return ClaudeReasoner(Settings(), client=SimpleNamespace(messages=msgs)), msgs
+    return ClaudeReasoner(Settings(**settings), client=SimpleNamespace(messages=msgs)), msgs
 
 
 def _http_error(cls, status):
@@ -61,9 +61,24 @@ def test_success_returns_validated_model_and_counts_tokens():
     r, msgs = reasoner(_resp())
     assert call(r) == Out(answer="ok")
     assert r.ledger.input_tokens == 120 and r.ledger.output_tokens == 30
-    assert msgs.kwargs["model"] == "claude-opus-5-5"
-    assert msgs.kwargs["thinking"] == {"type": "adaptive"}
+    assert msgs.kwargs["model"] == "claude-haiku-5-5"            # minimal-usage default
+    assert msgs.kwargs["thinking"] == {"type": "disabled"}
+    assert msgs.kwargs["output_config"] == {"effort": "low"}
+    assert msgs.kwargs["max_tokens"] == 1024
     assert msgs.kwargs["output_format"] is Out
+
+
+def test_call_budget_is_enforced_per_batch():
+    r, msgs = reasoner(_resp(), llm_max_calls_per_batch=2)
+    assert [call(r) is not None for _ in range(3)] == [True, True, False]
+    assert r.ledger.calls[-1].error == "budget_exhausted"
+    r.reset_budget()
+    assert call(r) is not None
+
+
+def test_tests_never_enable_the_llm():
+    from privacy_review.config import Settings as S
+    assert S().llm_available is False
 
 
 @pytest.mark.parametrize("behaviour,code", [

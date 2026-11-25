@@ -32,11 +32,19 @@ def main() -> None:
     s = get_settings()
     ap = argparse.ArgumentParser()
     ap.add_argument("--limit", type=int, default=None)
+    ap.add_argument("--llm", action="store_true", help="allow Claude calls (budgeted per batch). Off by default.")
     args = ap.parse_args()
-    p = default_pipeline()
+    if args.llm:
+        p = default_pipeline()
+    else:   # hundreds of documents: never spend API calls unless explicitly asked
+        from privacy_review.knowledge_base import default_engine
+        from privacy_review.llm import ClaudeReasoner
+        from privacy_review.orchestration.graph import Pipeline
+        quiet = s.model_copy(update={"llm_enabled": False})
+        p = Pipeline(default_engine(), quiet, reasoner=ClaudeReasoner(quiet))
     agents = (p.a1, p.a2, p.a3, p.a4, p.a5)
     report = {"generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-              "llm_reasoning": "not exercised - no API key on the evaluation machine; deterministic path only",
+              "llm_reasoning": "deterministic path only (run with --llm to include budgeted Claude calls)",
               "results": {}}
 
     for name, split in (("ai4privacy", "test"), ("piimb", "external_test")):

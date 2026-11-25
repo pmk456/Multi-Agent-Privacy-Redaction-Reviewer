@@ -23,6 +23,8 @@ def default_pipeline() -> Pipeline:
 def run_pipeline(documents: list[Document], batch_id: str | None = None, pipeline: Pipeline | None = None,
                  max_rounds: int | None = None) -> PipelineState:
     p = pipeline or default_pipeline()
+    if hasattr(p.reasoner, "reset_budget"):
+        p.reasoner.reset_budget()
     state = PipelineState(batch_id=batch_id or uuid.uuid4().hex[:12], documents=documents,
                           max_rounds=p.settings.max_remediation_rounds if max_rounds is None else max_rounds)
     return p.invoke(state)
