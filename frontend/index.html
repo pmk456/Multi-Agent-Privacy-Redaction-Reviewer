@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Multi-Agent Privacy Redaction Review</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: { extend: { colors: {
+      navy: "#192339", ink: "#0E1626", steel: "#1E3A6B", cyan: "#27B2CC", maroon: "#781B17",
+    }}}
+  };
+  // Backend base URL. Change if you run uvicorn on a different port.
+  const API = "http://127.0.0.1:8000";
+</script>
+</head>
+<body class="bg-slate-50 text-ink">
+
+  <header class="bg-navy text-white">
+    <div class="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
+      <div>
+        <p class="text-cyan text-xs font-semibold tracking-widest">PS 247</p>
+        <h1 class="text-xl font-bold">Multi-Agent Privacy Redaction Review</h1>
+      </div>
+      <img src="../docs/assets/alliance-university-logo.png"
+           alt="Alliance University" class="h-12 w-12 bg-white rounded-full p-0.5">
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 py-8 space-y-6">
+
+    <section class="bg-white rounded-lg border border-slate-200 p-6">
+      <h2 class="font-bold text-lg mb-1">Upload documents</h2>
+      <p class="text-sm text-slate-600 mb-4">
+        Several files at once are reviewed as one batch, which is what lets the
+        adversarial agent check for linkage between them.
+      </p>
+      <input id="files" type="file" multiple accept=".txt,.pdf"
+             class="block w-full text-sm border border-slate-300 rounded p-2">
+      <button id="review"
+              class="mt-4 bg-cyan text-navy font-semibold px-5 py-2 rounded hover:opacity-90">
+        Run privacy review
+      </button>
+    </section>
+
+    <!-- TODO(Review 2): render redacted text, entity categories and risk scores here.
+         Never render an original identifier value - the API does not send one. -->
+    <section id="results" class="hidden bg-white rounded-lg border border-slate-200 p-6">
+      <h2 class="font-bold text-lg mb-4">Results</h2>
+      <div id="results-body" class="text-sm"></div>
+    </section>
+
+    <!-- TODO(Review 3): Plotly charts from /analytics/batch/{id} - counts only. -->
+    <section id="analytics" class="hidden bg-white rounded-lg border border-slate-200 p-6">
+      <h2 class="font-bold text-lg mb-4">Aggregate privacy report</h2>
+      <div id="charts"></div>
+    </section>
+
+  </main>
+
+  <script>
+    document.getElementById("review").addEventListener("click", async () => {
+      const input = document.getElementById("files");
+      if (!input.files.length) return alert("Pick at least one document.");
+
+      const body = new FormData();
+      for (const f of input.files) body.append("files", f);
+
+      // TODO(Review 2): POST to API + "/documents/upload" and render the response.
+      alert("Not wired up yet - planned for Review 2.");
+    });
+  </script>
+
+</body>
+</html>

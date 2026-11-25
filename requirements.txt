@@ -1,0 +1,30 @@
+# API layer
+fastapi
+uvicorn[standard]
+python-multipart
+pydantic
+pydantic-settings
+
+# Agents and orchestration
+langgraph
+anthropic
+
+# PII detection
+presidio-analyzer
+presidio-anonymizer
+spacy
+# after installing: python -m spacy download en_core_web_lg
+
+# Entity relationships
+networkx
+
+# Documents, storage, analytics
+pymupdf
+sqlalchemy
+pandas
+plotly
+pyyaml
+
+# Tests
+pytest
+httpx2

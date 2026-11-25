@@ -1,0 +1,51 @@
+# Risk level -> redaction strategy.
+#
+# The risk agent produces a level; this file turns it into an instruction. Keeping the
+# mapping in a file rather than in code is what makes a redaction decision explainable
+# after the fact (NFR5).
+#
+# Owner: Patan Musthakheem
+
+default_scope: document   # document | batch -- see the open question in the report
+
+rules:
+  - id: critical-direct
+    when: { risk_level: critical }
+    strategy: suppress
+    note: Remove entirely. Nothing about the original should be recoverable.
+
+  - id: high-person
+    when: { risk_level: high, category: PERSON }
+    strategy: pseudonymize
+    note: Keeps the document followable - who did what - without naming anyone.
+
+  - id: high-other
+    when: { risk_level: high }
+    strategy: mask
+    note: Default for high-risk entities that do not need to stay traceable.
+
+  - id: medium-date-of-birth
+    when: { risk_level: medium, category: DATE_OF_BIRTH }
+    strategy: generalize
+    note: Age band. The age is usually what the document needed, not the date.
+
+  - id: medium-location
+    when: { risk_level: medium, category: LOCATION }
+    strategy: generalize
+    note: Widen to city or region.
+
+  - id: medium-default
+    when: { risk_level: medium }
+    strategy: mask
+
+  - id: low-default
+    when: { risk_level: low }
+    strategy: keep
+    note: Not personal information in this context. Over-redaction destroys utility.
+
+# Checks the verification agent runs against the result of the above.
+verification:
+  require_consistent_pseudonyms: true
+  require_no_overlapping_spans: true
+  require_strategy_matches_decision: true
+  max_remediation_loops: 2

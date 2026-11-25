@@ -1,0 +1,53 @@
+# --- privacy: never commit documents or anything derived from them ---
+data/*
+!data/README.md
+!data/annotated/
+!data/synthetic/
+!data/samples/
+data/annotated/*
+data/synthetic/*
+data/samples/*
+!data/annotated/.gitkeep
+!data/synthetic/.gitkeep
+!data/samples/.gitkeep
+uploads/
+protected_store/
+*.db
+*.sqlite
+*.sqlite3
+*.log
+logs/
+
+# --- secrets ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# --- python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+.coverage
+htmlcov/
+
+# --- node / tooling ---
+node_modules/
+package-lock.json
+
+# --- os / editor ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# --- office temp files ---
+~$*
