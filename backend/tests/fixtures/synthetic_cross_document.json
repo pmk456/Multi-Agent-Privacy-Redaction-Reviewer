@@ -3328,9 +3328,10 @@
       "risk": "medium",
       "fired_rules": [
         "CTX-01",
-        "CTX-04"
+        "CTX-04",
+        "CTX-07"
       ],
-      "why": "DATE base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+      "why": "DATE base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; CTX-07 raises it to at least medium; final risk medium -> generalize."
     },
     {
       "doc_id": "alumni-001",
@@ -3351,9 +3352,10 @@
       "risk": "medium",
       "fired_rules": [
         "CTX-01",
-        "CTX-04"
+        "CTX-04",
+        "CTX-07"
       ],
-      "why": "DATE base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; final risk medium -> generalize."
+      "why": "DATE base risk low; CTX-01 raises it to at least medium; CTX-04 raises it to at least medium; CTX-07 raises it to at least medium; final risk medium -> generalize."
     },
     {
       "doc_id": "alumni-001",
@@ -4072,9 +4074,10 @@
       "expected_strategy": "generalize",
       "risk": "medium",
       "fired_rules": [
-        "CTX-04"
+        "CTX-04",
+        "CTX-07"
       ],
-      "why": "DATE base risk low; CTX-04 raises it to at least medium; final risk medium -> generalize."
+      "why": "DATE base risk low; CTX-04 raises it to at least medium; CTX-07 raises it to at least medium; final risk medium -> generalize."
     },
     {
       "doc_id": "memo-002",
@@ -4720,9 +4723,10 @@
       "expected_strategy": "generalize",
       "risk": "medium",
       "fired_rules": [
-        "CTX-04"
+        "CTX-04",
+        "CTX-07"
       ],
-      "why": "DATE base risk low; CTX-04 raises it to at least medium; final risk medium -> generalize."
+      "why": "DATE base risk low; CTX-04 raises it to at least medium; CTX-07 raises it to at least medium; final risk medium -> generalize."
     },
     {
       "doc_id": "leave-003",
@@ -5519,9 +5523,10 @@
       "risk": "low",
       "fired_rules": [
         "CTX-01",
+        "CTX-07",
         "EXC-01"
       ],
-      "why": "DATE base risk low; CTX-01 raises it to at least medium; EXC-01 caps it at low (alone in its sentence); final risk low -> keep."
+      "why": "DATE base risk low; CTX-01 raises it to at least medium; CTX-07 raises it to at least medium; EXC-01 caps it at low (alone in its sentence); final risk low -> keep."
     },
     {
       "doc_id": "memo-004",
