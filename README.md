@@ -6,9 +6,10 @@ A multi-agent system that finds personal information in documents, judges how ri
 piece of it is, applies an appropriate redaction, and then independently verifies that
 what came out is actually safe to release.
 
-> **Status — Review 1 (design).** Nothing under `backend/` is implemented yet. The modules
-> are stubs with the interfaces we agreed, so the four of us can build in parallel without
-> waiting on each other. The design is written up in [`docs/review-1`](docs/review-1).
+> **Status — building toward Review 2.** Done and tested: the Pydantic schemas, the privacy
+> knowledge base (JSON + SQLite + policy engine, 64 tests) and the dataset pipeline
+> (ai4privacy + PIIMB). In progress: detection and Agent 1. Next: Agents 2–5, LangGraph
+> orchestration, evaluation. See [`docs/HANDOFF.md`](docs/HANDOFF.md) for who is doing what.
 
 ## The one rule
 
@@ -23,53 +24,60 @@ about to `print()` or log an entity's `value`, don't — log its `entity_id` ins
 
 ## Team
 
-| Member | Registration No. | Area | Works mostly in |
-|---|---|---|---|
-| Patan Musthakheem | 2023LCSE07AED636 | Architecture and integration | `backend/app/orchestrator/` |
-| Pulagampalli Sai Mahima | 2023LCSE07AED635 | Frontend | `frontend/` |
-| Diddekunta Jagan Mohan Reddy | 2023BCSE07AED200 | Backend and APIs | `backend/app/api/`, `backend/app/storage/` |
-| Nandha Jyothi E | 2023BCSE07AED156 | Privacy engine and testing | `backend/app/engines/`, `backend/tests/` |
-
-Dataset preparation, prompt design, Responsible AI safeguards and the written submissions
-are shared between all four of us.
+| Member | Registration No. | Area |
+|---|---|---|
+| Patan Musthakheem | 2023LCSE07AED636 | Architecture, agents, orchestration |
+| Pulagampalli Sai Mahima | 2023LCSE07AED635 | Frontend |
+| Diddekunta Jagan Mohan Reddy | 2023BCSE07AED200 | Backend API, ingestion, storage |
+| Nandha Jyothi E | 2023BCSE07AED156 | Privacy engine and testing |
 
 ## Layout
 
 ```
-backend/app/
-  main.py            FastAPI entry point
-  api/routes/        HTTP endpoints — the only thing the frontend talks to
-  schemas/           Pydantic contracts between stages. Change these together, not alone.
-  agents/            The five agents, one file each
-  orchestrator/      LangGraph workflow + shared state
-  engines/           Deterministic Python: detection, redaction, verification rules
-  analytics/         Aggregate statistics for the review report
-  storage/           SQLite metadata + the protected document store
-  llm/               Claude API client
-frontend/            HTML + Tailwind
-knowledge_base/      Entity categories, sensitivity levels, redaction policy rules
-data/                Local only — git-ignored, never commit documents
-docs/review-1/       Slide deck and design report
+backend/privacy_review/
+  schemas/          Pydantic contracts between agents. Ask before changing.
+  knowledge_base/   policies.json (authoring) -> SQLite (querying) -> policy_engine.py
+  datasets/         ai4privacy + PIIMB sampling, label mapping, splits, annotation corruption
+  detection/        Presidio + spaCy + custom recognizers            (in progress)
+  agents/           the five agents                                  (in progress)
+  redaction/        deterministic masking / generalization / pseudonymization
+  orchestration/    LangGraph workflow, state, routing
+  evaluation/       metrics and reports
+  llm/              Claude client - optional, never sees raw identifiers
+  config/           settings from environment / .env
+backend/scripts/    prepare_data.py and other runnable entry points
+backend/tests/      pytest; tests/fixtures/kb_expected_decisions.json is hand-written
+frontend/           HTML + Tailwind
+data/               git-ignored. Downloaded samples land here - never commit them.
+docs/               Review 1 deck and report, architecture diagram, HANDOFF.md
 ```
 
 ## Getting started
 
+Use Python 3.12, in a folder whose path has no `:` (Python refuses to create a venv there).
+
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
+python3.12 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 python -m spacy download en_core_web_lg
 
-cp .env.example .env        # then put your Anthropic API key in .env
-uvicorn app.main:app --reload --app-dir backend
+cd backend
+pytest                                  # run the tests
+python scripts/prepare_data.py          # download + prepare dataset samples into ../data
 ```
 
-The API then runs on <http://127.0.0.1:8000>, with docs at `/docs`.
-Open `frontend/index.html` in a browser for the interface.
+A Claude API key is optional. Without one, every agent runs its deterministic path. To
+enable LLM reasoning, copy `.env.example` to `.env` and set `ANTHROPIC_API_KEY`.
 
-```bash
-pytest backend/tests          # run the tests
-```
+## Datasets and licensing
+
+| Dataset | Use | Licence |
+|---|---|---|
+| [ai4privacy/pii-masking-200k](https://huggingface.co/datasets/ai4privacy/pii-masking-200k) | development, validation, test (English, seeded sample) | free for individuals / non-profits; **no redistribution of derived data** |
+| [piimb/pii-masking-benchmark](https://huggingface.co/datasets/piimb/pii-masking-benchmark) | independent evaluation: gretel, nemotron-pii and privy tasks only | CC-BY-NC-4.0 |
+
+PIIMB's `ai4privacy-*` tasks are deliberately excluded: they come from the same generator as
+our development data, so using them for "independent" evaluation would leak.
 
 ## How we work
 

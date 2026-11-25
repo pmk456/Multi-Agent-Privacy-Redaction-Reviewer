@@ -1,8 +1,5 @@
-# API layer
-fastapi
-uvicorn[standard]
-python-multipart
-pydantic
+# Core
+pydantic>=2.7
 pydantic-settings
 
 # Agents and orchestration
@@ -15,16 +12,17 @@ presidio-anonymizer
 spacy
 # after installing: python -m spacy download en_core_web_lg
 
-# Entity relationships
+# Entity relationships, documents, analytics
 networkx
-
-# Documents, storage, analytics
 pymupdf
-sqlalchemy
 pandas
 plotly
-pyyaml
+
+# API layer
+fastapi
+uvicorn[standard]
+python-multipart
 
 # Tests
 pytest
-httpx2
+httpx

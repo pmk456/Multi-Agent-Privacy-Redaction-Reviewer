@@ -1,0 +1,411 @@
+{
+  "_comment": "Written by hand from the PS 247 requirements, NOT generated from policies.json. If the two disagree, one of them is wrong - that is the point of keeping them separate.",
+  "sensitivity": {
+    "PERSON": "high",
+    "EMAIL_ADDRESS": "high",
+    "PHONE_NUMBER": "high",
+    "STREET_ADDRESS": "high",
+    "GOVERNMENT_ID": "critical",
+    "FINANCIAL_ACCOUNT": "critical",
+    "CREDENTIAL": "critical",
+    "DATE_OF_BIRTH": "high",
+    "MEDICAL_CONDITION": "high",
+    "AGE": "medium",
+    "POSTAL_CODE": "medium",
+    "LOCATION": "low",
+    "OCCUPATION": "low",
+    "ORGANIZATION": "low",
+    "DATE": "low",
+    "RECORD_IDENTIFIER": "high"
+  },
+  "identifier_class": {
+    "PERSON": "direct_identifier",
+    "EMAIL_ADDRESS": "direct_identifier",
+    "PHONE_NUMBER": "direct_identifier",
+    "GOVERNMENT_ID": "direct_identifier",
+    "FINANCIAL_ACCOUNT": "direct_identifier",
+    "OCCUPATION": "indirect_identifier",
+    "ORGANIZATION": "indirect_identifier",
+    "LOCATION": "indirect_identifier",
+    "AGE": "indirect_identifier",
+    "DATE_OF_BIRTH": "indirect_identifier",
+    "POSTAL_CODE": "indirect_identifier",
+    "MEDICAL_CONDITION": "sensitive_attribute",
+    "RECORD_IDENTIFIER": "direct_identifier"
+  },
+  "positive_decisions": [
+    {
+      "case": "email is masked",
+      "entity_type": "EMAIL_ADDRESS",
+      "risk": "high",
+      "expected": "mask"
+    },
+    {
+      "case": "phone is masked",
+      "entity_type": "PHONE_NUMBER",
+      "risk": "high",
+      "expected": "mask"
+    },
+    {
+      "case": "government id is suppressed",
+      "entity_type": "GOVERNMENT_ID",
+      "risk": "critical",
+      "expected": "suppress"
+    },
+    {
+      "case": "government id suppressed even at low",
+      "entity_type": "GOVERNMENT_ID",
+      "risk": "low",
+      "expected": "suppress"
+    },
+    {
+      "case": "exact age generalized to a range",
+      "entity_type": "AGE",
+      "risk": "medium",
+      "expected": "generalize"
+    },
+    {
+      "case": "precise location generalized",
+      "entity_type": "LOCATION",
+      "risk": "medium",
+      "expected": "generalize"
+    },
+    {
+      "case": "lone city kept at low risk",
+      "entity_type": "LOCATION",
+      "risk": "low",
+      "expected": "keep"
+    },
+    {
+      "case": "person pseudonymized",
+      "entity_type": "PERSON",
+      "risk": "high",
+      "expected": "pseudonymize"
+    },
+    {
+      "case": "person suppressed at critical",
+      "entity_type": "PERSON",
+      "risk": "critical",
+      "expected": "suppress"
+    },
+    {
+      "case": "date of birth generalized",
+      "entity_type": "DATE_OF_BIRTH",
+      "risk": "high",
+      "expected": "generalize"
+    },
+    {
+      "case": "card or account suppressed",
+      "entity_type": "FINANCIAL_ACCOUNT",
+      "risk": "medium",
+      "expected": "suppress"
+    },
+    {
+      "case": "password suppressed",
+      "entity_type": "CREDENTIAL",
+      "risk": "low",
+      "expected": "suppress"
+    },
+    {
+      "case": "occupation kept at low risk",
+      "entity_type": "OCCUPATION",
+      "risk": "low",
+      "expected": "keep"
+    },
+    {
+      "case": "occupation generalized when risky",
+      "entity_type": "OCCUPATION",
+      "risk": "high",
+      "expected": "generalize"
+    }
+  ],
+  "never_allowed": [
+    {
+      "entity_type": "GOVERNMENT_ID",
+      "strategy": "keep"
+    },
+    {
+      "entity_type": "GOVERNMENT_ID",
+      "strategy": "generalize"
+    },
+    {
+      "entity_type": "GOVERNMENT_ID",
+      "strategy": "pseudonymize"
+    },
+    {
+      "entity_type": "FINANCIAL_ACCOUNT",
+      "strategy": "keep"
+    },
+    {
+      "entity_type": "CREDENTIAL",
+      "strategy": "mask"
+    },
+    {
+      "entity_type": "CREDENTIAL",
+      "strategy": "keep"
+    },
+    {
+      "entity_type": "PERSON",
+      "strategy": "keep"
+    },
+    {
+      "entity_type": "EMAIL_ADDRESS",
+      "strategy": "keep"
+    },
+    {
+      "entity_type": "PHONE_NUMBER",
+      "strategy": "keep"
+    },
+    {
+      "entity_type": "DATE_OF_BIRTH",
+      "strategy": "keep"
+    },
+    {
+      "entity_type": "MEDICAL_CONDITION",
+      "strategy": "keep"
+    },
+    {
+      "entity_type": "RECORD_IDENTIFIER",
+      "strategy": "keep"
+    }
+  ],
+  "context_cases": [
+    {
+      "case": "workplace triangulation without a name",
+      "entities": [
+        [
+          "OCCUPATION",
+          0
+        ],
+        [
+          "ORGANIZATION",
+          0
+        ],
+        [
+          "LOCATION",
+          1
+        ]
+      ],
+      "expect": {
+        "OCCUPATION": {
+          "min_risk": "high",
+          "rule": "CTX-02"
+        },
+        "ORGANIZATION": {
+          "min_risk": "high",
+          "rule": "CTX-02"
+        }
+      }
+    },
+    {
+      "case": "dob + postcode + sex triple",
+      "entities": [
+        [
+          "DATE_OF_BIRTH",
+          0
+        ],
+        [
+          "POSTAL_CODE",
+          1
+        ],
+        [
+          "DEMOGRAPHIC",
+          2
+        ]
+      ],
+      "expect": {
+        "DATE_OF_BIRTH": {
+          "min_risk": "high",
+          "rule": "CTX-03"
+        },
+        "POSTAL_CODE": {
+          "min_risk": "high",
+          "rule": "CTX-03"
+        }
+      }
+    },
+    {
+      "case": "health data in a document with a name",
+      "entities": [
+        [
+          "PERSON",
+          0
+        ],
+        [
+          "MEDICAL_CONDITION",
+          2
+        ]
+      ],
+      "expect": {
+        "MEDICAL_CONDITION": {
+          "min_risk": "critical",
+          "rule": "CTX-05"
+        }
+      }
+    },
+    {
+      "case": "quasi-identifiers in the same sentence as a person",
+      "entities": [
+        [
+          "PERSON",
+          0
+        ],
+        [
+          "OCCUPATION",
+          0
+        ],
+        [
+          "AGE",
+          0
+        ]
+      ],
+      "expect": {
+        "OCCUPATION": {
+          "min_risk": "medium",
+          "rule": "CTX-04"
+        },
+        "AGE": {
+          "min_risk": "medium",
+          "rule": "CTX-04"
+        }
+      }
+    },
+    {
+      "case": "nationality stated about a named person",
+      "entities": [
+        [
+          "PERSON",
+          0
+        ],
+        [
+          "DEMOGRAPHIC",
+          0
+        ]
+      ],
+      "expect": {
+        "DEMOGRAPHIC": {
+          "min_risk": "high",
+          "rule": "CTX-06"
+        }
+      }
+    }
+  ],
+  "no_escalation_cases": [
+    {
+      "case": "a single city on its own",
+      "entities": [
+        [
+          "LOCATION",
+          0
+        ]
+      ]
+    },
+    {
+      "case": "two quasi types only",
+      "entities": [
+        [
+          "OCCUPATION",
+          0
+        ],
+        [
+          "LOCATION",
+          1
+        ]
+      ]
+    },
+    {
+      "case": "person and quasi-id in different sentences",
+      "entities": [
+        [
+          "PERSON",
+          0
+        ],
+        [
+          "OCCUPATION",
+          3
+        ]
+      ],
+      "check_type": "OCCUPATION"
+    },
+    {
+      "case": "health term with no identity in document",
+      "entities": [
+        [
+          "MEDICAL_CONDITION",
+          0
+        ]
+      ],
+      "check_type": "MEDICAL_CONDITION"
+    }
+  ],
+  "exception_cases": [
+    {
+      "case": "dateline date stays readable in a 3-quasi document",
+      "entities": [
+        [
+          "DATE",
+          0
+        ],
+        [
+          "OCCUPATION",
+          1
+        ],
+        [
+          "ORGANIZATION",
+          1
+        ],
+        [
+          "AGE",
+          2
+        ]
+      ],
+      "target": "DATE",
+      "expected_final_risk": "low",
+      "expected_rule": "EXC-01"
+    },
+    {
+      "case": "date in the same sentence as quasi-ids is NOT exempt",
+      "entities": [
+        [
+          "DATE",
+          1
+        ],
+        [
+          "OCCUPATION",
+          1
+        ],
+        [
+          "ORGANIZATION",
+          1
+        ],
+        [
+          "AGE",
+          2
+        ]
+      ],
+      "target": "DATE",
+      "expected_final_risk": "medium",
+      "expected_rule": "CTX-01"
+    },
+    {
+      "case": "location exception overridden by workplace triangulation",
+      "entities": [
+        [
+          "LOCATION",
+          0
+        ],
+        [
+          "OCCUPATION",
+          1
+        ],
+        [
+          "ORGANIZATION",
+          1
+        ]
+      ],
+      "target": "LOCATION",
+      "expected_final_risk": "medium",
+      "expected_rule": "CTX-01"
+    }
+  ]
+}

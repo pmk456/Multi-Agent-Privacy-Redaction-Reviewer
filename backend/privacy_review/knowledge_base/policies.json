@@ -1,0 +1,292 @@
+{
+  "version": "1.0.0",
+  "description": "Privacy knowledge base for PS 247. JSON is the authoring format; it is validated by schema.py and loaded into SQLite by database.py for querying.",
+
+  "defaults": {
+    "unsupported_entity_risk": "high",
+    "unsupported_entity_strategy": "suppress",
+    "default_pseudonym_scope": "document",
+    "max_remediation_rounds": 2,
+    "min_utility_retained": 0.5
+  },
+
+  "entity_policies": [
+    {"entity_type": "PERSON", "identifier_class": "direct_identifier", "sensitivity": "high",
+     "default_strategy": "pseudonymize", "allowed_strategies": ["pseudonymize", "mask", "suppress"],
+     "strategy_by_risk": {"low": "pseudonymize", "medium": "pseudonymize", "high": "pseudonymize", "critical": "suppress"},
+     "verification_required": true, "pseudonym_scope": "batch",
+     "risk_rules": ["Names must not remain visible in released output", "Pseudonyms must be consistent for the same person within their scope"]},
+
+    {"entity_type": "EMAIL_ADDRESS", "identifier_class": "direct_identifier", "sensitivity": "high",
+     "default_strategy": "mask", "allowed_strategies": ["mask", "pseudonymize", "suppress"],
+     "strategy_by_risk": {"low": "mask", "medium": "mask", "high": "mask", "critical": "suppress"},
+     "verification_required": true, "risk_rules": ["Must not remain visible in released output"]},
+
+    {"entity_type": "PHONE_NUMBER", "identifier_class": "direct_identifier", "sensitivity": "high",
+     "default_strategy": "mask", "allowed_strategies": ["mask", "suppress"],
+     "strategy_by_risk": {"low": "mask", "medium": "mask", "high": "mask", "critical": "suppress"},
+     "verification_required": true, "risk_rules": ["Must not remain visible in released output"]},
+
+    {"entity_type": "STREET_ADDRESS", "identifier_class": "direct_identifier", "sensitivity": "high",
+     "default_strategy": "mask", "allowed_strategies": ["mask", "suppress"],
+     "strategy_by_risk": {"low": "mask", "medium": "mask", "high": "mask", "critical": "suppress"},
+     "verification_required": true, "risk_rules": ["A street address locates a household"]},
+
+    {"entity_type": "GOVERNMENT_ID", "identifier_class": "direct_identifier", "sensitivity": "critical",
+     "default_strategy": "suppress", "allowed_strategies": ["suppress", "mask"],
+     "strategy_by_risk": {"low": "suppress", "medium": "suppress", "high": "suppress", "critical": "suppress"},
+     "verification_required": true, "risk_rules": ["Government identifiers are always fully removed", "Partial masking is not permitted"]},
+
+    {"entity_type": "RECORD_IDENTIFIER", "identifier_class": "direct_identifier", "sensitivity": "high",
+     "default_strategy": "mask", "allowed_strategies": ["mask", "pseudonymize", "suppress"],
+     "strategy_by_risk": {"low": "mask", "medium": "mask", "high": "mask", "critical": "suppress"},
+     "verification_required": true, "risk_rules": ["Customer, employee and medical record numbers resolve to one person inside the issuing organisation"]},
+
+    {"entity_type": "FINANCIAL_ACCOUNT", "identifier_class": "direct_identifier", "sensitivity": "critical",
+     "default_strategy": "suppress", "allowed_strategies": ["suppress", "mask"],
+     "strategy_by_risk": {"low": "suppress", "medium": "suppress", "high": "suppress", "critical": "suppress"},
+     "verification_required": true, "risk_rules": ["Account, card and wallet numbers enable fraud as well as identification"]},
+
+    {"entity_type": "CREDENTIAL", "identifier_class": "direct_identifier", "sensitivity": "critical",
+     "default_strategy": "suppress", "allowed_strategies": ["suppress"],
+     "strategy_by_risk": {"low": "suppress", "medium": "suppress", "high": "suppress", "critical": "suppress"},
+     "verification_required": true, "risk_rules": ["Passwords and PINs are removed without a type label"]},
+
+    {"entity_type": "ONLINE_IDENTIFIER", "identifier_class": "direct_identifier", "sensitivity": "high",
+     "default_strategy": "mask", "allowed_strategies": ["mask", "pseudonymize", "suppress"],
+     "strategy_by_risk": {"low": "mask", "medium": "mask", "high": "mask", "critical": "suppress"},
+     "verification_required": true, "risk_rules": ["IP and MAC addresses, usernames and user agents single out a device or account"]},
+
+    {"entity_type": "DEVICE_IDENTIFIER", "identifier_class": "direct_identifier", "sensitivity": "high",
+     "default_strategy": "mask", "allowed_strategies": ["mask", "suppress"],
+     "strategy_by_risk": {"low": "mask", "medium": "mask", "high": "mask", "critical": "suppress"},
+     "verification_required": true, "risk_rules": ["IMEI, VIN and registration numbers trace to an owner"]},
+
+    {"entity_type": "GPS_COORDINATE", "identifier_class": "direct_identifier", "sensitivity": "high",
+     "default_strategy": "generalize", "allowed_strategies": ["generalize", "mask", "suppress"],
+     "strategy_by_risk": {"low": "generalize", "medium": "generalize", "high": "mask", "critical": "suppress"},
+     "verification_required": true, "risk_rules": ["Precise coordinates locate a person; coarsen or remove"]},
+
+    {"entity_type": "DATE_OF_BIRTH", "identifier_class": "indirect_identifier", "sensitivity": "high",
+     "default_strategy": "generalize", "allowed_strategies": ["generalize", "mask", "suppress"],
+     "strategy_by_risk": {"low": "generalize", "medium": "generalize", "high": "generalize", "critical": "suppress"},
+     "verification_required": true, "risk_rules": ["Exact date of birth is one third of the classic DOB + postcode + sex re-identification triple"]},
+
+    {"entity_type": "POSTAL_CODE", "identifier_class": "indirect_identifier", "sensitivity": "medium",
+     "default_strategy": "generalize", "allowed_strategies": ["generalize", "mask", "suppress"],
+     "strategy_by_risk": {"low": "generalize", "medium": "generalize", "high": "mask", "critical": "suppress"},
+     "verification_required": true, "risk_rules": ["Full postcodes narrow a population sharply"]},
+
+    {"entity_type": "AGE", "identifier_class": "indirect_identifier", "sensitivity": "medium",
+     "default_strategy": "generalize", "allowed_strategies": ["keep", "generalize", "mask", "suppress"],
+     "strategy_by_risk": {"low": "generalize", "medium": "generalize", "high": "generalize", "critical": "suppress"},
+     "verification_required": true, "risk_rules": ["Exact age becomes an age range"]},
+
+    {"entity_type": "LOCATION", "identifier_class": "indirect_identifier", "sensitivity": "low",
+     "default_strategy": "keep", "allowed_strategies": ["keep", "generalize", "mask", "suppress"],
+     "strategy_by_risk": {"low": "keep", "medium": "generalize", "high": "generalize", "critical": "suppress"},
+     "verification_required": false, "risk_rules": ["A city alone is rarely identifying; combined with occupation and employer it often is"]},
+
+    {"entity_type": "DATE", "identifier_class": "indirect_identifier", "sensitivity": "low",
+     "default_strategy": "keep", "allowed_strategies": ["keep", "generalize", "mask", "suppress"],
+     "strategy_by_risk": {"low": "keep", "medium": "generalize", "high": "generalize", "critical": "suppress"},
+     "verification_required": false, "risk_rules": ["Dates tied to a person (joined, discharged, attended) narrow identity"]},
+
+    {"entity_type": "ORGANIZATION", "identifier_class": "indirect_identifier", "sensitivity": "low",
+     "default_strategy": "keep", "allowed_strategies": ["keep", "generalize", "mask", "suppress"],
+     "strategy_by_risk": {"low": "keep", "medium": "generalize", "high": "generalize", "critical": "suppress"},
+     "verification_required": false, "risk_rules": ["An employer narrows a population to its staff"]},
+
+    {"entity_type": "OCCUPATION", "identifier_class": "indirect_identifier", "sensitivity": "low",
+     "default_strategy": "keep", "allowed_strategies": ["keep", "generalize", "mask", "suppress"],
+     "strategy_by_risk": {"low": "keep", "medium": "generalize", "high": "generalize", "critical": "suppress"},
+     "verification_required": false, "risk_rules": ["Senior or rare job titles can be unique within an organisation"]},
+
+    {"entity_type": "EVENT", "identifier_class": "indirect_identifier", "sensitivity": "low",
+     "default_strategy": "keep", "allowed_strategies": ["keep", "generalize", "mask", "suppress"],
+     "strategy_by_risk": {"low": "keep", "medium": "generalize", "high": "generalize", "critical": "suppress"},
+     "verification_required": false, "risk_rules": ["Participation in a named event narrows identity to its attendees"]},
+
+    {"entity_type": "DEMOGRAPHIC", "identifier_class": "indirect_identifier", "sensitivity": "medium",
+     "default_strategy": "keep", "allowed_strategies": ["keep", "mask", "suppress"],
+     "strategy_by_risk": {"low": "keep", "medium": "mask", "high": "mask", "critical": "suppress"},
+     "verification_required": false, "risk_rules": ["Nationality, religion and political affiliation are special-category data when tied to a person"]},
+
+    {"entity_type": "URL", "identifier_class": "indirect_identifier", "sensitivity": "low",
+     "default_strategy": "keep", "allowed_strategies": ["keep", "mask", "suppress"],
+     "strategy_by_risk": {"low": "keep", "medium": "mask", "high": "mask", "critical": "suppress"},
+     "verification_required": false, "risk_rules": ["Profile URLs identify; public reference URLs usually do not"]},
+
+    {"entity_type": "MEDICAL_CONDITION", "identifier_class": "sensitive_attribute", "sensitivity": "high",
+     "default_strategy": "mask", "allowed_strategies": ["mask", "suppress"],
+     "strategy_by_risk": {"low": "mask", "medium": "mask", "high": "mask", "critical": "suppress"},
+     "verification_required": true, "risk_rules": ["Health data is special-category data"]}
+  ],
+
+  "context_rules": [
+    {"rule_id": "CTX-01", "name": "quasi_identifier_combination",
+     "description": "Three or more distinct quasi-identifier types in one document can single out a person even with no name present.",
+     "scope": "document", "trigger_types": ["OCCUPATION", "ORGANIZATION", "LOCATION", "AGE", "DATE", "EVENT", "DEMOGRAPHIC", "POSTAL_CODE", "DATE_OF_BIRTH"],
+     "min_distinct_types": 3, "requires_all": [], "applies_to": ["OCCUPATION", "ORGANIZATION", "LOCATION", "AGE", "DATE", "EVENT", "DEMOGRAPHIC", "POSTAL_CODE", "DATE_OF_BIRTH"],
+     "escalate_to": "medium"},
+
+    {"rule_id": "CTX-02", "name": "workplace_triangulation",
+     "description": "Job title + employer + city together usually identify one employee.",
+     "scope": "document", "trigger_types": ["OCCUPATION", "ORGANIZATION", "LOCATION"],
+     "min_distinct_types": 3, "requires_all": ["OCCUPATION", "ORGANIZATION", "LOCATION"],
+     "applies_to": ["OCCUPATION", "ORGANIZATION"], "escalate_to": "high"},
+
+    {"rule_id": "CTX-03", "name": "dob_postcode_sex_triple",
+     "description": "Date of birth, postcode and sex together uniquely identify most people (Sweeney, 2000).",
+     "scope": "document", "trigger_types": ["DATE_OF_BIRTH", "POSTAL_CODE", "DEMOGRAPHIC"],
+     "min_distinct_types": 3, "requires_all": ["DATE_OF_BIRTH", "POSTAL_CODE", "DEMOGRAPHIC"],
+     "applies_to": ["DATE_OF_BIRTH", "POSTAL_CODE", "DEMOGRAPHIC"], "escalate_to": "high"},
+
+    {"rule_id": "CTX-04", "name": "quasi_identifiers_attached_to_person",
+     "description": "Quasi-identifiers in the same sentence as a named person describe that person.",
+     "scope": "sentence", "trigger_types": ["PERSON"], "min_distinct_types": 1, "requires_all": ["PERSON"],
+     "applies_to": ["OCCUPATION", "ORGANIZATION", "AGE", "DATE", "EVENT", "DEMOGRAPHIC", "LOCATION"],
+     "escalate_to": "medium"},
+
+    {"rule_id": "CTX-05", "name": "health_data_linked_to_identity",
+     "description": "A medical condition in a document that also contains a direct identifier is health data about that person.",
+     "scope": "document", "trigger_types": ["PERSON", "EMAIL_ADDRESS", "PHONE_NUMBER", "GOVERNMENT_ID"],
+     "min_distinct_types": 1, "requires_all": ["MEDICAL_CONDITION"],
+     "applies_to": ["MEDICAL_CONDITION"], "escalate_to": "critical"},
+
+    {"rule_id": "CTX-06", "name": "sensitive_attribute_linked_to_person",
+     "description": "Nationality, religion or political group stated about a named person is special-category data.",
+     "scope": "sentence", "trigger_types": ["PERSON"], "min_distinct_types": 1, "requires_all": ["PERSON", "DEMOGRAPHIC"],
+     "applies_to": ["DEMOGRAPHIC"], "escalate_to": "high"}
+  ],
+
+  "transformation_rules": {
+    "mask_format": "[{entity_type}]",
+    "suppress_token": "[REDACTED]",
+    "pseudonym_format": "{prefix}_{index:02d}",
+    "pseudonym_prefixes": {"PERSON": "PERSON", "EMAIL_ADDRESS": "EMAIL", "ONLINE_IDENTIFIER": "USER"},
+    "generalization": {
+      "AGE": {"1": {"method": "age_band", "width": 10}, "2": {"method": "age_band", "width": 20}},
+      "DATE_OF_BIRTH": {"1": {"method": "decade"}, "2": {"method": "mask"}},
+      "DATE": {"1": {"method": "month_year"}, "2": {"method": "year"}},
+      "POSTAL_CODE": {"1": {"method": "prefix", "keep": 3}, "2": {"method": "prefix", "keep": 2}},
+      "GPS_COORDINATE": {"1": {"method": "round", "decimals": 1}, "2": {"method": "round", "decimals": 0}},
+      "LOCATION": {"1": {"method": "region_map", "level": "region"}, "2": {"method": "region_map", "level": "country"}},
+      "OCCUPATION": {"1": {"method": "occupation_family"}, "2": {"method": "constant", "value": "a professional"}},
+      "ORGANIZATION": {"1": {"method": "organization_sector"}, "2": {"method": "constant", "value": "an organisation"}},
+      "EVENT": {"1": {"method": "constant", "value": "an event"}, "2": {"method": "constant", "value": "an event"}}
+    }
+  },
+
+  "verification_rules": [
+    {"rule_id": "VR-01", "check": "residual_pii", "severity_direct": "blocking", "severity_indirect": "warning",
+     "description": "An independent detection pass over the redacted text must find no direct identifier in text that was left unchanged."},
+    {"rule_id": "VR-02", "check": "original_value_absent", "severity": "blocking",
+     "description": "The original value of every entity that was not kept must not appear anywhere in the redacted text."},
+    {"rule_id": "VR-03", "check": "span_integrity", "severity": "blocking",
+     "description": "Each replacement must sit exactly at its recorded output span; spans must be in bounds and must not overlap."},
+    {"rule_id": "VR-04", "check": "transformation_format", "severity": "blocking",
+     "description": "Replacements must match the format of their strategy (mask token, suppress token, pseudonym pattern, non-identical generalisation)."},
+    {"rule_id": "VR-05", "check": "policy_compliance", "severity": "blocking",
+     "description": "The applied strategy must be allowed for the entity type and must not be forbidden by a policy constraint."},
+    {"rule_id": "VR-06", "check": "pseudonym_consistency", "severity": "blocking",
+     "description": "The same entity must get the same pseudonym within its scope, and two different entities must never share one."},
+    {"rule_id": "VR-07", "check": "over_redaction", "severity": "warning",
+     "description": "Flag documents that keep less than min_utility_retained of their non-PII text, and redactions of entities assessed as low risk whose policy is keep."},
+    {"rule_id": "VR-08", "check": "decision_coverage", "severity": "blocking",
+     "description": "Every detected entity must have a redaction decision."}
+  ],
+
+  "linkage_rules": {
+    "rule_id": "LR-01",
+    "description": "Combined visible quasi-identifiers across linked documents are scored for re-identification risk. Specificity weights are rough probabilities that the attribute narrows identity; combined score = 1 - prod(1 - w).",
+    "specificity_weights": {
+      "OCCUPATION": {"specific": 0.35, "generalized": 0.08},
+      "ORGANIZATION": {"specific": 0.40, "generalized": 0.05},
+      "LOCATION": {"specific": 0.25, "generalized": 0.08},
+      "AGE": {"specific": 0.30, "generalized": 0.12},
+      "DATE": {"specific": 0.30, "generalized": 0.10},
+      "DATE_OF_BIRTH": {"specific": 0.50, "generalized": 0.15},
+      "POSTAL_CODE": {"specific": 0.45, "generalized": 0.15},
+      "EVENT": {"specific": 0.40, "generalized": 0.05},
+      "DEMOGRAPHIC": {"specific": 0.15, "generalized": 0.05}
+    },
+    "link_on_shared_pseudonym": true,
+    "link_on_shared_specific_values": 2,
+    "high_risk_threshold": 0.75,
+    "medium_risk_threshold": 0.55,
+    "min_anonymity_set": 2,
+    "high_risk_combinations": [
+      ["OCCUPATION", "ORGANIZATION", "LOCATION"],
+      ["DATE_OF_BIRTH", "POSTAL_CODE", "DEMOGRAPHIC"],
+      ["EVENT", "OCCUPATION", "ORGANIZATION"]
+    ]
+  },
+
+  "policy_constraints": [
+    {"constraint_id": "PC-01", "entity_types": ["GOVERNMENT_ID", "FINANCIAL_ACCOUNT", "CREDENTIAL"], "forbidden_strategies": ["keep", "generalize", "pseudonymize"],
+     "reason": "High-harm identifiers are never left visible, partially revealed, or made linkable."},
+    {"constraint_id": "PC-02", "entity_types": ["PERSON", "EMAIL_ADDRESS", "PHONE_NUMBER", "STREET_ADDRESS", "RECORD_IDENTIFIER", "ONLINE_IDENTIFIER", "DEVICE_IDENTIFIER", "GPS_COORDINATE", "DATE_OF_BIRTH", "MEDICAL_CONDITION"], "forbidden_strategies": ["keep"],
+     "reason": "Direct identifiers, exact dates of birth and health data are never released unchanged."}
+  ],
+
+  "exceptions": [
+    {"exception_id": "EXC-01", "entity_type": "DATE", "condition": "isolated_in_sentence",
+     "effect": "cap_risk", "value": "low", "unless_rules": [],
+     "description": "A date standing alone in its sentence (a dateline, a report date) is document metadata, not a fact about a person. Stays readable even when CTX-01 fires on the document."},
+    {"exception_id": "EXC-02", "entity_type": "LOCATION", "condition": "isolated_in_sentence",
+     "effect": "cap_risk", "value": "low", "unless_rules": ["CTX-02", "CTX-04"],
+     "description": "A location mentioned on its own (a venue, a dateline city) stays readable unless it is part of workplace triangulation or attached to a named person."}
+  ],
+
+  "reference_data": {
+    "location_regions": {
+      "bengaluru": ["Karnataka", "India"], "bangalore": ["Karnataka", "India"], "mysuru": ["Karnataka", "India"],
+      "mumbai": ["Maharashtra", "India"], "pune": ["Maharashtra", "India"], "nagpur": ["Maharashtra", "India"],
+      "chennai": ["Tamil Nadu", "India"], "coimbatore": ["Tamil Nadu", "India"],
+      "hyderabad": ["Telangana", "India"], "delhi": ["Delhi NCR", "India"], "new delhi": ["Delhi NCR", "India"],
+      "gurugram": ["Delhi NCR", "India"], "noida": ["Delhi NCR", "India"], "kolkata": ["West Bengal", "India"],
+      "kochi": ["Kerala", "India"], "thiruvananthapuram": ["Kerala", "India"], "ahmedabad": ["Gujarat", "India"],
+      "jaipur": ["Rajasthan", "India"], "lucknow": ["Uttar Pradesh", "India"], "bhubaneswar": ["Odisha", "India"],
+      "london": ["England", "United Kingdom"], "manchester": ["England", "United Kingdom"], "edinburgh": ["Scotland", "United Kingdom"],
+      "new york": ["New York State", "United States"], "san francisco": ["California", "United States"], "los angeles": ["California", "United States"],
+      "seattle": ["Washington State", "United States"], "boston": ["Massachusetts", "United States"], "chicago": ["Illinois", "United States"],
+      "toronto": ["Ontario", "Canada"], "berlin": ["Berlin", "Germany"], "paris": ["Ile-de-France", "France"],
+      "singapore": ["Singapore", "Singapore"], "sydney": ["New South Wales", "Australia"], "dubai": ["Dubai", "United Arab Emirates"]
+    },
+    "occupation_families": [
+      {"family": "a healthcare professional", "keywords": ["nurse", "doctor", "physician", "surgeon", "pharmacist", "therapist", "radiologist", "paramedic", "dentist", "clinician"]},
+      {"family": "an education professional", "keywords": ["professor", "lecturer", "teacher", "tutor", "dean", "principal investigator", "researcher", "librarian"]},
+      {"family": "a technology professional", "keywords": ["engineer", "developer", "programmer", "data scientist", "architect", "devops", "analyst", "administrator", "technician", "scientist"]},
+      {"family": "a finance professional", "keywords": ["accountant", "auditor", "banker", "actuary", "controller", "treasurer"]},
+      {"family": "a legal professional", "keywords": ["lawyer", "advocate", "solicitor", "paralegal", "attorney", "judge"]},
+      {"family": "a manager", "keywords": ["manager", "director", "head", "chief", "officer", "lead", "supervisor", "executive", "president", "coordinator"]},
+      {"family": "a design professional", "keywords": ["designer", "illustrator", "artist", "photographer"]},
+      {"family": "a sales or support professional", "keywords": ["sales", "representative", "agent", "consultant", "associate", "specialist", "assistant", "liaison"]}
+    ],
+    "organization_sectors": [
+      {"sector": "an educational institution", "keywords": ["university", "college", "institute", "school", "academy"]},
+      {"sector": "a healthcare provider", "keywords": ["hospital", "clinic", "medical", "health", "pharma", "labs", "biolabs"]},
+      {"sector": "a financial institution", "keywords": ["bank", "capital", "finance", "insurance", "securities", "credit"]},
+      {"sector": "a government body", "keywords": ["ministry", "department of", "municipal", "council", "government", "commission"]},
+      {"sector": "a technology company", "keywords": ["technologies", "tech", "software", "systems", "labs", "digital", "data", "analytics", "ai"]},
+      {"sector": "a private company", "keywords": ["ltd", "limited", "inc", "corp", "corporation", "llc", "pvt", "group", "industries", "solutions"]}
+    ],
+    "job_titles": [
+      "nurse", "staff nurse", "head nurse", "doctor", "surgeon", "pharmacist", "physiotherapist", "radiologist",
+      "professor", "associate professor", "assistant professor", "lecturer", "teacher", "dean", "librarian", "researcher",
+      "software engineer", "data scientist", "data analyst", "machine learning engineer", "devops engineer", "solutions architect",
+      "chief architect", "systems administrator", "product manager", "project manager", "engineering manager",
+      "accountant", "auditor", "lawyer", "advocate", "paralegal", "warden", "assistant warden", "receptionist",
+      "chief executive officer", "chief technology officer", "chief financial officer", "head of research",
+      "security guard", "driver", "electrician", "plumber", "chef", "pilot", "journalist", "photographer"
+    ],
+    "role_nouns": [
+      "Specialist", "Coordinator", "Engineer", "Manager", "Officer", "Designer", "Consultant", "Analyst", "Strategist",
+      "Producer", "Developer", "Architect", "Agent", "Assistant", "Associate", "Director", "Executive", "Facilitator",
+      "Liaison", "Orchestrator", "Planner", "Representative", "Supervisor", "Technician", "Administrator", "Scientist",
+      "Lead", "Head", "Nurse", "Professor", "Lecturer", "Warden"
+    ],
+    "seniority_words": ["Senior", "Junior", "Lead", "Principal", "Chief", "Head", "Staff", "Associate", "Assistant", "Deputy", "Regional", "Global", "District", "Central", "Corporate", "Dynamic", "Direct", "Forward", "Future", "Human", "International", "Internal", "Investor", "Legacy", "National", "Product", "Customer"]
+  }
+}
