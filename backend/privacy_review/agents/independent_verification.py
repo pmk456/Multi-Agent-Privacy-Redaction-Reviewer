@@ -225,7 +225,7 @@ class IndependentVerificationAgent:
         esc = self.policy.context_escalations(ents)
         for e in ents:
             d = dec.get(e.entity_id)
-            if d is None or d.strategy == Strategy.KEEP or d.remediation_round > 0:
+            if d is None or d.strategy == Strategy.KEEP or d.remediation_round > 0 or e.ambiguous_person:
                 continue
             _, risk, _ = self.policy.assess(e, ents, esc)
             if self.policy.strategy_for(e.entity_type, risk) == Strategy.KEEP:

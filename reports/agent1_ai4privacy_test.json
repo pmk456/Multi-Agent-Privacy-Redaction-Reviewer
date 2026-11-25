@@ -701,6 +701,47 @@
       "MEDICAL_CONDITION": 1,
       "RECORD_IDENTIFIER": 1
     },
-    "seconds": 1.0
+    "seconds": 0.9
+  },
+  "annotation_validation": {
+    "by_corruption": {
+      "none": {
+        "cases": 201,
+        "expected_status_rate": 0.7711,
+        "false_alarm_rate": 0.2289
+      },
+      "spurious": {
+        "cases": 100,
+        "expected_status_rate": 0.98,
+        "flagged_rate": 1.0
+      },
+      "out_of_bounds": {
+        "cases": 100,
+        "expected_status_rate": 1.0,
+        "flagged_rate": 1.0
+      },
+      "shifted": {
+        "cases": 23,
+        "expected_status_rate": 0.7826,
+        "flagged_rate": 0.913
+      },
+      "dropped": {
+        "cases": 26,
+        "expected_status_rate": 0.9231,
+        "flagged_rate": 0.9231
+      },
+      "wrong_type": {
+        "cases": 14,
+        "expected_status_rate": 0.9286,
+        "flagged_rate": 0.9286
+      }
+    },
+    "shifted_spans_repaired_to_cover_gold": 0.9565,
+    "span_level_accuracy_after_validation": {
+      "exact_match": 0.9394,
+      "gold_fully_covered": 0.9811,
+      "gold_spans": 264
+    },
+    "corruption_rate": 0.3
   }
 }

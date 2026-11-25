@@ -199,10 +199,56 @@ SPECS: list[PatternSpec] = [
     # --- occupation
     PatternSpec("job_title_shape", E.OCCUPATION, C(rf"\b(?:{DESCRIPTOR}\s+){{0,2}}(?:[A-Z][a-z]+\s+)?{ROLE_TAIL}\b"), 0.55,
                 validator=lambda s: len(s.split()) >= 2),
+    # lowercase titles after an explicit cue: "works as a data science manager", "the role is events
+    # coordinator", "Vikram Rao, customer support engineer"
+    PatternSpec("job_title_cued", E.OCCUPATION,
+                C(r"(?:\b(?:works as|working as|employed as|joined as|hired as|serves as|appointed|is|was|as|post is|role is|"
+                  r"position is|title is|job title:?|role:?|designation:?)\s+(?:an?\s+|the\s+)?|,\s+)"
+                  r"((?:[a-z][a-z-]+\s){0,3}(?:engineer|manager|coordinator|architect|scientist|analyst|consultant|specialist|"
+                  r"officer|director|administrator|developer|designer|technician|supervisor|executive|assistant|associate|"
+                  r"nurse|radiologist|pharmacist|physician|surgeon|therapist|professor|lecturer|teacher|accountant|auditor|"
+                  r"lawyer|advocate|librarian|researcher|warden|planner|strategist|editor|writer|programmer|clerk|"
+                  r"receptionist|paramedic|dentist|lead|head|dean|registrar|counsellor|counselor))\b"),
+                0.6, group=1),
     PatternSpec("role_noun", E.OCCUPATION, C(rf"(?<=[a-z,] ){ROLE_TAIL}\b"), 0.45),
     PatternSpec("dept_area", E.OCCUPATION, C(r"\b([A-Z][a-z]{3,})\s+(?:department|team|division|dept\.?|unit|practice)\b"), 0.5, group=1,
                 validator=lambda s: s.lower() not in {"hello", "dear", "team", "your", "this", "that", "whole", "entire", "every", "each", "same", "sales"}),
 ]
+
+
+# Structured data (SQL, JSON, logs): the field name says what the value is.
+_FIELD_TYPES = [
+    (r"(?:first|last|full|middle|given|family|sur|user_?full|customer|patient|employee|contact)_?name|^name$|^surname$", E.PERSON),
+    (r"e_?mail", E.EMAIL_ADDRESS), (r"phone|mobile|tel(?:ephone)?|fax|cell", E.PHONE_NUMBER),
+    (r"street|address(?:_?line)?|addr", E.STREET_ADDRESS), (r"city|town|state|county|country|region", E.LOCATION),
+    (r"zip|postal|post_?code|pin_?code", E.POSTAL_CODE), (r"ssn|social_?security|national_?id|passport|tax_?id|licen[cs]e", E.GOVERNMENT_ID),
+    (r"dob|birth", E.DATE_OF_BIRTH), (r"user_?name|login|handle|screen_?name", E.ONLINE_IDENTIFIER),
+    (r"pass(?:word|wd)?|pwd|secret|token|api_?key", E.CREDENTIAL), (r"ip_?(?:addr|address)?$|mac_?addr", E.ONLINE_IDENTIFIER),
+    (r"iban|account_?(?:no|num|number)|card_?(?:no|num|number)|routing|swift|bic", E.FINANCIAL_ACCOUNT),
+    (r"customer_?id|employee_?id|patient_?id|member_?id|mrn|record_?id", E.RECORD_IDENTIFIER),
+    (r"^age$", E.AGE), (r"gender|^sex$", E.DEMOGRAPHIC), (r"company|employer|organi[sz]ation", E.ORGANIZATION),
+    (r"job_?title|occupation|profession|designation", E.OCCUPATION), (r"lat(?:itude)?$|lon(?:gitude)?$|coord", E.GPS_COORDINATE),
+]
+_FIELD_VALUE = re.compile(r"""[`'"]?([A-Za-z][A-Za-z0-9_]{1,40})[`'"]?\s*(?:=|:|<>|!=|=>)\s*(['"])([^'"\n]{1,120})\2""")
+
+
+def _field_type(key: str) -> E | None:
+    k = re.sub(r"(?<=[a-z])(?=[A-Z])", "_", key).lower()        # camelCase -> snake_case
+    for pat, et in _FIELD_TYPES:
+        if re.search(pat, k):
+            return et
+    return None
+
+
+def find_field_values(text: str) -> list[Candidate]:
+    out = []
+    for m in _FIELD_VALUE.finditer(text):
+        et = _field_type(m.group(1))
+        v = m.group(3)
+        if et is None or not v.strip() or v.strip().lower() in ("null", "none", "n/a", "true", "false"):
+            continue
+        out.append(Candidate(m.start(3), m.end(3), et, 0.75, DetectionSource.PATTERN, f"field:{m.group(1)}"))
+    return out
 
 
 def find_patterns(text: str) -> list[Candidate]:
@@ -228,4 +274,4 @@ def find_patterns(text: str) -> list[Candidate]:
                 if any(w in window for w in spec.context):
                     score = min(0.99, score + spec.context_boost)
             out.append(Candidate(start, end, spec.entity_type, score, DetectionSource.PATTERN, spec.name))
-    return out
+    return out + find_field_values(text)

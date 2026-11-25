@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-25T08:09:46+00:00",
-  "llm_reasoning": "not exercised - no API key on the evaluation machine; deterministic path only",
+  "generated_at": "2026-11-25T09:04:46+00:00",
+  "llm_reasoning": "deterministic path only (run with --llm to include budgeted Claude calls)",
   "results": {
     "pipeline_ai4privacy_test": {
       "documents": 100,
@@ -13,16 +13,16 @@
       },
       "redaction_completeness": {
         "gold_spans": 264,
-        "protected": 212,
-        "completeness": 0.803,
+        "protected": 222,
+        "completeness": 0.8409,
         "never_keep_types": {
           "gold_spans": 166,
-          "protected": 152,
-          "completeness": 0.9157
+          "protected": 154,
+          "completeness": 0.9277
         },
         "leak_causes": {
           "undetected": 15,
-          "kept_by_policy": 37
+          "kept_by_policy": 27
         },
         "leak_causes_by_type": {
           "AGE": {
@@ -40,7 +40,7 @@
           },
           "DEMOGRAPHIC": {
             "undetected": 2,
-            "kept_by_policy": 2
+            "kept_by_policy": 1
           },
           "DEVICE_IDENTIFIER": {
             "kept_by_policy": 1
@@ -49,18 +49,17 @@
             "undetected": 2
           },
           "LOCATION": {
-            "kept_by_policy": 10,
+            "kept_by_policy": 4,
             "undetected": 2
           },
           "OCCUPATION": {
-            "kept_by_policy": 8,
+            "kept_by_policy": 7,
             "undetected": 3
           },
           "ONLINE_IDENTIFIER": {
             "kept_by_policy": 1
           },
           "PERSON": {
-            "kept_by_policy": 2,
             "undetected": 3
           },
           "POSTAL_CODE": {
@@ -95,9 +94,9 @@
             "leak_rate": 0.3
           },
           "DEMOGRAPHIC": {
-            "leaked": 4,
+            "leaked": 3,
             "total": 26,
-            "leak_rate": 0.1538
+            "leak_rate": 0.1154
           },
           "DEVICE_IDENTIFIER": {
             "leaked": 1,
@@ -110,14 +109,14 @@
             "leak_rate": 0.0714
           },
           "LOCATION": {
-            "leaked": 12,
+            "leaked": 6,
             "total": 26,
-            "leak_rate": 0.4615
+            "leak_rate": 0.2308
           },
           "OCCUPATION": {
-            "leaked": 11,
+            "leaked": 10,
             "total": 17,
-            "leak_rate": 0.6471
+            "leak_rate": 0.5882
           },
           "ONLINE_IDENTIFIER": {
             "leaked": 1,
@@ -125,9 +124,9 @@
             "leak_rate": 0.0333
           },
           "PERSON": {
-            "leaked": 5,
+            "leaked": 3,
             "total": 44,
-            "leak_rate": 0.1136
+            "leak_rate": 0.0682
           },
           "POSTAL_CODE": {
             "leaked": 1,
@@ -147,7 +146,7 @@
         }
       },
       "data_utility": {
-        "mean_utility_retained_including_blocked": 0.8149,
+        "mean_utility_retained_including_blocked": 0.8086,
         "note": "unchanged text counts 1.0, generalised text 0.5, blocked documents 0"
       },
       "seconds": 2.3,
@@ -156,25 +155,25 @@
     "pipeline_piimb_external_test": {
       "documents": 300,
       "end_to_end": {
-        "released": 294,
-        "blocked": 6,
-        "release_rate": 0.98,
+        "released": 296,
+        "blocked": 4,
+        "release_rate": 0.9867,
         "mean_remediation_rounds": 0.25,
         "stalled": 3
       },
       "redaction_completeness": {
         "gold_spans": 1306,
-        "protected": 996,
-        "completeness": 0.7626,
+        "protected": 1008,
+        "completeness": 0.7718,
         "never_keep_types": {
           "gold_spans": 869,
-          "protected": 754,
-          "completeness": 0.8677
+          "protected": 760,
+          "completeness": 0.8746
         },
         "leak_causes": {
-          "undetected": 212,
-          "kept_by_policy": 97,
-          "partially_covered_or_repeated": 1
+          "undetected": 207,
+          "kept_by_policy": 89,
+          "partially_covered_or_repeated": 2
         },
         "leak_causes_by_type": {
           "AGE": {
@@ -182,27 +181,24 @@
             "undetected": 3
           },
           "CREDENTIAL": {
-            "undetected": 10,
+            "undetected": 9,
             "kept_by_policy": 3
           },
           "DATE": {
             "kept_by_policy": 31,
-            "undetected": 9,
+            "undetected": 7,
             "partially_covered_or_repeated": 1
           },
           "DATE_OF_BIRTH": {
-            "kept_by_policy": 3
+            "kept_by_policy": 2
           },
           "DEMOGRAPHIC": {
             "undetected": 28,
-            "kept_by_policy": 3
+            "kept_by_policy": 2
           },
           "DEVICE_IDENTIFIER": {
             "kept_by_policy": 1,
             "undetected": 1
-          },
-          "EMAIL_ADDRESS": {
-            "kept_by_policy": 1
           },
           "FINANCIAL_ACCOUNT": {
             "undetected": 15,
@@ -215,37 +211,36 @@
             "undetected": 2
           },
           "LOCATION": {
-            "undetected": 26,
-            "kept_by_policy": 10
+            "undetected": 23,
+            "kept_by_policy": 9
           },
           "MEDICAL_CONDITION": {
             "undetected": 1
           },
           "OCCUPATION": {
-            "undetected": 38,
-            "kept_by_policy": 1
+            "undetected": 37,
+            "kept_by_policy": 1,
+            "partially_covered_or_repeated": 1
           },
           "ONLINE_IDENTIFIER": {
             "undetected": 7
           },
           "ORGANIZATION": {
-            "undetected": 9,
-            "kept_by_policy": 8
+            "undetected": 13,
+            "kept_by_policy": 5
           },
           "PERSON": {
-            "undetected": 35,
-            "kept_by_policy": 1
+            "undetected": 33
           },
           "PHONE_NUMBER": {
             "undetected": 1
           },
           "RECORD_IDENTIFIER": {
             "undetected": 24,
-            "kept_by_policy": 5
+            "kept_by_policy": 6
           },
           "STREET_ADDRESS": {
-            "undetected": 1,
-            "kept_by_policy": 1
+            "undetected": 1
           },
           "URL": {
             "kept_by_policy": 27
@@ -258,34 +253,29 @@
             "leak_rate": 0.2857
           },
           "CREDENTIAL": {
-            "leaked": 13,
+            "leaked": 12,
             "total": 40,
-            "leak_rate": 0.325
+            "leak_rate": 0.3
           },
           "DATE": {
-            "leaked": 41,
+            "leaked": 39,
             "total": 125,
-            "leak_rate": 0.328
+            "leak_rate": 0.312
           },
           "DATE_OF_BIRTH": {
-            "leaked": 3,
+            "leaked": 2,
             "total": 60,
-            "leak_rate": 0.05
+            "leak_rate": 0.0333
           },
           "DEMOGRAPHIC": {
-            "leaked": 31,
+            "leaked": 30,
             "total": 65,
-            "leak_rate": 0.4769
+            "leak_rate": 0.4615
           },
           "DEVICE_IDENTIFIER": {
             "leaked": 2,
             "total": 34,
             "leak_rate": 0.0588
-          },
-          "EMAIL_ADDRESS": {
-            "leaked": 1,
-            "total": 73,
-            "leak_rate": 0.0137
           },
           "FINANCIAL_ACCOUNT": {
             "leaked": 16,
@@ -303,9 +293,9 @@
             "leak_rate": 0.2
           },
           "LOCATION": {
-            "leaked": 36,
+            "leaked": 32,
             "total": 102,
-            "leak_rate": 0.3529
+            "leak_rate": 0.3137
           },
           "MEDICAL_CONDITION": {
             "leaked": 1,
@@ -323,14 +313,14 @@
             "leak_rate": 0.1
           },
           "ORGANIZATION": {
-            "leaked": 17,
+            "leaked": 18,
             "total": 44,
-            "leak_rate": 0.3864
+            "leak_rate": 0.4091
           },
           "PERSON": {
-            "leaked": 36,
+            "leaked": 33,
             "total": 179,
-            "leak_rate": 0.2011
+            "leak_rate": 0.1844
           },
           "PHONE_NUMBER": {
             "leaked": 1,
@@ -338,14 +328,14 @@
             "leak_rate": 0.0238
           },
           "RECORD_IDENTIFIER": {
-            "leaked": 29,
+            "leaked": 30,
             "total": 173,
-            "leak_rate": 0.1676
+            "leak_rate": 0.1734
           },
           "STREET_ADDRESS": {
-            "leaked": 2,
+            "leaked": 1,
             "total": 45,
-            "leak_rate": 0.0444
+            "leak_rate": 0.0222
           },
           "URL": {
             "leaked": 27,
@@ -355,10 +345,10 @@
         }
       },
       "data_utility": {
-        "mean_utility_retained_including_blocked": 0.8047,
+        "mean_utility_retained_including_blocked": 0.8038,
         "note": "unchanged text counts 1.0, generalised text 0.5, blocked documents 0"
       },
-      "seconds": 15.5,
+      "seconds": 13.4,
       "kind": "dataset-based"
     },
     "verification_fault_injection": {
@@ -376,13 +366,13 @@
           "rate": 1.0
         },
         "tamper_mask": {
-          "caught": 63,
-          "injected": 63,
+          "caught": 72,
+          "injected": 72,
           "rate": 1.0
         },
         "reproduce_generalisation": {
-          "caught": 9,
-          "injected": 9,
+          "caught": 10,
+          "injected": 10,
           "rate": 1.0
         },
         "drop_decision": {
@@ -407,8 +397,7 @@
       "kind": "deterministic rule-based"
     },
     "adversarial_synthetic": {
-      "status": "pending",
-      "reason": "synthetic_cross_document.json not present yet (being built on feature/synthetic-cross-document)"
+      "status": "fixture present - run scripts/evaluate_adversarial.py"
     }
   }
 }

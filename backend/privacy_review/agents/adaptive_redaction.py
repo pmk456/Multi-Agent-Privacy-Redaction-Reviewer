@@ -27,8 +27,12 @@ class AdaptiveRedactionAgent:
         self.policy = policy
         self.settings = settings or get_settings()
         tr = policy.transformation
+        store = None
+        if self.settings.pseudonym_persist and self.settings.pseudonym_secret \
+                and self.settings.pseudonym_secret.get_secret_value() not in ("", "change-me"):
+            store = self.settings.protected_store_dir / "pseudonyms.sqlite"    # HMAC digests only, mode 0600
         self.registry = registry or PseudonymRegistry(self.settings.pseudonym_key(), tr.pseudonym_prefixes,
-                                                      tr.pseudonym_format)
+                                                      tr.pseudonym_format, store_path=store)
 
     def run(self, documents: list[Document], entities: list[DetectedEntity], decisions: list[RedactionDecision],
             batch_id: str, revision: int = 0) -> list[RedactedDocument]:

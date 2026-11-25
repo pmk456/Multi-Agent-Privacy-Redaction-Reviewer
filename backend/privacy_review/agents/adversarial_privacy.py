@@ -79,85 +79,127 @@ class AdversarialPrivacyAgent:
     # ================================================================ run
     def run(self, documents: list[Document], redacted: list[RedactedDocument], entities: list[DetectedEntity],
             decisions: list[RedactionDecision], revision: int = 0) -> AdversarialReport:
+        """Person-centric: each pseudonymised person gets a fingerprint built only from details
+        attached to their own mentions, so a newsletter naming ten people does not merge them
+        into one 'subject'. Documents that name nobody are scored as document groups."""
         dec = {d.entity_id: d for d in decisions}
+        ents = {e.entity_id: e for e in entities}
         by_doc_ents = defaultdict(list)
         for e in entities:
             by_doc_ents[e.doc_id].append(e)
 
         attrs: dict[str, list[Attribute]] = {}
-        pseudonym_links: dict[str, set[str]] = defaultdict(set)      # pseudonym -> docs
-        pseudonym_entities: dict[str, list[str]] = defaultdict(list)
-        cues: dict[str, int] = {}
+        sent_of: dict[int, int | None] = {}
+        cue_sents: dict[str, set] = {}
+        persons: dict[str, list[tuple[str, str]]] = defaultdict(list)   # person key -> [(doc_id, entity_id)]
         for red in redacted:
-            attrs[red.doc_id] = self._visible(red, by_doc_ents[red.doc_id], dec)
-            cues[red.doc_id] = self._uniqueness_cues(red.text)
+            attrs[red.doc_id] = self._visible(red, by_doc_ents[red.doc_id], dec, sent_of, ents)
+            cue_sents[red.doc_id] = self._cue_sentences(red, ents)
             for a in red.redactions:
                 d = dec.get(a.entity_id)
-                if a.strategy == Strategy.PSEUDONYMIZE and d and d.scope == PseudonymScope.BATCH:
-                    pseudonym_links[a.replacement].add(red.doc_id)
-                    pseudonym_entities[a.replacement].append(a.entity_id)
+                if a.strategy == Strategy.PSEUDONYMIZE and a.entity_type == EntityType.PERSON and d:
+                    key = a.replacement if d.scope == PseudonymScope.BATCH else f"{red.doc_id}/{a.replacement}"
+                    persons[key].append((red.doc_id, a.entity_id))
 
+        subjects: list[dict] = []
+        docs_with_people = set()
+        for key, mentions in persons.items():
+            docs = sorted({d for d, _ in mentions})
+            docs_with_people.update(docs)
+            own: list[Attribute] = []
+            n_cues = 0
+            for doc in docs:
+                people_here = {k for k, ms in persons.items() if any(d == doc for d, _ in ms)}
+                my_sents = {ents[eid].sentence_index for d, eid in mentions if d == doc and eid in ents}
+                if len(people_here) == 1:
+                    own += attrs[doc]
+                    n_cues += len(cue_sents[doc])
+                else:
+                    own += [a for a in attrs[doc] if sent_of.get(id(a)) in my_sents]
+                    n_cues += len(cue_sents[doc] & my_sents)
+            subjects.append({"docs": docs, "fp": self._fingerprint(own), "cues": n_cues,
+                             "linked_by": ["shared_pseudonym"] if len(docs) > 1 and "/" not in key else [],
+                             "pseudonym": key, "subject": [eid for _, eid in mentions], "multi_link": len(docs) > 1})
+
+        # documents that name nobody: group by shared specific values, as an attacker would
         g = nx.Graph()
-        g.add_nodes_from(attrs)
-        linked_by: dict[frozenset, set[str]] = defaultdict(set)
-        if self.rules.link_on_shared_pseudonym:
-            for p, docs in pseudonym_links.items():
-                docs = sorted(docs)
-                for a, b in zip(docs, docs[1:]):
-                    g.add_edge(a, b)
-                    linked_by[frozenset((a, b))].add("shared_pseudonym")
-        docs = sorted(attrs)
-        for i, a in enumerate(docs):
+        lonely = sorted(d for d in attrs if d not in docs_with_people)
+        g.add_nodes_from(lonely)
+        why: dict[frozenset, set] = defaultdict(set)
+        for i, a in enumerate(lonely):
             ka = {x.key for x in attrs[a] if x.specific}
-            for b in docs[i + 1:]:
+            for b in lonely[i + 1:]:
                 shared = ka & {x.key for x in attrs[b] if x.specific}
                 if len(shared) >= self.rules.link_on_shared_specific_values:
                     g.add_edge(a, b)
-                    linked_by[frozenset((a, b))].update(f"shared_{t.value}" for t, _ in shared)
+                    why[frozenset((a, b))].update(f"shared_{t.value}" for t, _ in shared)
+        for comp in nx.connected_components(g):
+            comp = sorted(comp)
+            subjects.append({"docs": comp, "fp": self._fingerprint([x for d in comp for x in attrs[d]]),
+                             "cues": sum(len(cue_sents[d]) for d in comp),
+                             "linked_by": sorted({w for k, ws in why.items() if k <= set(comp) for w in ws}),
+                             "pseudonym": None, "subject": [], "multi_link": False})
 
-        comps = [sorted(c) for c in nx.connected_components(g)]
-        fingerprints = [self._fingerprint([x for d in c for x in attrs[d]]) for c in comps]
-
+        all_fps = [s_["fp"] for s_ in subjects]
         findings: list[Finding] = []
         components: list[LinkageComponent] = []
         llm_probed = False
-        for ci, (comp, fp) in enumerate(zip(comps, fingerprints)):
-            n_cues = sum(cues[d] for d in comp)
+        for ci, sub in enumerate(subjects):
+            fp, n_cues, comp = sub["fp"], sub["cues"], sub["docs"]
             score = self._score(fp.values(), n_cues)
             combo = self._combo_hit(fp.values())
-            k = self._anonymity_set(fp, fingerprints)
+            k = self._anonymity_set(fp, all_fps)
             risk = self._risk(score, combo, n_cues)
             if risk == RiskLevel.HIGH and k >= self.rules.min_anonymity_set and not n_cues:
                 risk = RiskLevel.MEDIUM                    # a crowd shares this fingerprint
-
             if self.reasoner and self.reasoner.available and risk != RiskLevel.HIGH and len(fp) >= 2:
                 probe = self._llm_probe([r for r in redacted if r.doc_id in comp])
                 if probe is not None:
                     llm_probed = True
                     if probe.risk.rank > risk.rank:
                         risk = probe.risk
-
-            links = sorted({why for a, b in zip(comp, comp[1:]) for why in linked_by.get(frozenset((a, b)), set())}
-                           | {why for key, whys in linked_by.items() if key <= set(comp) for why in whys})
             components.append(LinkageComponent(
-                component_id=f"L{ci + 1:03d}", doc_ids=comp, linked_by=links,
-                visible_quasi_types=sorted({t.value for t, _ in fp}), anonymity_set_size=k, risk=risk.value))
-
+                component_id=f"L{ci + 1:03d}", doc_ids=comp, linked_by=sub["linked_by"],
+                visible_quasi_types=sorted({t.value for t, _ in fp}), anonymity_set_size=k, risk=risk.value,
+                subject_entity_ids=sub["subject"]))
             if risk == RiskLevel.HIGH:
-                findings += self._remediate(comp, fp, score, n_cues, "shared_pseudonym" in links,
-                                            pseudonym_entities, pseudonym_links, k)
+                pl = {sub["pseudonym"]: set(comp)} if sub["multi_link"] else {}
+                pe = {sub["pseudonym"]: sub["subject"]} if sub["multi_link"] else {}
+                findings += self._remediate(comp, fp, score, n_cues, sub["multi_link"], pe, pl, k)
             elif risk == RiskLevel.MEDIUM:
                 findings.append(Finding(
                     finding_type=FindingType.QUASI_IDENTIFIER_COMBINATION, severity=Severity.WARNING, doc_id=comp[0],
-                    related_doc_ids=comp[1:], rule_id=self.rules.rule_id,
+                    related_doc_ids=comp[1:], rule_id=self.rules.rule_id, entity_ids=sub["subject"],
                     description=f"visible quasi-identifiers ({', '.join(sorted({t.value for t, _ in fp}))}) give a "
                                 f"moderate re-identification score ({score:.2f}); anonymity set within batch = {k}"))
 
         return AdversarialReport(revision=revision, safe_to_release=not any(f.severity == Severity.BLOCKING for f in findings),
                                  findings=findings, components=components, llm_probed=llm_probed)
 
+    def _cue_sentences(self, red: RedactedDocument, ents: dict) -> set:
+        """Sentence indices (original-text frame, via the segment map) holding a uniqueness phrase."""
+        out = set()
+        low = red.text.lower()
+        for c in self.rules.uniqueness_cues:
+            for m in re.finditer(rf"\b{re.escape(c)}\b", low):
+                orig = red.to_original_span(Span(start=m.start(), end=m.end()))
+                out.add(self._sentence_at(red, orig.start if orig else None, ents))
+        return out
+
+    @staticmethod
+    def _sentence_at(red: RedactedDocument, orig_start, ents: dict):
+        if orig_start is None:
+            return None
+        best = None
+        for e in ents.values():
+            if e.doc_id == red.doc_id and e.span.start <= orig_start and e.sentence_index is not None:
+                if best is None or e.span.start > best.span.start:
+                    best = e
+        return best.sentence_index if best else 0
+
     # ================================================================ visible attributes
-    def _visible(self, red: RedactedDocument, ents: list[DetectedEntity], dec: dict) -> list[Attribute]:
+    def _visible(self, red: RedactedDocument, ents: list[DetectedEntity], dec: dict,
+                 sent_of: dict | None = None, all_ents: dict | None = None) -> list[Attribute]:
         out: list[Attribute] = []
         w = self.rules.specificity_weights
         for a in red.redactions:                                         # generalised = partly visible
@@ -165,6 +207,8 @@ class AdversarialPrivacyAgent:
                 level = dec[a.entity_id].generalization_level if a.entity_id in dec else 1
                 out.append(Attribute(red.doc_id, a.entity_type, a.replacement.strip().lower(), False,
                                      w[a.entity_type].generalized, [a.entity_id], level=level))
+                if sent_of is not None and all_ents and a.entity_id in all_ents:
+                    sent_of[id(out[-1])] = all_ents[a.entity_id].sentence_index
         scan = self.extractor.detect(red.doc_id, red.text, id_prefix="adv:").entities    # attacker's own read
         for r in scan:
             if r.entity_type not in self.quasi or red.in_replacement(r.span):
@@ -174,6 +218,9 @@ class AdversarialPrivacyAgent:
             value = re.sub(r"\s+", " ", r.raw().strip().lower())
             out.append(Attribute(red.doc_id, r.entity_type, value, True, self._weight(r.entity_type, value),
                                  known, None if known else orig))
+            if sent_of is not None:
+                sent_of[id(out[-1])] = (all_ents[known[0]].sentence_index if known and all_ents and known[0] in all_ents
+                                        else self._sentence_at(red, orig.start if orig else None, all_ents or {}))
         return out
 
     def _weight(self, et: EntityType, value: str) -> float:

@@ -7,37 +7,37 @@
     "gold_spans": 261,
     "micro": {
       "strict": {
-        "tp": 183,
-        "fp": 87,
-        "fn": 78,
-        "precision": 0.6778,
-        "recall": 0.7011,
-        "f1": 0.6893,
+        "tp": 190,
+        "fp": 81,
+        "fn": 71,
+        "precision": 0.7011,
+        "recall": 0.728,
+        "f1": 0.7143,
         "support": 261
       },
       "relaxed": {
-        "tp": 194,
-        "fp": 76,
-        "fn": 67,
-        "precision": 0.7185,
-        "recall": 0.7433,
-        "f1": 0.7307,
+        "tp": 201,
+        "fp": 70,
+        "fn": 60,
+        "precision": 0.7417,
+        "recall": 0.7701,
+        "f1": 0.7556,
         "support": 261
       }
     },
     "macro_f1": {
-      "strict": 0.6576,
-      "relaxed": 0.7054
+      "strict": 0.6825,
+      "relaxed": 0.7271
     },
     "per_type": {
       "strict": {
         "AGE": {
-          "tp": 0,
-          "fp": 1,
-          "fn": 5,
-          "precision": 0.0,
-          "recall": 0.0,
-          "f1": 0.0,
+          "tp": 1,
+          "fp": 2,
+          "fn": 4,
+          "precision": 0.3333,
+          "recall": 0.2,
+          "f1": 0.25,
           "support": 5
         },
         "CREDENTIAL": {
@@ -51,11 +51,11 @@
         },
         "DATE": {
           "tp": 7,
-          "fp": 14,
+          "fp": 6,
           "fn": 3,
-          "precision": 0.3333,
+          "precision": 0.5385,
           "recall": 0.7,
-          "f1": 0.4516,
+          "f1": 0.6087,
           "support": 10
         },
         "DATE_OF_BIRTH": {
@@ -68,12 +68,12 @@
           "support": 2
         },
         "DEMOGRAPHIC": {
-          "tp": 11,
+          "tp": 10,
           "fp": 2,
-          "fn": 9,
-          "precision": 0.8462,
-          "recall": 0.55,
-          "f1": 0.6667,
+          "fn": 10,
+          "precision": 0.8333,
+          "recall": 0.5,
+          "f1": 0.625,
           "support": 20
         },
         "DEVICE_IDENTIFIER": {
@@ -95,12 +95,12 @@
           "support": 13
         },
         "FINANCIAL_ACCOUNT": {
-          "tp": 33,
+          "tp": 39,
           "fp": 0,
-          "fn": 10,
+          "fn": 4,
           "precision": 1.0,
-          "recall": 0.7674,
-          "f1": 0.8684,
+          "recall": 0.907,
+          "f1": 0.9512,
           "support": 43
         },
         "GOVERNMENT_ID": {
@@ -131,12 +131,12 @@
           "support": 27
         },
         "OCCUPATION": {
-          "tp": 8,
-          "fp": 1,
-          "fn": 11,
-          "precision": 0.8889,
-          "recall": 0.4211,
-          "f1": 0.5714,
+          "tp": 9,
+          "fp": 2,
+          "fn": 10,
+          "precision": 0.8182,
+          "recall": 0.4737,
+          "f1": 0.6,
           "support": 19
         },
         "ONLINE_IDENTIFIER": {
@@ -150,20 +150,20 @@
         },
         "ORGANIZATION": {
           "tp": 6,
-          "fp": 32,
+          "fp": 31,
           "fn": 0,
-          "precision": 0.1579,
+          "precision": 0.1622,
           "recall": 1.0,
-          "f1": 0.2727,
+          "f1": 0.2791,
           "support": 6
         },
         "PERSON": {
           "tp": 28,
-          "fp": 12,
+          "fp": 13,
           "fn": 6,
-          "precision": 0.7,
+          "precision": 0.6829,
           "recall": 0.8235,
-          "f1": 0.7568,
+          "f1": 0.7467,
           "support": 34
         },
         "PHONE_NUMBER": {
@@ -205,12 +205,12 @@
       },
       "relaxed": {
         "AGE": {
-          "tp": 1,
-          "fp": 0,
-          "fn": 4,
-          "precision": 1.0,
-          "recall": 0.2,
-          "f1": 0.3333,
+          "tp": 2,
+          "fp": 1,
+          "fn": 3,
+          "precision": 0.6667,
+          "recall": 0.4,
+          "f1": 0.5,
           "support": 5
         },
         "CREDENTIAL": {
@@ -224,11 +224,11 @@
         },
         "DATE": {
           "tp": 8,
-          "fp": 13,
+          "fp": 5,
           "fn": 2,
-          "precision": 0.381,
+          "precision": 0.6154,
           "recall": 0.8,
-          "f1": 0.5161,
+          "f1": 0.6957,
           "support": 10
         },
         "DATE_OF_BIRTH": {
@@ -241,12 +241,12 @@
           "support": 2
         },
         "DEMOGRAPHIC": {
-          "tp": 11,
+          "tp": 10,
           "fp": 2,
-          "fn": 9,
-          "precision": 0.8462,
-          "recall": 0.55,
-          "f1": 0.6667,
+          "fn": 10,
+          "precision": 0.8333,
+          "recall": 0.5,
+          "f1": 0.625,
           "support": 20
         },
         "DEVICE_IDENTIFIER": {
@@ -268,12 +268,12 @@
           "support": 13
         },
         "FINANCIAL_ACCOUNT": {
-          "tp": 33,
+          "tp": 39,
           "fp": 0,
-          "fn": 10,
+          "fn": 4,
           "precision": 1.0,
-          "recall": 0.7674,
-          "f1": 0.8684,
+          "recall": 0.907,
+          "f1": 0.9512,
           "support": 43
         },
         "GOVERNMENT_ID": {
@@ -304,12 +304,12 @@
           "support": 27
         },
         "OCCUPATION": {
-          "tp": 8,
-          "fp": 1,
-          "fn": 11,
-          "precision": 0.8889,
-          "recall": 0.4211,
-          "f1": 0.5714,
+          "tp": 9,
+          "fp": 2,
+          "fn": 10,
+          "precision": 0.8182,
+          "recall": 0.4737,
+          "f1": 0.6,
           "support": 19
         },
         "ONLINE_IDENTIFIER": {
@@ -323,20 +323,20 @@
         },
         "ORGANIZATION": {
           "tp": 6,
-          "fp": 32,
+          "fp": 31,
           "fn": 0,
-          "precision": 0.1579,
+          "precision": 0.1622,
           "recall": 1.0,
-          "f1": 0.2727,
+          "f1": 0.2791,
           "support": 6
         },
         "PERSON": {
           "tp": 30,
-          "fp": 10,
+          "fp": 11,
           "fn": 4,
-          "precision": 0.75,
+          "precision": 0.7317,
           "recall": 0.8824,
-          "f1": 0.8108,
+          "f1": 0.8,
           "support": 34
         },
         "PHONE_NUMBER": {
@@ -381,7 +381,7 @@
       "recall": 0.9119,
       "covered": 238,
       "total": 261,
-      "precision_any_type": 0.9044,
+      "precision_any_type": 0.9011,
       "by_type": {
         "AGE": {
           "covered": 3,
@@ -710,47 +710,6 @@
     "predictions_of_types_not_annotated_in_dataset": {
       "EVENT": 2
     },
-    "seconds": 0.9
-  },
-  "annotation_validation": {
-    "by_corruption": {
-      "none": {
-        "cases": 198,
-        "expected_status_rate": 0.7475,
-        "false_alarm_rate": 0.2525
-      },
-      "spurious": {
-        "cases": 100,
-        "expected_status_rate": 0.99,
-        "flagged_rate": 1.0
-      },
-      "out_of_bounds": {
-        "cases": 100,
-        "expected_status_rate": 1.0,
-        "flagged_rate": 1.0
-      },
-      "shifted": {
-        "cases": 26,
-        "expected_status_rate": 0.8846,
-        "flagged_rate": 0.9615
-      },
-      "dropped": {
-        "cases": 31,
-        "expected_status_rate": 0.9355,
-        "flagged_rate": 0.9355
-      },
-      "wrong_type": {
-        "cases": 6,
-        "expected_status_rate": 1.0,
-        "flagged_rate": 1.0
-      }
-    },
-    "shifted_spans_repaired_to_cover_gold": 1.0,
-    "span_level_accuracy_after_validation": {
-      "exact_match": 0.9272,
-      "gold_fully_covered": 0.9885,
-      "gold_spans": 261
-    },
-    "corruption_rate": 0.3
+    "seconds": 1.7
   }
 }

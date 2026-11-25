@@ -114,6 +114,7 @@ class DetectedEntity(BaseModel):
     annotation_status: Optional[AnnotationStatus] = None
     cluster_id: Optional[str] = None             # same real-world entity across docs
     sentence_index: Optional[int] = None
+    ambiguous_person: bool = False               # a lone NER org/place that may be someone's first name
 
     def raw(self) -> str:
         """The original text. Every call site is a place raw PII is handled."""

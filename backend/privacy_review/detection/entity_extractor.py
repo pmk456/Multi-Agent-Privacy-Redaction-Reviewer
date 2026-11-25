@@ -224,4 +224,15 @@ class EntityExtractor:
             confidence=round(min(1.0, c.score), 3), sources=sorted(c.sources, key=lambda s: s.value),
             identifier_class=self.policy.identifier_class(c.entity_type), original_label=c.label,
             sentence_index=SpacyProcessor.sentence_index(starts, c.start),
+            ambiguous_person=self._ambiguous_person(c, text),
         )
+
+    def _ambiguous_person(self, c: Candidate, text: str) -> bool:
+        """'Reva', 'Laurel', 'Lavina': spaCy alone calls them an organisation or a place, but a
+        single capitalised word with no corroboration is as likely a first name. Fail safe."""
+        if c.entity_type not in (EntityType.ORGANIZATION, EntityType.LOCATION) or c.sources != {DetectionSource.SPACY}:
+            return False
+        v = text[c.start:c.end].strip()
+        if " " in v or not v[:1].isupper() or v.isupper() or not v.isalpha():
+            return False
+        return v.lower() not in self.policy.reference.get("location_regions", {})

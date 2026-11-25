@@ -2,6 +2,19 @@
 
 Paste this into your own Claude session (or just read it) before picking up work.
 
+## Status (Review 2)
+
+Everything in the original plan is built, merged on `main`, tested and evaluated:
+- Agents 1-5, LangGraph orchestration and `run_batch` (Patan)
+- Ingestion, FastAPI service, frontend, synthetic dataset, Document 2 skeleton, demo script (Jagan)
+- Results: `docs/review-2/Document-2-Implementation-and-Prototype-Report.md` section 6, and `reports/`
+
+Before you run anything: put secrets in your own `.env` (copy `.env.example`), never in `.env.example`.
+Generate `PSEUDONYM_SECRET` with `python -c "import secrets;print(secrets.token_hex(32))"`.
+Work on a branch and open a pull request; don't push straight to `main`.
+
+The sections below are the original Review 1 to Review 2 allocation, kept for the record.
+
 ## Already being built – do NOT work on these
 
 Patan's session is building the AI backend in `backend/privacy_review/`:
